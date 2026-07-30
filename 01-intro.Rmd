@@ -1,21 +1,63 @@
-# Introduction {#intro}
+# EDA {#intro}
 
-You can label chapter and section titles using `{#label}` after them, e.g., we can reference Chapter \@ref(intro). If you do not manually label them, there will be automatic labels anyway, e.g., Chapter \@ref(methods).
+Carguemos las librerias
 
-Figures and tables with captions will be placed in `figure` and `table` environments, respectively.
-
-```{r nice-fig, fig.cap='Here is a nice figure!', out.width='80%', fig.asp=.75, fig.align='center'}
-par(mar = c(4, 4, .1, .1))
-plot(pressure, type = 'b', pch = 19)
+```{r libreria, message= FALSE, warning=FALSE}
+library(tidyverse)
+library(Amelia)
+library(dplyr)
 ```
 
-Reference a figure by its code chunk label with the `fig:` prefix, e.g., see Figure \@ref(fig:nice-fig). Similarly, you can reference tables generated from `knitr::kable()`, e.g., see Table \@ref(tab:nice-tab).
-
-```{r nice-tab, tidy=FALSE}
-knitr::kable(
-  head(iris, 20), caption = 'Here is a nice table!',
-  booktabs = TRUE
-)
+```{r data}
+data <- read.csv("~/Metodos_estadisticos/Data/housing.csv")
 ```
 
-You can write citations, too. For example, we are using the **bookdown** package [@R-bookdown] in this sample book, which was built on top of R Markdown and **knitr** [@xie2015].
+Muestrame las 5 primeras filas
+
+```{r filas}
+head(data, n= 5)
+```
+
+La estructura de los datos
+
+```{r estructura}
+str(data)
+```
+
+
+Veamos si hay datos faltantes
+
+```{r faltante}
+data %>% 
+  summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
+```
+
+Otra forma de detectar valores faltantes
+```{r otraforma}
+missmap(data)
+```
+
+Ahora hagamos la imputacion de datos faltantes
+
+```{r imp}
+data %>% 
+  mutate(across(
+    where(is.numeric),
+    ~ ifelse(is.na(.),mean(., na.rm= TRUE), .)
+  )) -> df
+```
+
+
+Verificar si tiene datos faltantes nuevamente
+
+```{r faltante2}
+df %>% 
+  summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
+```
+
+Vamos a convertir la variable 'ocean_proximity' en un factor
+
+```{r factorocean}
+df$ocean_proximity <- factor(df$ocean_proximity)
+```
+
