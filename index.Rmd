@@ -18,6 +18,9 @@ This is a _sample_ book written in **Markdown**. You can use anything that Pando
 
 The **bookdown** package can be installed from CRAN or Github:
 
+#Contexto del problema {-}
+
+Los datos que vamos a analizar están relacionados con el promedio de las casas en el estado de California
 ```{r eval=FALSE}
 install.packages("bookdown")
 # or the development version

@@ -9,7 +9,9 @@ library(dplyr)
 ```
 
 ```{r data}
-data <- read.csv("~/Metodos_estadisticos/Data/housing.csv")
+data <- read.csv("~/Metodos_estadisticos/Data/ai_job_exposure.csv")
+datas <- read.csv("~/Metodos_estadisticos/Data/cognitive_ability_ai_exposure.csv")
+dat <- read.csv("~/Metodos_estadisticos/Data/occupation_cognitive_profile.csv")
 ```
 
 Muestrame las 5 primeras filas
@@ -29,6 +31,10 @@ Veamos si hay datos faltantes
 
 ```{r faltante}
 data %>% 
+  summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
+datas %>% 
+  summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
+dat %>% 
   summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
 ```
 

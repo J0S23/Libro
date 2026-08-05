@@ -1,0 +1,22 @@
+cognitive_ability,cognitive_family,ai_exposure_score
+Information Ordering,Reasoning,1.908
+Memorization,Memory,1.686
+Speed of Closure,Perceptual,1.377
+Flexibility of Closure,Perceptual,1.36
+Category Flexibility,Reasoning,1.276
+Perceptual Speed,Perceptual,1.24
+Selective Attention,Attention,1.151
+Deductive Reasoning,Reasoning,1.04
+Inductive Reasoning,Reasoning,0.964
+Oral Comprehension,Verbal,0.7
+Time Sharing,Attention,0.67
+Written Comprehension,Verbal,0.563
+Problem Sensitivity,Reasoning,0.538
+Oral Expression,Verbal,0.526
+Mathematical Reasoning,Quantitative,0.486
+Number Facility,Quantitative,0.483
+Written Expression,Verbal,0.458
+Visualization,Spatial,0.449
+Fluency of Ideas,Reasoning,0.401
+Spatial Orientation,Spatial,0.375
+Originality,Reasoning,-0.144
