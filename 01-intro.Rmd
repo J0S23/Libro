@@ -6,10 +6,13 @@ Carguemos las librerias
 library(tidyverse)
 library(Amelia)
 library(dplyr)
+library(moments)
+library(ggplot2)
+library(patchwork)
 ```
 
 ```{r data}
-data <- read.csv("~/Metodos_estadisticos/Data/ai_job_exposure.csv")
+data <- read.csv("~/Metodos_estadisticos/Data/housing.csv")
 datas <- read.csv("~/Metodos_estadisticos/Data/cognitive_ability_ai_exposure.csv")
 dat <- read.csv("~/Metodos_estadisticos/Data/occupation_cognitive_profile.csv")
 ```
@@ -65,5 +68,114 @@ Vamos a convertir la variable 'ocean_proximity' en un factor
 
 ```{r factorocean}
 df$ocean_proximity <- factor(df$ocean_proximity)
+```
+
+## Análisis exploratorio de 'median_house_value' (Target)
+
+Realicemos el resumen estadístico de la variable
+
+```{r median_house}
+df %>% summarise(n = length(median_house_value),
+                 media = mean(median_house_value), 
+                 sd = sd(median_house_value),
+                 mediana = median(median_house_value), 
+                 RIC = IQR(median_house_value), 
+                 Q1 = quantile(median_house_value, 0.25),
+                 Q3 = quantile(median_house_value, 0.75), 
+                 minimo = min(median_house_value), 
+                 maximo = max(median_house_value), 
+                 curtosis = kurtosis(median_house_value), 
+                 Coef_asim = skewness(median_house_value))
+```
+
+Se registra un total de 20.640 de casas. En promedio las casas cuestan aproximadamente $206.855(con una desviación estándar de 115.395). Seguidamente, el 50% de las casas cuestan a lo sumo $180.000, costando la mitad de estas menos de $120.000. Asimismo en caso de buscar una vivienda mejor valuada, cerca del 25% de las casas cuestan mínimo  $264.725 (siendo la más cara una con un valor de $500.001). Si visualizamos los datos también podemos observar que es platicúrtica, osea que tienen una forma de mesa, mientras que a su vez, los datos tienden hacia el lado derecho. 
+
+Veamos un histograma
+
+```{r histhousevalue}
+df %>% 
+  ggplot(aes(x = median_house_value))+
+  geom_histogram(aes(y = after_stat(density)), 
+                 binwidth = 25000, 
+                 fill = "#797bb0", 
+                 color = "white", 
+                 alpha = 0.6)+
+  geom_density(color = "darkblue", linewidth = 1.2)+
+  labs(title = 'Distribucion del valor medio de las viviendas', 
+       x = 'Valor medio de la casa (USD)', 
+       y = 'Densidad')+
+  theme_bw()
+```
+
+Asimismo, se evidencia la existencia de un sesgo hacia la derecha al considerar que la acumulación de los datos se encuentran hacia la izquierda, no obstante, datos de gran valor se sitúan en la derecha. 
+
+
+```{r boxplotvaluehouse}
+df %>% 
+  ggplot(aes(x = "", y = median_house_value))+
+  geom_boxplot(fill = "#797bb0", color = "#b07989", 
+               outlier.color = "darkred")+
+  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black')+
+  theme_bw()
+```
+
+## Análisis de las variables independientes (características)
+
+```{r}
+df %>% 
+  select(where(is.numeric), -median_house_value) %>% 
+  pivot_longer(
+    cols = everything(),
+    names_to = 'variable', 
+    values_to = 'valor' 
+  ) %>% 
+  group_by(variable) %>% 
+  summarise(n = length(valor),
+                 media = mean(valor), 
+                 sd = sd(valor),
+                 mediana = median(valor), 
+                 RIC = IQR(valor), 
+                 Q1 = quantile(valor, 0.25),
+                 Q3 = quantile(valor, 0.75), 
+                 minimo = min(valor), 
+                 maximo = max(valor), 
+                 curtosis = kurtosis(valor), 
+                 Coef_asim = skewness(valor))
+```
+
+Falta interpretación. 
+
+
+```{r grafindep}
+df %>% 
+  ggplot(aes(x = "", y = housing_median_age))+
+  geom_boxplot(fill = "#797bb0", color = "#b07989", 
+               outlier.color = "darkred")+
+  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black')+
+  theme_bw() -> p1
+
+df %>% 
+  ggplot(aes(x = "", y = total_rooms))+
+  geom_boxplot(fill = "#797bb0", color = "#b07989", 
+               outlier.color = "darkred")+
+  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black')+
+  theme_bw() -> p2
+
+df %>% 
+  ggplot(aes(x = "", y = total_bedrooms))+
+  geom_boxplot(fill = "#797bb0", color = "#b07989", 
+               outlier.color = "darkred")+
+  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black')+
+  theme_bw() -> p3
+
+df %>% 
+  ggplot(aes(x = "", y = median_income))+
+  geom_boxplot(fill = "#797bb0", color = "#b07989", 
+               outlier.color = "darkred")+
+  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black')+
+  theme_bw() ->p4
+
+
+p1 + p2 + p3 + p4
 ```
 
