@@ -9,6 +9,7 @@ library(dplyr)
 library(moments)
 library(ggplot2)
 library(patchwork)
+library(GGally)
 ```
 
 ```{r data}
@@ -121,7 +122,7 @@ df %>%
 
 ## Análisis de las variables independientes (características)
 
-```{r}
+```{r hallo}
 df %>% 
   select(where(is.numeric), -median_house_value) %>% 
   pivot_longer(
@@ -177,5 +178,84 @@ df %>%
 
 
 p1 + p2 + p3 + p4
+```
+
+Ahora veamos la variable ocean_proximity
+
+```{r variableoceano}
+df %>% 
+  count(ocean_proximity, name = "n")%>% 
+  mutate(Porcentaje = round(n/sum(n)*100, 2), 
+         Variable = 'ocean_proximity', 
+         Categoria = as.character(ocean_proximity))%>% 
+  select(Variable, Categoria, n, Porcentaje) -> tabla_ocean
+
+tabla_ocean
+```
+
+
+```{r hola}
+df %>% 
+  count(ocean_proximity, name = "n")%>% 
+  mutate(Porcentaje = round(n/sum(n)*100, 2), 
+         Etiqueta = paste0(n, " (", Porcentaje, "%)")) -> tabla_ocean_b
+
+tabla_ocean_b %>%
+  ggplot(aes(x = ocean_proximity, y = n))+
+  geom_col(fill = "#008B8B", width = 0.6)+
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 4.5)+
+  facet_wrap(~'Distribución de la variable ocean proximity')+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15)))+
+  theme_bw()
+```
+
+
+## Análisis exploratorio bivariado
+
+```{r valorvsingreso}
+df %>% 
+  ggplot(aes(x = median_income, y = median_house_value))+
+  geom_point(alpha = 0.4, color = 'darkblue')+
+  labs(y = 'Valor medio de la vivienda', 
+       x = 'Ingreso')+
+  theme_bw()+
+  facet_grid(.~'Dispersión entre ingreso medio y el valor medio de la vivienda')
+```
+
+Ahora comparemos el valor medio de la vivienda según la aproximidad al oceano.
+
+```{r bivalorvsoceano}
+df %>% 
+  group_by(ocean_proximity) %>% 
+  summarise(n = length(median_house_value),
+                 media = mean(median_house_value), 
+                 sd = sd(median_house_value),
+                 mediana = median(median_house_value), 
+                 RIC = IQR(median_house_value), 
+                 Q1 = quantile(median_house_value, 0.25),
+                 Q3 = quantile(median_house_value, 0.75), 
+                 minimo = min(median_house_value), 
+                 maximo = max(median_house_value), 
+                 curtosis = kurtosis(median_house_value), 
+                 Coef_asim = skewness(median_house_value))
+```
+
+Falta interpretación
+
+
+Veamos un gráfico de cajas y bigotes
+
+```{r bibloxplot}
+df %>% 
+  ggplot(aes(x = ocean_proximity, y = median_house_value))+ 
+  geom_boxplot()
+  
+```
+
+##Paquete GGally
+
+```{r ggally}
+df %>% 
+  ggpairs()
 ```
 
