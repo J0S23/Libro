@@ -253,11 +253,35 @@ df %>%
   
 ```
 
-##Paquete GGally
+Se empieza el análisis exploratorio univariado por cada variable independiente numérica
 
-```{r ggally}
-df %>% 
-  ggpairs()
+```{r caractUnivar}
+plot_univariado <- function(df, var) {
+  
+  p_box <- df %>% 
+    ggplot(aes(x = "", y = .data[[var]])) +
+    geom_boxplot(fill = "#8ecae6", color = "#023047", 
+                 outlier.color = "#e63946") +
+    stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = '#023047') +
+    labs(title = paste("Diagrama de cajas y bigotes"), x = NULL, y = var) +
+    theme_bw()
+  
+  p_hist <- df %>% 
+    ggplot(aes(x = .data[[var]]))+
+    geom_histogram(aes(y = after_stat(count)), fill = "#8ecae6", color = "white", bins = 30) +
+    geom_freqpoly(color = "#023047", linewidth = 1, alpha = 0.8, bins = 30) +
+    labs(title = paste("Histograma de polígonos"), x = var, y = "Frecuencia") +
+    theme_bw()
+  
+  p_hist + p_box
+}
+vars_numericas <- df %>% 
+  select(where(is.numeric), -median_house_value) %>% 
+  names()
+
+for (v in vars_numericas) {
+  print(plot_univariado(df, v))
+}
 ```
 
 
