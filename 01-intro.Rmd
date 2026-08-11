@@ -123,7 +123,7 @@ df %>%
 
 Ahora veamos la variable ocean_proximity
 
-```{r hallo}
+```{r tablacarac}
 df %>% 
   select(where(is.numeric), -median_house_value) %>% 
   pivot_longer(
@@ -193,47 +193,48 @@ for (v in vars_numericas) {
 ```{r longitude}
 plot_univariado(df, "longitude")
 ```
-La distribución de `longitude` presenta una asimetría marcada por su carácter bimodal, con una mayor concentración de observaciones en dos zonas específicas —una alrededor de -122° y otra más pronunciada cerca de -118°—, mientras que una menor proporción de datos corresponde a los valores intermedios y a los extremos del rango. El histograma y el diagrama de cajas evidencian esta concentración en dos grupos diferenciados, así como la ausencia de valores atípicos en los extremos de la distribución, lo que es consistente con tratarse de una variable geográfica acotada dentro de un rango fijo. Esta característica bimodal puede influir en el ajuste de algunos modelos de aprendizaje automático, ya que la relación de esta variable con la respuesta podría no ser lineal, por lo que será importante considerarla durante las etapas posteriores del análisis y modelamiento.
-
+La distribución de `longitude` presenta una asimetría negativa, evidenciada dado que la media (-120°) es menor que la mediana (-118°), sugiriendo que existen algunas observaciones con longitudes considerablemente más bajas que desplazan la media hacia abajo. Además, la variable cuenta con un carácter bimodal, con una mayor concentración de observaciones en dos zonas específicas —una alrededor de -122° y otra más pronunciada cerca de -118°—, mientras que una menor proporción de datos corresponde a los valores intermedios y a los extremos del rango. Esta característica bimodal sugiere que la relación de esta variable con la respuesta podría no ser lineal, por lo que sería importante considerarla durante las etapas posteriores del análisis y modelamiento. Por su parte, el diagrama de cajas y bigotes muestra que el 50% central de los datos (rango intercuartílico) se ubica entre -122° y -118°, coincidiendo sus extremos justamente con las dos zonas de mayor concentración observadas en el histograma de polígonos. Además, se evidencia ausencia de valores atípicos en los extremos de la distribución.
 ```{r latitude}
 plot_univariado(df, "latitude")
 ```
-
+La distribución de `latitude` presenta una asimetría positiva, evidenciada porque la latitud media (36°) se encuentra por encima de la mediana (34°) en la caja, sugiriendo que, aunque la mayoría de los datos se concentra en valores más bajos, existen algunas observaciones con latitudes considerablemente más altas que desplazan la media hacia arriba. Además, la variable muestra un carácter bimodal, con una mayor concentración de observaciones en dos zonas específicas (una notablemente pronunciada alrededor de 34° y otra menos pronunciada alrededor de 38°), mientras que una menor proporción de datos corresponde a los valores intermedios y a los extremos del rango. Por su parte, el diagrama de cajas y bigotes muestra que el 50% central de los datos (rango intercuartílico) se ubica aproximadamente entre 34° y 38°, coincidiendo sus extremos justamente con las dos zonas de mayor concentración observadas en el histograma de polígonos. Adicionalmente, se evidencia ausencia de valores atípicos en los extremos de la distribución. Esta característica bimodal muestra que la relación de esta variable con la respuesta podría no ser lineal.
 
 
 ```{r housing_median_age}
 plot_univariado(df, "housing_median_age")
 ```
 
-
+La distribución de `housing_median_age` presenta un notable grado de simetría, donde la media es prácticamente igual que la mediana (29 años), con una concentración relativamente uniforme de los datos a lo largo del rango. Por su parte, el diagrama de cajas y bigotes muestra que el 50% central de los datos (rango intercuartílico) se ubica aproximadamente entre 18 y 37 años. Además, se evidencia ausencia de valores atípicos en los extremos de la distribución. Sin embargo, el histograma no presenta una forma completamente normal, es decir, de campana, sino que posee varios picos irregulares a lo largo del rango, y particularmente una acumulación notoria de observaciones cerca del valor máximo (52 años), lo que sugiere una mayor frecuencia de valores más altos de edad media de casas en la zona.
 
 ```{r total_rooms}
 plot_univariado(df, "total_rooms")
 ```
-
+La distribución de `total_rooms` presenta una fuerte asimetría positiva, evidenciada porque la media (2.636) se encuentra considerablemente por encima de la mediana (2.127), sugiriendo que existen zonas con un número de habitaciones notablemente elevado que desplazan la media hacia arriba. El histograma muestra un pico marcado en valores bajos, seguido de una larga cola hacia la derecha que se extiende hasta cerca de 40.000. El diagrama de cajas y bigotes confirma esta asimetría, con el 50% central de los datos (rango intercuartílico) ubicado entre 1.448 y 3.148, y evidencia además una gran cantidad de valores atípicos por encima del bigote superior, lo cual refuerza la presencia de zonas con un número de habitaciones muy por fuera del comportamiento típico del resto de las observaciones.
 
 
 ```{r total_bedrooms}
 plot_univariado(df, "total_bedrooms")
 ```
 
-
+La distribución de `total_bedrooms` presenta una fuerte asimetría positiva, evidenciada porque la media (538) se encuentra por encima de la mediana (438), sugiriendo que existen zonas con un número de dormitorios notablemente elevado que desplazan la media hacia arriba. El histograma muestra un pico marcado en valores bajos, seguido de una larga cola hacia la derecha que se extiende hasta cerca de 6.500. El diagrama de cajas y bigotes confirma esta asimetría, con el 50% central de los datos (rango intercuartílico) ubicado entre 297 y 643, y evidencia además una considerable cantidad de valores atípicos por encima del bigote superior, lo cual refuerza la presencia de zonas con un número de dormitorios muy por fuera del comportamiento típico del resto de las observaciones.
 
 ```{r population}
 plot_univariado(df, "population")
 ```
-
+La distribución de `population` presenta una fuerte asimetría positiva, evidenciada porque la media (1.425) se encuentra por encima de la mediana (1.166), sugiriendo que existen zonas con una población notablemente elevada que desplazan la media hacia arriba. El histograma muestra un pico muy pronunciado en valores bajos, seguido de una larga cola hacia la derecha que se extiende hasta cerca de 35.000. El diagrama de cajas y bigotes confirma esta asimetría, con el 50% central de los datos (rango intercuartílico) ubicado entre 787 y 1.725, y evidencia además una gran cantidad de valores atípicos por encima del bigote superior, incluyendo una observación extrema cercana a los 30.000, lo cual refuerza la presencia de zonas con una población muy por fuera del comportamiento típico del resto de las observaciones.
 
 
 ```{r households}
 plot_univariado(df, "households")
 ```
 
-
+La distribución de `households` presenta una fuerte asimetría positiva, evidenciada porque la media (500) se encuentra por encima de la mediana (409), sugiriendo que existen zonas con un número de hogares notablemente elevado que desplazan la media hacia arriba. El histograma muestra un pico marcado en valores bajos, seguido de una larga cola hacia la derecha que se extiende hasta cerca de 6.000. El diagrama de cajas y bigotes confirma esta asimetría, con el 50% central de los datos (rango intercuartílico) ubicado entre 280 y 605, y evidencia además una considerable cantidad de valores atípicos por encima del bigote superior, lo cual refuerza la presencia de zonas con un número de hogares muy por fuera del comportamiento típico del resto de las observaciones.
 
 ```{r median_income}
 plot_univariado(df, "median_income")
 ```
+La distribución de `median_income` presenta una asimetría positiva, evidenciada porque la media (3,87) se encuentra por encima de la mediana (3,53), sugiriendo que existen zonas con un ingreso notablemente elevado que desplazan la media hacia arriba. El histograma muestra un pico pronunciado en valores medios-bajos, seguido de una cola hacia la derecha que se extiende hasta cerca de 15. El diagrama de cajas y bigotes confirma esta asimetría, con el 50% central de los datos (rango intercuartílico) ubicado entre 2,56 y 4,74, y evidencia además una considerable cantidad de valores atípicos por encima del bigote superior, lo cual refuerza la presencia de zonas con ingresos notablemente más altos que el resto de las observaciones.
+
 ## Análisis exploratorio bivariado
 
 
@@ -254,15 +255,33 @@ plot_dispersión_respuesta <- function(df, var, var_label) {
 
 ```{r valorvsingreso}
 plot_dispersión_respuesta(df, "median_income", "ingreso medio")
+```
+```{r valorvsedad}
 plot_dispersión_respuesta(df, "housing_median_age", "edad media de las viviendas")
-plot_dispersión_respuesta(df, "total_rooms", "total de habitaciones")
-plot_dispersión_respuesta(df, "total_bedrooms", "total de dormitorios")
-plot_dispersión_respuesta(df, "population", "población")
-plot_dispersión_respuesta(df, "households", "número de hogares")
-plot_dispersión_respuesta(df, "latitude", "latitud")
-plot_dispersión_respuesta(df, "longitude", "longitud")
 ```
 
+```{r valorvshabitacion}
+plot_dispersión_respuesta(df, "total_rooms", "total de habitaciones")
+```
+
+```{r valorvsdormitorio}
+plot_dispersión_respuesta(df, "total_bedrooms", "total de dormitorios")
+```
+
+```{r valorvspoblacion}
+plot_dispersión_respuesta(df, "population", "población")
+```
+```{r valorvsnhogares}
+plot_dispersión_respuesta(df, "households", "número de hogares")
+```
+
+```{r valorvslatitud}
+plot_dispersión_respuesta(df, "latitude", "latitud")
+```
+
+```{r valorvslongitud}
+plot_dispersión_respuesta(df, "longitude", "longitud")
+```
 Ahora veamos la variable ocean_proximity
 
 ```{r variableoceano}
@@ -277,7 +296,7 @@ tabla_ocean
 ```
 
 
-```{r hola}
+```{r histoceano}
 df %>% 
   count(ocean_proximity, name = "n")%>% 
   mutate(Porcentaje = round(n/sum(n)*100, 2), 
@@ -290,19 +309,6 @@ tabla_ocean_b %>%
   facet_wrap(~'Distribución de la variable ocean proximity')+
   scale_y_continuous(expand = expansion(mult = c(0, 0.15)))+
   theme_bw()
-```
-
-
-## Análisis exploratorio bivariado
-
-```{r valorvsingreso}
-df %>% 
-  ggplot(aes(x = median_income, y = median_house_value))+
-  geom_point(alpha = 0.4, color = 'darkblue')+
-  labs(y = 'Valor medio de la vivienda', 
-       x = 'Ingreso')+
-  theme_bw()+
-  facet_grid(.~'Dispersión entre ingreso medio y el valor medio de la vivienda')
 ```
 
 Ahora comparemos el valor medio de la vivienda según la aproximidad al oceano.
@@ -323,12 +329,9 @@ df %>%
                  Coef_asim = skewness(median_house_value))
 ```
 
-Falta interpretación
-
-
 Veamos un gráfico de cajas y bigotes
 
-```{r bibloxplot}
+```{r biboxplot}
 df %>% 
   ggplot(aes(x = ocean_proximity, y = median_house_value))+ 
   geom_boxplot()
