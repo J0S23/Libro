@@ -14,9 +14,7 @@ library(GGally)
 
 Conjunto de datos
 ```{r data}
-data <- read.csv("/cloud/project/Metodos_estadisticos/Data/housing.csv")
-data_cae <- read.csv("/cloud/project/Metodos_estadisticos/Data/cognitive_ability_ai_exposure.csv")
-data_ocp <- read.csv("/cloud/project/Metodos_estadisticos/Data/occupation_cognitive_profile.csv")
+data <- read.csv("~/Metodos_estadisticos/Data/housing.csv")
 ```
 
 Muestrame las 5 primeras filas
@@ -36,10 +34,6 @@ Veamos si hay datos faltantes
 
 ```{r faltante}
 data %>% 
-  summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
-data_cae %>% 
-  summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
-data_ocp %>% 
   summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
 ```
 
@@ -340,5 +334,362 @@ df %>%
 ```{r ggally}
 df %>% 
   ggpairs()
+```
+
+Seguidamente, crearemos una función auxiliar 
+
+```{r auxiliar}
+graf_dispersion <- function(var_x, var_y) {
+  df %>% 
+    ggplot(aes(x = .data[[var_x]], y = .data[[var_y]])) +
+    geom_point(alpha = 0.4, color = 'darkblue') +
+    theme_bw()
+}
+```
+
+<span style="font-size:1.2em;">**Gráficos de dispersión: independientes numéricas vs independientes numéricas**</span>.
+
+**Longitud vs Latitud:**
+```{r longitude vs latitude}
+graf_dispersion("longitude", "latitude")
+```
+Podemos observar una marcada tendencia negativa en el gráfico de dispersión, esto señala que conforme aumenta el valor de la *Longitud*, el valor de la *Latitud* se ve disminuido. Seguidamente, podemos notar que no tiene una concentración clara de los datos más allá de cuando está entre los 34 en Latitud y -118 en Longitud ó cuando está entre 37-38 Latitud y -122 en Longitud. 
+
+Está claro que, aunque en menor medida que otros gráficos de dispersión, la variabilidad de los datos de latitud aumenta conforme disminuye la longitud, lo cual sugiere que en California la zona Sur es donde es más apto o más rentable la construcción de viviendas.
+
+En síntesis, la relación entre *Latitud* y *Longitud* es negativa, con tendencia negativa y aproximandamente lineal aunque con una ligera curva. Lo cual sugiere la independencia de estas dos variables.
+
+**Longitud vs Edad media de las casas:**
+
+```{r longitude vs housing_median_age}
+graf_dispersion("longitude", "housing_median_age")
+```
+
+En este gráfico no se observa una tendencia clara ni marcada, la nube de puntos se distribuye en bandas verticales a lo largo de casi todo el rango de edad (entre 1 y 52 años). Seguidamente, podemos notar que sí hay una concentración clara de los datos cuando la longitud está entre -122 y -118, coincidiendo con las zonas urbanas más antiguas y densamente construidas. 
+
+Está claro que la variabilidad de la edad de las casas no cambia de forma sistemática con la longitud, lo cual sugiere que a la hora de invertir en una zona por su antigüedad de construcción, la posición este-oeste por sí sola no es un criterio útil; conviene mirar la ciudad o el municipio específico.
+
+En síntesis, la relación entre Longitud y Edad media de las casas es prácticamente nula, lo cual sugiere independencia entre estas dos variables.
+
+**Longitud vs Total de habitaciones:**
+
+```{r longitude vs total_rooms}
+graf_dispersion("longitude", "total_rooms")
+```
+No se observa una tendencia definida en el gráfico de dispersión. Seguidamente, podemos notar que sí hay una concentración clara de los datos entre 0 y 8.000 habitaciones, independientemente del valor de longitud, con valores atípicos que llegan hasta cerca de 40.000 en longitudes puntuales como -122 y -116. 
+
+Está claro que la variabilidad del total de habitaciones aumenta considerablemente en esas zonas urbanas específicas, lo cual sugiere que los desarrollos de gran tamaño (edificios, complejos residenciales) se concentran en las metrópolis costeras y no se distribuyen de forma pareja por todo el estado. 
+
+En síntesis, la relación entre Longitud y Total de habitaciones es prácticamente nula, lo cual sugiere independencia entre estas dos variables.
+
+
+**Longitud vs Total de dormitorios:**
+
+```{r longitude vs total_bedrooms}
+graf_dispersion("longitude", "total_bedrooms")
+```
+
+No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 1.000 dormitorios, sin importar la longitud, con valores atípicos dispersos en las mismas zonas urbanas de siempre (-122 y -116). 
+
+Está claro que este comportamiento replica exactamente el observado con el total de habitaciones, lo cual sugiere que ambas variables aportan la misma señal de negocio, la oferta de vivienda de mayor tamaño está atada a las zonas metropolitanas, no a la longitud en sí. 
+
+En síntesis, la relación entre Longitud y Total de dormitorios es prácticamente nula.
+
+**Longitud vs Población:**
+```{r longitude-population}
+graf_dispersion("longitude", "population")
+```
+
+No se evidencia una tendencia clara. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 950 habitantes por bloque censal, con pocos valores atípicos que superan los 20.000 en longitudes puntuales. 
+
+Está claro que la variabilidad de la población no depende de la posición este-oeste, sino de si el bloque censal cae en zona urbana o rural, lo cual sugiere que para estimar demanda de vivienda por densidad poblacional, es más útil clasificar por tipo de zona que por coordenada de longitud. 
+
+En síntesis, la relación entre Longitud y Población es prácticamente nula, lo cual sugiere independencia entre estas dos variables.
+
+**Longitud vs Hogares:**
+```{r longitude-households}
+graf_dispersion("longitude", "households")
+```
+No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 1.200 hogares, comportamiento muy similar al de longitud vs población. 
+
+Está claro que esta ausencia de relación es coherente con lo visto en las demás variables de tamaño poblacional frente a la longitud, lo cual sugiere que la cantidad de hogares por bloque no es un indicador que varíe según el desplazamiento este-oeste del estado. 
+
+En síntesis, la relación entre Longitud y Hogares es prácticamente nula.
+
+
+**Longitud vs Ingreso medio:**
+```{r longitude-median_income}
+graf_dispersion("longitude", "median_income")
+```
+
+No se observa una tendencia clara ni marcada. Seguidamente, podemos notar que hay una concentración clara de los datos entre 2.5 y 4.8 en ingreso medio, con un límite superior visible cercano a 15, más denso en las longitudes -122.5 y -116. 
+
+Está claro que el nivel de ingreso no varía de forma sistemática según la posición este-oeste, lo cual sugiere que la longitud por sí sola no sirve para segmentar zonas de mayor o menor poder adquisitivo; es la ubicación específica (ciudad, distrito) la que realmente marca la diferencia. 
+
+En síntesis, la relación entre Longitud e Ingreso medio es prácticamente nula, lo cual sugiere independencia entre estas dos variables.
+
+
+**Latitud vs Edad media de las casas:**
+```{r latitude-housing_median_age}
+graf_dispersion("latitude", "housing_median_age")
+```
+No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos cuando la latitud está entre 33 y 35 y también entre 37.3 y 39. 
+
+En síntesis, la relación entre Latitud y Edad media de las casas es prácticamente nula, lo cual sugiere que la antigüedad de las viviendas no depende de la posición norte-sur del estado.
+
+
+**Latitud vs Total de habitaciones:**
+```{r latitude-total_rooms}
+graf_dispersion("latitude", "total_rooms")
+```
+No se observa una tendencia clara. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 5.00 habitaciones, con valores atípicos notorios en las latitudes 34 y 38. 
+
+Está claro que la variabilidad aumenta en esas franjas específicas, lo cual sugiere que la oferta de viviendas grandes se concentra en las mismas latitudes. 
+
+En síntesis, la relación entre Latitud y Total de habitaciones es prácticamente nula.
+
+
+
+**Latitud vs Total de dormitorios:**
+```{r latitude-total_bedrooms}
+graf_dispersion("latitude", "total_bedrooms")
+```
+No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 500 dormitorios, replicando el mismo patrón que la latitud vs total de habitaciones. 
+
+Está claro que ambas variables se comportan de forma prácticamente idéntica frente a la latitud, lo cual sugiere que, de nuevo, la variable relevante no es la posición geográfica en sí, sino si el bloque pertenece a una zona metropolitana o rural. 
+
+En síntesis, la relación entre Latitud y Total de dormitorios es prácticamente nula.
+
+
+**Latitud vs Población:**
+```{r latitude-population}
+graf_dispersion("latitude", "population")
+```
+No se observa una tendencia clara. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 1.200 habitantes, con algunos valores atípicos elevados en las latitudes 33 y 38. 
+
+Está claro que la densidad poblacional no varía de forma sistemática con la latitud, lo cual sugiere que para fines de planeación urbana o comercial, es más útil identificar directamente las zonas metropolitanas que usar la latitud. 
+
+En síntesis, la relación entre Latitud y Población es prácticamente nula.
+
+
+
+**Latitud vs Hogares:**
+```{r latitude-households}
+graf_dispersion("latitude", "households")
+```
+No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 500 hogares, comportamiento equivalente al de latitud vs población. 
+
+Está claro que la ausencia de relación es consistente con las demás variables de tamaño poblacional, lo cual sugiere que la latitud no aporta valor predictivo sobre la cantidad de hogares de una zona. 
+
+En síntesis, la relación entre Latitud y Hogares es prácticamente nula.
+
+
+**Latitud vs Ingreso medio:**
+```{r latitude-median_income}
+graf_dispersion("latitude", "median_income")
+```
+No se observa una tendencia clara. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 5 en ingreso medio, más denso en las latitudes 33-34 y 37-38. 
+
+Está claro que el nivel de ingreso no depende de la posición norte-sur por sí sola, lo cual sugiere que tanto el norte como el sur del estado tienen zonas de ingresos altos y bajos. 
+
+En síntesis, la relación entre Latitud e Ingreso medio es prácticamente nula.
+
+
+**Edad media de las casas vs Total de habitaciones:**
+```{r housing_median_age-total_rooms}
+graf_dispersion("housing_median_age", "total_rooms")
+```
+Podemos observar una leve tendencia negativa en el gráfico de dispersión, esto señala que conforme aumenta el valor de la Edad media de las casas, el valor del Total de habitaciones se ve ligeramente disminuido. Seguidamente, podemos notar que no tiene una concentración clara de los datos más allá de cuando está entre 3 y 52 años de edad y entre 0 y 5.000 habitaciones. 
+
+Está claro que, aunque en menor medida que otros gráficos de dispersión, la variabilidad del total de habitaciones disminuye conforme aumenta la edad de la vivienda, lo cual sugiere que las construcciones más recientes tienden a levantarse en bloques de mayor tamaño poblacional, siendo estas zonas potencialmente más atractivas. 
+
+En síntesis, la relación entre Edad media de las casas y Total de habitaciones es negativa, con tendencia negativa y débilmente lineal.
+
+
+**Edad media de las casas vs Total de dormitorios:**
+```{r housing_median_age-total_bedrooms}
+graf_dispersion("housing_median_age", "total_bedrooms")
+```
+Podemos observar una leve tendencia negativa, esto señala que conforme aumenta la Edad media de las casas, el Total de dormitorios disminuye ligeramente. Seguidamente, podemos notar que hay concentración de datos entre 4 y 52 años y entre 0 y 1.000 dormitorios. 
+
+Está claro que este comportamiento replica el visto con el total de habitaciones, lo cual sugiere nuevamente que las zonas de construcción más nueva son las que concentran mayor cantidad de habitaciones. 
+
+En síntesis, la relación entre Edad media de las casas y Total de dormitorios es negativa, con tendencia negativa y débilmente lineal.
+
+
+**Edad media de las casas vs Población:**
+```{r housing_median_age-population}
+graf_dispersion("housing_median_age", "population")
+```
+Podemos observar una leve tendencia negativa, esto señala que conforme aumenta la Edad media de las casas, la Población del bloque poblacional disminuye ligeramente. Seguidamente, podemos notar concentración de datos entre 2 y 52 años y entre 0 y 5.000 habitantes. 
+
+Está claro que las zonas con construcciones más antiguas tienden a estar levemente menos pobladas, lo cual sugiere que estas áreas podrían estar en proceso de despoblamiento o de menor renovación urbana frente a las zonas de construcción más reciente. 
+
+En síntesis, la relación entre Edad media de las casas y Población es negativa, con tendencia negativa y débilmente lineal.
+
+
+**Edad media de las casas vs Hogares:**
+```{r housing_median_age-households}
+graf_dispersion("housing_median_age", "households")
+```
+Podemos observar una leve tendencia negativa, esto señala que conforme aumenta la Edad media de las casas, el número de Hogares disminuye ligeramente. Seguidamente, podemos notar concentración de datos entre 2 y 52 años y entre 0 y 900 hogares. Está claro que este patrón es consistente con el observado en población, lo cual sugiere que las zonas más antiguas del estado también concentran menos familias.
+
+En síntesis, la relación entre Edad media de las casas y Hogares es negativa, con tendencia negativa y débilmente lineal.
+
+
+**Edad media de las casas vs Ingreso medio:**
+```{r housing_median_age-median_income}
+graf_dispersion("housing_median_age", "median_income")
+```
+Podemos observar una tendencia negativa leve, apenas perceptible, esto señala que las zonas con viviendas más antiguas tienden a tener un ingreso medio ligeramente menor. Seguidamente, podemos notar que hay concentración de datos entre 10 y 52 años y entre 2.3 y 5 en ingreso medio. 
+
+Está claro que, a diferencia de las otras variables de tamaño, aquí la variabilidad no cambia mucho con la edad, lo cual sugiere que la antigüedad de la construcción no es un buen predictor por sí solo del nivel socioeconómico de una zona. 
+
+En síntesis, la relación entre Edad media de las casas e Ingreso medio es prácticamente nula, lo cual sugiere independencia entre estas dos variables.
+
+
+**Total de habitaciones vs Total de dormitorios:**
+```{r total_rooms-total_bedrooms}
+graf_dispersion("total_rooms", "total_bedrooms")
+```
+Podemos observar una marcada tendencia positiva en el gráfico de dispersión, esto señala que conforme aumenta el valor del Total de habitaciones, el valor del Total de dormitorios también se ve incrementado. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 7.000 habitaciones y entre 0 y 1.700 dormitorios. 
+
+Está claro que, a diferencia de los gráficos anteriores, la variabilidad de ambas variables aumenta de forma conjunta y proporcional conforme crecen los valores, lo cual sugiere que basta con conocer el total de habitaciones de una zona para estimar de forma bastante confiable su total de dormitorios. 
+
+En síntesis, la relación entre Total de habitaciones y Total de dormitorios es positiva, con tendencia positiva y fuertemente lineal, lo cual sugiere una alta dependencia entre estas dos variables.
+
+
+**Total de habitaciones vs Población:**
+```{r total_rooms-population}
+graf_dispersion("total_rooms", "population")
+```
+Podemos observar una marcada tendencia positiva, esto señala que conforme aumenta el Total de habitaciones, la Población también se ve incrementada. Seguidamente, podemos notar concentración de datos entre 0 y 11.000 habitaciones y entre 0 y 5.000 habitantes. 
+
+Está claro que la dispersión se amplía considerablemente en los valores altos de ambas variables, lo cual sugiere que las zonas con mayor número de habitaciones efectivamente logran absorber más población, siendo un buen indicador de capacidad de acogida de un bloque poblacional. 
+
+En síntesis, la relación entre Total de habitaciones y Población es positiva, con tendencia positiva y moderadamente lineal, contando con una dependencia moderada-alta.
+
+
+**Total de habitaciones vs Hogares:**
+```{r total_rooms-households}
+graf_dispersion("total_rooms", "households")
+```
+Podemos observar una marcada tendencia positiva, esto señala que conforme aumenta el Total de habitaciones, el número de Hogares también se ve incrementado. Seguidamente, podemos notar concentración de datos entre 0 y 9.000 habitaciones y entre 0 y 1.800 hogares. 
+
+Está claro que esta es una de las relaciones más fuertes de todo el conjunto de variables, lo cual sugiere que ambas variables aportan prácticamente la misma información sobre el tamaño poblacional, siendo buena candidata para combinarlas en un ratio como habitaciones por hogar en vez de mantenerlas por separado. 
+
+En síntesis, la relación entre Total de habitaciones y Hogares es positiva, con tendencia positiva y fuertemente lineal, lo cual sugiere una alta dependencia entre estas dos variables.
+
+
+**Total de habitaciones vs Ingreso medio:**
+```{r total_rooms-median_income}
+graf_dispersion("total_rooms", "median_income")
+```
+Podemos observar una tendencia positiva leve en el gráfico de dispersión. Seguidamente, podemos notar que no tiene una concentración clara de los datos más allá de cuando está entre 0 y 5.000 habitaciones y entre 0 y 8 en ingreso medio. 
+
+Está claro que, a diferencia de los gráficos entre variables de tamaño, aquí la variabilidad del ingreso no aumenta de forma proporcional con el total de habitaciones, lo cual sugiere que muchas habitaciones no necesariamente implica residentes de mayor poder adquisitivo, siendo el tamaño de la vivienda y el nivel de ingreso factores relativamente independientes. 
+
+En síntesis, la relación entre Total de habitaciones e Ingreso medio es positiva pero débil, lo cual sugiere una dependencia mínima entre estas dos variables.
+
+
+**Total de dormitorios vs Población:**
+```{r total_bedrooms-population}
+graf_dispersion("total_bedrooms", "population")
+```
+Podemos observar una marcada tendencia positiva, esto señala que conforme aumenta el Total de dormitorios, la Población también se ve incrementada. Seguidamente, podemos notar concentración de datos entre 0 y 1.700 dormitorios y entre 0 y 4.600 habitantes. 
+
+Está claro que este comportamiento replica el de total de habitaciones vs población, lo cual sugiere que el número de dormitorios disponibles es también un buen indicador de la capacidad para albergar población. 
+
+En síntesis, la relación entre Total de dormitorios y Población es positiva, con tendencia positiva y moderadamente lineal.
+
+
+**Total de dormitorios vs Hogares:**
+```{r total_bedrooms-households}
+graf_dispersion("total_bedrooms", "households")
+```
+Podemos observar la tendencia positiva más marcada y lineal de todo el conjunto de gráficos, esto señala que conforme aumenta el Total de dormitorios, el número de Hogares aumenta casi en la misma proporción. Seguidamente, podemos notar concentración de datos entre 0 y 2.000 dormitorios y entre 0 y 1.500 hogares. 
+
+Está claro que ambas variables prácticamente se determinan una a la otra, lo cual sugiere que mantener las dos en un modelo predictivo aportaría información redundante, siendo más eficiente resumirlas en una sola métrica como dormitorios por hogar. 
+
+En síntesis, la relación entre Total de dormitorios y Hogares es positiva, con tendencia positiva y casi perfectamente lineal, lo cual sugiere una redundancia muy alta entre estas dos variables.
+
+
+**Total de dormitorios vs Ingreso medio:**
+```{r total_bedrooms-median_income}
+graf_dispersion("total_bedrooms", "median_income")
+```
+No se observa una tendencia clara en el gráfico de dispersión. Seguidamente, podemos notar que hay concentración de datos entre 0 y 1.600 dormitorios y entre 0 y 7.5 en ingreso medio. 
+
+Está claro que el nivel de ingreso no depende de la cantidad de dormitorios disponibles en la zona, lo cual sugiere que el poder adquisitivo de los residentes no está condicionado por la cantidad de habitaciones del bloque censal donde viven. 
+
+En síntesis, la relación entre Total de dormitorios e Ingreso medio es prácticamente nula, lo cual sugiere independencia entre estas dos variables.
+
+
+**Población vs Hogares:**
+```{r population-households}
+graf_dispersion("population", "households")
+```
+Podemos observar una marcada tendencia positiva y fuertemente lineal, esto señala que conforme aumenta la Población, el número de Hogares aumenta en la misma proporción. Seguidamente, podemos notar concentración de datos entre 0 y 5.000 habitantes y entre 0 y 1.700 hogares. 
+
+Está claro que esta es una relación totalmente esperable, ya que la población está compuesta directamente por los integrantes de los hogares, lo cual sugiere que esta es, junto con total de dormitorios vs hogares, la pareja más redundante del dataset y una candidata clara para simplificar en la ingeniería de características. 
+
+En síntesis, la relación entre Población y Hogares es positiva, con tendencia positiva y fuertemente lineal.
+
+
+**Población vs Ingreso medio:**
+```{r population-median_income}
+graf_dispersion("population", "median_income")
+```
+No se observa una tendencia clara en el gráfico de dispersión. Seguidamente, podemos notar que hay concentración de datos entre 0 y 4.000 habitantes y entre 0 y 7 en ingreso medio. 
+
+Está claro que la densidad poblacional de una zona no está relacionada con su nivel de ingreso, lo cual sugiere que tanto zonas muy pobladas como poco pobladas pueden tener residentes de ingresos altos o bajos. 
+
+En síntesis, la relación entre Población e Ingreso medio es prácticamente nula, lo cual sugiere independencia entre estas dos variables.
+
+
+
+**Hogares vs Ingreso medio:**
+```{r households-median_income}
+graf_dispersion("households", "median_income")
+```
+No se observa una tendencia clara en el gráfico de dispersión. Seguidamente, podemos notar que hay concentración de datos entre 0 y 1.200 hogares y entre 0 y 6.5 en ingreso medio. 
+
+Está claro que la cantidad de hogares de un bloque poblacional no está relacionada con el nivel de ingreso de sus habitantes, lo cual sugiere que el tamaño de la comunidad (en número de hogares) no debe usarse como indicador del nivel socioeconómico de la zona. 
+
+En síntesis, la relación entre Hogares e Ingreso medio es prácticamente nula, lo cual sugiere independencia entre estas dos variables.
+
+## Ingeniería de características
+
+Con base en la matriz de correlación, identificamos que total_rooms, total_bedrooms, population y households están altamente correlacionadas entre sí, ya que todas escalan según el tamaño del bloque censal. Para reducir esta redundancia, eliminamos estas 4 variables originales y las combinamos en 4 nuevas variables; habitaciones_por_hogar, dormitorios_por_habitacion, poblacion_por_hogar e ingreso_por_persona.
+
+```{r feature-engineering}
+df <- df %>% 
+  mutate(
+    rooms_per_household     = total_rooms / households,
+    bedrooms_by_room = total_bedrooms / total_rooms,
+    population_per_household        = population / households,
+  ) %>% 
+  select(-total_rooms, -total_bedrooms, -population, -households)
+
+df %>% 
+  select(rooms_per_household, bedrooms_by_room, 
+         population_per_household) %>% 
+```
+
+
+```{r rooms_per_household}
+plot_univariado(df, "rooms_per_household")
+```
+
+
+
+```{r bedrooms_by_room}
+plot_univariado(df, "bedrooms_by_room")
+```
+
+
+
+```{r population_per_household}
+plot_univariado(df, "population_per_household")
 ```
 
