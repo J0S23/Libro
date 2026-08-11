@@ -121,66 +121,6 @@ df %>%
   theme_bw()
 ```
 
-## Análisis de las variables independientes (características)
-
-```{r hallo}
-df %>% 
-  select(where(is.numeric), -median_house_value) %>% 
-  pivot_longer(
-    cols = everything(),
-    names_to = 'variable', 
-    values_to = 'valor' 
-  ) %>% 
-  group_by(variable) %>% 
-  summarise(n = length(valor),
-                 media = mean(valor), 
-                 sd = sd(valor),
-                 mediana = median(valor), 
-                 RIC = IQR(valor), 
-                 Q1 = quantile(valor, 0.25),
-                 Q3 = quantile(valor, 0.75), 
-                 minimo = min(valor), 
-                 maximo = max(valor), 
-                 curtosis = kurtosis(valor), 
-                 Coef_asim = skewness(valor))
-```
-
-Falta interpretación. 
-
-
-```{r grafindep}
-df %>% 
-  ggplot(aes(x = "", y = housing_median_age))+
-  geom_boxplot(fill = "#797bb0", color = "#b07989", 
-               outlier.color = "darkred")+
-  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black')+
-  theme_bw() -> p1
-
-df %>% 
-  ggplot(aes(x = "", y = total_rooms))+
-  geom_boxplot(fill = "#797bb0", color = "#b07989", 
-               outlier.color = "darkred")+
-  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black')+
-  theme_bw() -> p2
-
-df %>% 
-  ggplot(aes(x = "", y = total_bedrooms))+
-  geom_boxplot(fill = "#797bb0", color = "#b07989", 
-               outlier.color = "darkred")+
-  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black')+
-  theme_bw() -> p3
-
-df %>% 
-  ggplot(aes(x = "", y = median_income))+
-  geom_boxplot(fill = "#797bb0", color = "#b07989", 
-               outlier.color = "darkred")+
-  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black')+
-  theme_bw() ->p4
-
-
-p1 + p2 + p3 + p4
-```
-
 Ahora veamos la variable ocean_proximity
 
 ```{r variableoceano}
@@ -208,19 +148,6 @@ tabla_ocean_b %>%
   facet_wrap(~'Distribución de la variable ocean proximity')+
   scale_y_continuous(expand = expansion(mult = c(0, 0.15)))+
   theme_bw()
-```
-
-
-## Análisis exploratorio bivariado
-
-```{r valorvsingreso}
-df %>% 
-  ggplot(aes(x = median_income, y = median_house_value))+
-  geom_point(alpha = 0.4, color = 'darkblue')+
-  labs(y = 'Valor medio de la vivienda', 
-       x = 'Ingreso')+
-  theme_bw()+
-  facet_grid(.~'Dispersión entre ingreso medio y el valor medio de la vivienda')
 ```
 
 Ahora comparemos el valor medio de la vivienda según la aproximidad al oceano.
@@ -252,12 +179,50 @@ df %>%
   geom_boxplot()
   
 ```
+## Análisis univariado de las variables independientes (características)
 
-Se empieza el análisis exploratorio univariado por cada variable independiente numérica
+```{r tablaCaracNum}
+df %>% 
+  select(where(is.numeric), -median_house_value) %>% 
+  pivot_longer(
+    cols = everything(),
+    names_to = 'variable', 
+    values_to = 'valor' 
+  ) %>% 
+  group_by(variable) %>% 
+  summarise(n = length(valor),
+                 media = mean(valor), 
+                 sd = sd(valor),
+                 mediana = median(valor), 
+                 RIC = IQR(valor), 
+                 Q1 = quantile(valor, 0.25),
+                 Q3 = quantile(valor, 0.75), 
+                 minimo = min(valor), 
+                 maximo = max(valor), 
+                 curtosis = kurtosis(valor), 
+                 Coef_asim = skewness(valor))
+```
+La variable `households` fue analizada a partir de 20.640 observaciones correspondientes a diferentes sectores del estado de California. Se obtuvo un promedio de 500 hogares por sector (DS = 382,32), donde el 50% de los sectores registran menos de 409 hogares. El valor mínimo registrado fue de 1 hogar, mientras que el máximo alcanzó los 6.082 hogares, evidenciando una alta variabilidad entre sectores. El rango intercuartílico indica que el 50% central de los valores se encuentra entre 280 y 605 hogares, con una amplitud de 325. La diferencia entre la media y la mediana sugiere una posible asimetría positiva en la distribución, asociada a la presencia de algunos sectores con un número de hogares considerablemente elevado.
 
-```{r caractUnivar}
+La variable `housing_median_age` fue analizada a partir de 20.640 observaciones. Se obtuvo una edad promedio de las viviendas de 28,6 años (DS = 12,61 años), donde el 50% de los sectores registran una edad mediana de las viviendas por debajo de 29 años. El valor mínimo registrado fue de 1 año, mientras que el máximo alcanzó los 52 años. El rango intercuartílico indica que el 50% central de los valores se encuentra entre 18 y 37 años, con una amplitud de 19 años. La cercanía entre la media y la mediana sugiere una distribución relativamente simétrica para esta variable.
+
+La variable `latitude` fue analizada a partir de 20.640 observaciones. Se obtuvo un valor promedio de 35,6 grados (DS = 2,14 grados), donde el 50% de los sectores registran una latitud mediana de 34,3 grados. El valor mínimo registrado fue de 32,5 grados, mientras que el máximo alcanzó los 42,0 grados. El rango intercuartílico indica que el 50% central de los valores se encuentra entre 33,9 y 37,7 grados, con una amplitud de 3,78 grados. La diferencia entre la media y la mediana sugiere una leve asimetría en la distribución de esta variable geográfica.
+
+La variable `longitude` fue analizada a partir de 20.640 observaciones. Se obtuvo un valor promedio de -120 grados (DS = 2,00 grados), donde el 50% de los sectores registran una longitud mediana de -118 grados. El valor mínimo registrado fue de -124 grados, mientras que el máximo alcanzó los -114 grados. El rango intercuartílico indica que el 50% central de los valores se encuentra entre -122 y -118 grados, con una amplitud de 3,79 grados. La diferencia entre la media y la mediana es consistente con una asimetría negativa en la distribución de esta variable.
+
+La variable `median_income` fue analizada a partir de 20.640 observaciones. Se obtuvo un ingreso promedio de 3,87 decenas de miles de dólares (DS = 1,90), donde el 50% de los sectores registran un ingreso mediano por debajo de 3,53. El valor mínimo registrado fue de 0,500, mientras que el máximo alcanzó las 15,0 decenas de miles de dólares. El rango intercuartílico indica que el 50% central de los valores se encuentra entre 2,56 y 4,74, con una amplitud de 2,18. La diferencia entre la media y la mediana sugiere una posible asimetría positiva en la distribución, asociada a la presencia de sectores con ingresos considerablemente elevados.
+
+La variable `population` fue analizada a partir de 20.640 observaciones. Se obtuvo una población promedio de 1.425 personas por sector (DS = 1.131,24), donde el 50% de los sectores registran una población mediana por debajo de 1.166 personas. El valor mínimo registrado fue de 3 personas, mientras que el máximo alcanzó las 35.682 personas, evidenciando una alta variabilidad entre sectores. El rango intercuartílico indica que el 50% central de los valores se encuentra entre 787 y 1.725 personas, con una amplitud de 938. La marcada diferencia entre la media y la mediana, junto con el elevado valor máximo, sugiere una fuerte asimetría positiva en la distribución.
+
+La variable `total_bedrooms` fue analizada a partir de 20.640 observaciones. Se obtuvo un promedio de 538 dormitorios por sector (DS = 419,39), donde el 50% de los sectores registran menos de 438 dormitorios. El valor mínimo registrado fue de 1 dormitorio, mientras que el máximo alcanzó los 6.445 dormitorios. El rango intercuartílico indica que el 50% central de los valores se encuentra entre 297 y 643 dormitorios, con una amplitud de 346. La diferencia entre la media y la mediana sugiere una posible asimetría positiva en la distribución, asociada a la presencia de algunos sectores con un número de dormitorios considerablemente elevado.
+
+La variable `total_rooms` fue analizada a partir de 20.640 observaciones. Se obtuvo un promedio de 2.636 habitaciones por sector (DS = 2.181,50), donde el 50% de los sectores registran menos de 2.127 habitaciones. El valor mínimo registrado fue de 2 habitaciones, mientras que el máximo alcanzó las 39.320 habitaciones, evidenciando una alta variabilidad entre sectores. El rango intercuartílico indica que el 50% central de los valores se encuentra entre 1.448 y 3.148 habitaciones, con una amplitud de 1.700. La marcada diferencia entre la media y la mediana, junto con el elevado valor máximo, sugiere una fuerte asimetría positiva en la distribución.
+
+A continuación, se presentan los gráficos exploratorios de cada variable independiente numérica
+
+```{r caracUnivar}
 plot_univariado <- function(df, var) {
-  
+  #Boxplot
   p_box <- df %>% 
     ggplot(aes(x = "", y = .data[[var]])) +
     geom_boxplot(fill = "#8ecae6", color = "#023047", 
@@ -265,23 +230,94 @@ plot_univariado <- function(df, var) {
     stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = '#023047') +
     labs(title = paste("Diagrama de cajas y bigotes"), x = NULL, y = var) +
     theme_bw()
-  
+  #Histograma de polígonos
   p_hist <- df %>% 
     ggplot(aes(x = .data[[var]]))+
     geom_histogram(aes(y = after_stat(count)), fill = "#8ecae6", color = "white", bins = 30) +
     geom_freqpoly(color = "#023047", linewidth = 1, alpha = 0.8, bins = 30) +
     labs(title = paste("Histograma de polígonos"), x = var, y = "Frecuencia") +
     theme_bw()
-  
+  #combinar los dos plots
   p_hist + p_box
 }
+#nombres de las variables independientes numéricas
 vars_numericas <- df %>% 
   select(where(is.numeric), -median_house_value) %>% 
   names()
-
 for (v in vars_numericas) {
-  print(plot_univariado(df, v))
+  print(v)
+}
+```
+```{r longitude}
+plot_univariado(df, "longitude")
+```
+La distribución de `longitude` presenta una asimetría marcada por su carácter bimodal, con una mayor concentración de observaciones en dos zonas específicas —una alrededor de -122° y otra más pronunciada cerca de -118°—, mientras que una menor proporción de datos corresponde a los valores intermedios y a los extremos del rango. El histograma y el diagrama de cajas evidencian esta concentración en dos grupos diferenciados, así como la ausencia de valores atípicos en los extremos de la distribución, lo que es consistente con tratarse de una variable geográfica acotada dentro de un rango fijo. Esta característica bimodal puede influir en el ajuste de algunos modelos de aprendizaje automático, ya que la relación de esta variable con la respuesta podría no ser lineal, por lo que será importante considerarla durante las etapas posteriores del análisis y modelamiento.
+
+```{r latitude}
+plot_univariado(df, "latitude")
+```
+
+
+
+```{r housing_median_age}
+plot_univariado(df, "housing_median_age")
+```
+
+
+
+```{r total_rooms}
+plot_univariado(df, "total_rooms")
+```
+
+
+
+```{r total_bedrooms}
+plot_univariado(df, "total_bedrooms")
+```
+
+
+
+```{r population}
+plot_univariado(df, "population")
+```
+
+
+
+```{r households}
+plot_univariado(df, "households")
+```
+
+
+
+```{r median_income}
+plot_univariado(df, "median_income")
+```
+## Análisis exploratorio bivariado
+
+
+```{r bivariado}
+plot_dispersión_respuesta <- function(df, var, var_label) {
+  df %>%
+    ggplot(aes(x = .data[[var]], y = median_house_value)) +
+    geom_point(alpha = 0.4, color = "#1E90FF") +
+    geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
+    labs(
+      x = var_label,
+      y = "Valor medio de la vivienda (USD)"
+    ) +
+    theme_bw() +
+    facet_grid(. ~ paste("Dispersión entre", var_label, "y el valor medio de las viviendas"))
 }
 ```
 
+```{r valorvsingreso}
+plot_dispersión_respuesta(df, "median_income", "ingreso medio")
+plot_dispersión_respuesta(df, "housing_median_age", "edad media de las viviendas")
+plot_dispersión_respuesta(df, "total_rooms", "total de habitaciones")
+plot_dispersión_respuesta(df, "total_bedrooms", "total de dormitorios")
+plot_dispersión_respuesta(df, "population", "población")
+plot_dispersión_respuesta(df, "households", "número de hogares")
+plot_dispersión_respuesta(df, "latitude", "latitud")
+plot_dispersión_respuesta(df, "longitude", "longitud")
+```
 
