@@ -14,7 +14,7 @@ library(GGally)
 
 Conjunto de datos
 ```{r data}
-data <- read.csv("/cloud/project/Metodos_estadisticos/Data/housing.csv")
+data <- read.csv("~/Metodos_estadisticos/Data/housing.csv")
 ```
 
 Muestrame las 5 primeras filas
