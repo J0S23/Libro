@@ -14,7 +14,7 @@ library(GGally)
 
 Conjunto de datos
 ```{r data}
-data <- read.csv("~/Metodos_estadisticos/Data/housing.csv")
+data <- read.csv("/cloud/project/Metodos_estadisticos/Data/housing.csv")
 ```
 
 Muestrame las 5 primeras filas
@@ -198,7 +198,7 @@ La distribución de `latitude` presenta una asimetría positiva, evidenciada por
 plot_univariado(df, "housing_median_age")
 ```
 
-La distribución de `housing_median_age` presenta un notable grado de simetría, donde la media es prácticamente igual que la mediana (29 años), con una concentración relativamente uniforme de los datos a lo largo del rango. Por su parte, el diagrama de cajas y bigotes muestra que el 50% central de los datos (rango intercuartílico) se ubica aproximadamente entre 18 y 37 años. Además, se evidencia ausencia de valores atípicos en los extremos de la distribución. Sin embargo, el histograma no presenta una forma completamente normal, es decir, de campana, sino que posee varios picos irregulares a lo largo del rango, y particularmente una acumulación notoria de observaciones cerca del valor máximo (52 años), lo que sugiere una mayor frecuencia de valores más altos de edad media de casas en la zona.
+La distribución de `housing_median_age` presenta una media y mediana muy cercanas (29 años), lo que en principio sugeriría una distribución simétrica. Sin embargo, el histograma no tiene una forma de campana regular, sino varios picos irregulares a lo largo del rango, y particularmente una acumulación notoria de observaciones en el valor máximo (52 años). Esto sugiere un posible efecto de censura o tope en la variable, similar al observado en `median_house_value`, donde las viviendas con una edad igual o mayor a 52 años parecen haber sido agrupadas en ese límite superior. Por su parte, el diagrama de cajas y bigotes muestra que el 50% central de los datos (rango intercuartílico) se ubica aproximadamente entre 18 y 37 años, y no se evidencian valores atípicos en los extremos de la distribución.
 
 ```{r total_rooms}
 plot_univariado(df, "total_rooms")
@@ -250,32 +250,60 @@ plot_dispersión_respuesta <- function(df, var, var_label) {
 ```{r valorvsingreso}
 plot_dispersión_respuesta(df, "median_income", "ingreso medio")
 ```
+Los puntos muestran una tendencia ascendente clara: a mayor ingreso medio, mayor valor medio de la vivienda. La mayoría de las observaciones se concentra entre ingresos de 2 a 6, con valores por debajo de 400.000 USD.
+
+La dispersión aumenta con el ingreso, es decir, en zonas de mayores ingresos hay más variabilidad en los precios. También se nota una acumulación de puntos en 500,000 USD, el límite superior del dataset, lo que sugiere censura en la variable objetivo.
+
+En general, la relación es positiva, aproximadamente lineal, y una de las más fuertes del dataset, lo que evidencia la importancia de `median_income` para el desarrollo del futuro modelo.
+
 ```{r valorvsedad}
 plot_dispersión_respuesta(df, "housing_median_age", "edad media de las viviendas")
 ```
+Los puntos no muestran mucha información, puesto que se evidencia una gran cantidad de ruido, con lo cual resulta complejo encontrar una tendencia lineal entre las variables `housing_median_age` y `median_house_value`. La línea de regresión sugiere una pendiente positiva muy leve, indicando que a mayor edad de la vivienda hay un ligero incremento en su valor medio, aunque esta relación es débil.
+
+Se observa una dispersión vertical muy amplia y similar en casi todos los valores de edad, lo que indica que `housing_median_age` por sí sola no explica bien las variaciones en `median_house_value`. Por tanto, esta variable probablemente tendrá un poder predictivo bajo en los modelos de regresión.
 
 ```{r valorvshabitacion}
 plot_dispersión_respuesta(df, "total_rooms", "total de habitaciones")
 ```
+`total_rooms` muestra una relación positiva débil con `median_house_value.` La mayoría de los datos se concentra en valores bajos (menos de 5000), con bastante ruido vertical.
+
+Se observan outliers con valores muy altos de `total_rooms` (hasta cerca de 40,000) que parecen seguir la tendencia ascendente de la línea de regresión. Aun así, la enorme dispersión en el grueso de los datos sugiere que esta variable tiene una capacidad para predecir la variable respuesta de forma individual. Además, estos valores extremos podrían estar asociados a zonas censales de mayor tamaño geográfico, lo que amerita revisión antes de incluirla directamente en el modelo.
 
 ```{r valorvsdormitorio}
 plot_dispersión_respuesta(df, "total_bedrooms", "total de dormitorios")
 ```
+Se evidencia una relación positiva débil entre `total_bedrooms` y `median_house_value`. La mayoría de las observaciones se concentra en valores bajos de dormitorios (menos de 1000), con alta dispersión vertical en ese rango, lo que dificulta ver una tendencia clara.
+
+Existen algunos puntos atípicos con valores muy altos de `total_bedrooms` (por encima de 4000), pero son pocos y no parecen seguir el patrón general. La pendiente positiva leve indica que esta variable, por sí sola, no sería capaz de predecir la variabilidad de la variable respuesta. Asimismo, su comportamiento sugiere que podría estar altamente correlacionada con otras variables del conjunto de datos, como `total_rooms` o `households`.
 
 ```{r valorvspoblacion}
 plot_dispersión_respuesta(df, "population", "población")
 ```
+population presenta una relación negativa muy leve con median_house_value, casi plana. La gran mayoría de las observaciones se concentra en valores bajos de población (menos de 5000), con una dispersión vertical muy amplia que impide identificar un patrón claro.
+
+Hay pocos puntos con población alta (por encima de 10,000) y estos tienden a tener valores de vivienda más bajos, lo que podría reflejar zonas densamente pobladas con menor valor promedio por unidad. En general, esta variable parece tener un poder predictivo bajo por sí sola. Adicionalmente, este comportamiento podría estar relacionado con dinámicas urbanas particulares, donde una mayor densidad poblacional no necesariamente implica viviendas de mayor valor.
 ```{r valorvsnhogares}
 plot_dispersión_respuesta(df, "households", "número de hogares")
 ```
+households muestra un comportamiento similar al de total_rooms y total_bedrooms: una relación positiva débil, con la mayoría de los puntos concentrados en valores bajos (menos de 2000) y alta dispersión vertical.
+
+Los pocos valores atípicos con número de hogares alto (por encima de 4000) tienden a acompañar valores de vivienda más altos, en línea con la tendencia de la recta. Sin embargo, el ruido generalizado sugiere que, individualmente, esta variable aporta poca información predictiva. Además, esta similitud con `total_rooms` y `total_bedrooms` sugiere una posible multicolinealidad entre estas tres variables, aspecto que deberá evaluarse más adelante.
 
 ```{r valorvslatitud}
 plot_dispersión_respuesta(df, "latitude", "latitud")
 ```
+Se observa una relación negativa débil entre `latitude` y `median_house_value`: a medida que aumenta la latitud, el valor medio de las viviendas tiende a disminuir levemente. Los puntos muestran una distribución muy concentrada en ciertas franjas (alrededor de 34° y 37°-38°), correspondientes a zonas densamente pobladas como Los Ángeles y el área de la Bahía de San Francisco, con valores más altos ahí.
+
+La dispersión vertical es amplia en casi todos los niveles de latitud, y se mantiene la acumulación de puntos en 500,000 USD (límite superior censurado). En general, `latitude` por sí sola tiene un poder explicativo moderado, pero su valor real probablemente esté en combinación con `longitude` para capturar efectos geográficos/regionales.
 
 ```{r valorvslongitud}
 plot_dispersión_respuesta(df, "longitude", "longitud")
 ```
+La relación entre `longitude` y `median_house_value` también es negativa y débil, similar a la de latitud. Los puntos se concentran en dos franjas verticales marcadas (cerca de -122° y -118°), que corresponden a las mismas zonas urbanas de alta densidad.
+
+Al igual que con latitud, hay una fuerte dispersión vertical y acumulación en el límite superior de 500,000 USD. Esto sugiere que `longitude` aporta información geográfica relevante, pero de forma aislada tiene poca capacidad predictiva lineal; su combinación con `latitude` podría ser más útil para el modelo de regresión.
+
 Ahora veamos la variable ocean_proximity
 
 ```{r variableoceano}
@@ -339,13 +367,14 @@ df %>%
   ggpairs()
 ```
 
-Seguidamente, crearemos una función auxiliar 
+Seguidamente, crearemos una función para analizar cada pareja de variables características numéricas 
 
-```{r auxiliar}
+```{r carac_vs_carac}
 graf_dispersion <- function(var_x, var_y) {
   df %>% 
     ggplot(aes(x = .data[[var_x]], y = .data[[var_y]])) +
     geom_point(alpha = 0.4, color = 'darkblue') +
+    geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
     theme_bw()
 }
 ```
@@ -356,7 +385,7 @@ graf_dispersion <- function(var_x, var_y) {
 ```{r longitude vs latitude}
 graf_dispersion("longitude", "latitude")
 ```
-Podemos observar una marcada tendencia negativa en el gráfico de dispersión, esto señala que conforme aumenta el valor de la *Longitud*, el valor de la *Latitud* se ve disminuido. Seguidamente, podemos notar que no tiene una concentración clara de los datos más allá de cuando está entre los 34 en Latitud y -118 en Longitud ó cuando está entre 37-38 Latitud y -122 en Longitud. 
+Podemos observar una marcada tendencia negativa en el gráfico de dispersión, esto señala que conforme aumenta el valor de la *Longitud*, el valor de la *Latitud* se ve disminuido. Seguidamente, podemos notar que no tiene una concentración clara de los datos más allá de cuando está entre los 34° en Latitud y -118° en Longitud ó cuando está entre 37°-38° Latitud y -122° en Longitud. 
 
 Está claro que, aunque en menor medida que otros gráficos de dispersión, la variabilidad de los datos de latitud aumenta conforme disminuye la longitud, lo cual sugiere que en California la zona Sur es donde es más apto o más rentable la construcción de viviendas.
 
@@ -392,7 +421,7 @@ En síntesis, la relación entre Longitud y Total de habitaciones es prácticame
 graf_dispersion("longitude", "total_bedrooms")
 ```
 
-No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 1.000 dormitorios, sin importar la longitud, con valores atípicos dispersos en las mismas zonas urbanas de siempre (-122 y -116). 
+No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 1.000 dormitorios, sin importar la longitud, con valores atípicos dispersos en las mismas zonas urbanas de siempre (-122° y -116°). 
 
 Está claro que este comportamiento replica exactamente el observado con el total de habitaciones, lo cual sugiere que ambas variables aportan la misma señal de negocio, la oferta de vivienda de mayor tamaño está atada a las zonas metropolitanas, no a la longitud en sí. 
 
@@ -425,7 +454,7 @@ En síntesis, la relación entre Longitud y Hogares es prácticamente nula.
 graf_dispersion("longitude", "median_income")
 ```
 
-No se observa una tendencia clara ni marcada. Seguidamente, podemos notar que hay una concentración clara de los datos entre 2.5 y 4.8 en ingreso medio, con un límite superior visible cercano a 15, más denso en las longitudes -122.5 y -116. 
+No se observa una tendencia clara ni marcada. Seguidamente, podemos notar que hay una concentración clara de los datos entre 2.5 y 4.8 en ingreso medio, con un límite superior visible cercano a 15, más denso en las longitudes -122.5° y -116°. 
 
 Está claro que el nivel de ingreso no varía de forma sistemática según la posición este-oeste, lo cual sugiere que la longitud por sí sola no sirve para segmentar zonas de mayor o menor poder adquisitivo; es la ubicación específica (ciudad, distrito) la que realmente marca la diferencia. 
 
@@ -436,7 +465,7 @@ En síntesis, la relación entre Longitud e Ingreso medio es prácticamente nula
 ```{r latitude-housing_median_age}
 graf_dispersion("latitude", "housing_median_age")
 ```
-No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos cuando la latitud está entre 33 y 35 y también entre 37.3 y 39. 
+No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos cuando la latitud está entre 33° y 35° y también entre 37.3° y 39°. 
 
 En síntesis, la relación entre Latitud y Edad media de las casas es prácticamente nula, lo cual sugiere que la antigüedad de las viviendas no depende de la posición norte-sur del estado.
 
@@ -445,7 +474,7 @@ En síntesis, la relación entre Latitud y Edad media de las casas es prácticam
 ```{r latitude-total_rooms}
 graf_dispersion("latitude", "total_rooms")
 ```
-No se observa una tendencia clara. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 5.00 habitaciones, con valores atípicos notorios en las latitudes 34 y 38. 
+No se observa una tendencia clara. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 5.00 habitaciones, con valores atípicos notorios en las latitudes 34° y 38°. 
 
 Está claro que la variabilidad aumenta en esas franjas específicas, lo cual sugiere que la oferta de viviendas grandes se concentra en las mismas latitudes. 
 
@@ -491,7 +520,7 @@ En síntesis, la relación entre Latitud y Hogares es prácticamente nula.
 ```{r latitude-median_income}
 graf_dispersion("latitude", "median_income")
 ```
-No se observa una tendencia clara. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 5 en ingreso medio, más denso en las latitudes 33-34 y 37-38. 
+No se observa una tendencia clara. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 5 en ingreso medio, más denso en las latitudes 33°-34° y 37°-38°. 
 
 Está claro que el nivel de ingreso no depende de la posición norte-sur por sí sola, lo cual sugiere que tanto el norte como el sur del estado tienen zonas de ingresos altos y bajos. 
 
@@ -665,6 +694,7 @@ En síntesis, la relación entre Hogares e Ingreso medio es prácticamente nula,
 
 Con base en la matriz de correlación, identificamos que total_rooms, total_bedrooms, population y households están altamente correlacionadas entre sí, ya que todas escalan según el tamaño del bloque censal. Para reducir esta redundancia, eliminamos estas 4 variables originales y las combinamos en 4 nuevas variables; habitaciones_por_hogar, dormitorios_por_habitacion, poblacion_por_hogar e ingreso_por_persona.
 
+
 ```{r feature-engineering}
 df <- df %>% 
   mutate(
@@ -676,7 +706,8 @@ df <- df %>%
 
 df %>% 
   select(rooms_per_household, bedrooms_by_room, 
-         population_per_household) %>% 
+         population_per_household)%>% 
+  head()
 ```
 
 **Histograma y diagrama de cajas: rooms_per_household**
