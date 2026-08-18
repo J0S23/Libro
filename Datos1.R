@@ -1,153 +1,152 @@
 #Librería ----
 library(readxl)
 library(tidyverse)
-library(effsize)
+library(effsize) # para cohen.d
 library(openintro)
 library(nortest)
-library(car)
-#data----
-df <- read_excel("~/Datos_Medicos/Data/datos_medicos.xlsx")
-summary(df)
+library(car) # para leveneTest
 
-##transformación ----
-df$Presion <- factor(df$Presion)
-dfs <- df %>%
-  filter(Presion =="PresionSistolica") %>%
-  pull(Valores)#para quedarse solamente con los datos
-dfd <- df %>%
-  filter(Presion =="PresionDiastolica") %>%
-  pull(Valores)#para quedarse solamente con los datos
-#Resumen
-df %>%
-  group_by(Presion) %>%
-  summarise(n= length(Valores),
-            prom = mean(Valores),
-            ds = sd(Valores),
-            mediana = median(Valores),
-            RIC = IQR(Valores),
-            min = min(Valores),
-            max = max(Valores))
 
-# supuesto de normalidad ----
-# (x-media)/ds
-#Ho:x ~ N(miu,sigma**2)
-#Ha:x !~ N(miu,sigma**2)
-ks.test(dfs, "pnorm", mean = mean(dfs), sd = sd(dfs))
-ks.test(dfd, "pnorm", mean = mean(dfd), sd = sd(dfd))
-
-#Supuesto de homocedasticidad ----
-var.test(dfs,dfd)
-#Verificando paso a paso las salidas de var.test
-
-# t student (se puede usar normal porque las muestras son n1=n2=100>=30 y la t student
-#con muy altos grados de libertad converge a la distribucion normal)
-t.test(x=dfs,y=dfd,var.equal=TRUE,paired=FALSE)
-#con distribucion normal dada la ley de los grandes numeros se cumple
-#que se obtiene lo mismo
-z.test(x = dfs, y = dfd,
-       sigma.x = sd(dfs), sigma.y = sd(dfd),
-       alternative = "two.sided")
-#Verificando paso a paso las salidas de t.test
-
-#Tamaño del efecto ----
-cohen.d(dfs,dfd,paired=FALSE) # representa la distancia entre el efecto de cada grupo
-
-#Verificar las salidas con las notas de clase
-
-#Objetivo 2 ----
-#Ho:μ(ganancias) = μ(inversion)
-#Ha:μ(ganancias) != μ(inversion)
-
-#data 2 ----
-df <- read_excel("~/Datos_Medicos/Data/datos_economia.xlsx")
+#EDA reducido ----
+df <- read_excel("~/Metodos_estadisticos/Data/datos_economia.xlsx")
 df$`Tipo de cuenta` <- factor(df$`Tipo de cuenta`)
 
-# transformacion 2 ----
-dfi <- df %>%
-  filter(`Tipo de cuenta`=="Inversion") %>%
-  pull(Precio)
-dfg <- df %>%
-  filter(`Tipo de cuenta`=="Ganancia") %>%
-  pull(Precio)
-#Supuestos----
-#1. normalidad
-#Ho:X~N(μ,σ**2)
-#Ha:X!~N(μ,σ**2)
+head(df, 5)
+str(df)
+# datos faltantes
+sum(is.na(df))
 
-#Kolmogorov-smirnov
-ks.test(scale(dfi),"pnorm")
-ks.test(scale(dfg),"pnorm")
+#Univariado: Precio (numerica) ----
+df %>%
+  summarise(n = length(Precio),
+            media = mean(Precio),
+            sd = sd(Precio),
+            mediana = median(Precio),
+            RIC = IQR(Precio),
+            Q1 = quantile(Precio, 0.25),
+            Q3 = quantile(Precio, 0.75),
+            min = min(Precio),
+            max = max(Precio))
 
-#2. homocedasticidad(homogeneidad) ----
-#Ho:σ**2(ganancia)=σ**2(inversion)
-#Ha:σ**2(ganancia)=σ(inversion)
-#prueba de Welch
-var.test(dfi,dfg)
-#Tarea verificar las salidas, Y ADEMAS, para probar los resultados, aplicar Bartlett, Levene y
-#Fligner-Killeen, explicar en todas cuál estadistico se utiliza, su distribucion e interprete
+df %>%
+  ggplot(aes(x = Precio)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30,
+                 fill = "#8ecae6", color = "white") +
+  geom_density(color = "#023047", linewidth = 1.1) +
+  theme_bw()
 
-#t-test con correlacion de Welch ----
-t.test(dfi,
-       dfg,
-       var.equal = FALSE,
-       paired=FALSE)
-#verificar las salidas, los grados de libertad son los de la formula larguisima
+df %>%
+  ggplot(aes(x = "", y = Precio)) +
+  geom_boxplot(fill = "#8ecae6", color = "#023047",
+               outlier.color = "darkred") +
+  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black') +
+  theme_bw()
 
-#Tamaño del efecto 2 ----
-cohen.d(dfi,
-        dfg,
-        paired = FALSE)
-#ejercicio usar otra prueba diferente a cohen (opcional)
+#Univariado: Tipo de cuenta (categorica) ----
+df %>%
+  count(`Tipo de cuenta`, name = "n") %>%
+  mutate(Porcentaje = round(n / sum(n) * 100, 2))
 
-#Comparación de medias entre dos grupos pareados con estadística paramétrica
+df %>%
+  ggplot(aes(x = `Tipo de cuenta`)) +
+  geom_bar(fill = "#008B8B", width = 0.6) +
+  theme_bw()
 
-# Datos de tiempos antes y después de la intervención educativa
-datos <- data.frame(
-  estudiante = c(1:10),
-  antes = c(12.9, 13.5, 12.8, 15.6, 17.2, 19.2, 12.6, 15.3, 14.4, 11.3),
-  despues = c(12.7, 13.6, 12.0, 15.2, 16.8, 20.0, 12.0, 15.9, 16.0, 11.1)
-)
-#realizar EDA tarea
+#Bivariado: Precio segun Tipo de cuenta ----
+df %>%
+  group_by(`Tipo de cuenta`) %>%
+  summarise(n = length(Precio),
+            media = mean(Precio),
+            sd = sd(Precio),
+            mediana = median(Precio),
+            RIC = IQR(Precio),
+            min = min(Precio),
+            max = max(Precio))
 
-#Supuesto de normalidad ----
-shapiro.test(datos$antes)
-shapiro.test(datos$despues)
+df %>%
+  ggplot(aes(x = `Tipo de cuenta`, y = Precio)) +
+  geom_boxplot(fill = "#8ecae6", color = "#023047",
+               outlier.color = "darkred") +
+  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black') +
+  theme_bw()
 
-#Diferencia entre las medias ----
-t.test(x = datos$despues,
-       y = datos$antes,
-       paired = TRUE)
+#Separar los dos grupos ----
+dfi <- df %>% filter(`Tipo de cuenta` == "Inversion") %>% pull(Precio)
+dfg <- df %>% filter(`Tipo de cuenta` == "Ganancia")  %>% pull(Precio)
 
-#tamaño del efecto 3----
-cohen.d(datos$despues,
-        datos$antes,
-        paired = TRUE)
-#Usando el teorema de la diferencia de medias para datos pareados verifica la salida
-#de la función t.test con los datos de la intervención educativa
+#Supuestos ----
+#1. Normalidad
+#Ho: X ~ N(mu, sigma^2)
+#Ha: X !~ N(mu, sigma^2)
+shapiro.test(dfi)
+shapiro.test(dfg)
+
+#2. Homocedasticidad (homogeneidad de varianzas)
+#Ho: sigma^2(Ganancia) = sigma^2(Inversion)
+#Ha: sigma^2(Ganancia) != sigma^2(Inversion)
+
+#F de Fisher (dos grupos, asume normalidad)
+var.test(dfi, dfg)
+
+#Bartlett: estadistico Chi-cuadrado, muy sensible a no-normalidad
+bartlett.test(list(dfi, dfg))
+
+#Levene: estadistico F, usa desviaciones absolutas respecto a la media (mas robusto que Bartlett ante no-normalidad)
+leveneTest(Precio ~ `Tipo de cuenta`, data = df)
+
+#Fligner-Killeen: no parametrico, estadistico Chi-cuadrado, el mas robusto ante outliers/no-normalidad
+fligner.test(list(dfi, dfg))
+
+#t-test con correccion de Welch ----
+t.test(dfi, dfg, var.equal = FALSE, paired = FALSE)
+
+#Tamano del efecto ----
+cohen.d(dfi, dfg, paired = FALSE)
 
 
-
-
-
-#diferencia de medianas con estadística no parmétrica ----
+#diferencia de medianas con estadistica no parametrica ----
 data('births')
 df <- births
 
-#Caracterizar el peso del bebé según si la madre es smoker o no smoker(TAREA) ----
+#4.3 Peso al nacer: decidir si es valido usar t-test en vez de Mann-Whitney ----
 
-#Supuesto de normalidad ----
+#Supuesto de normalidad por grupo ----
+#Ho: X ~ N(mu, sigma^2)
+#Ha: X !~ N(mu, sigma^2)
 df %>%
   group_by(smoke) %>%
   summarise(n = length(weight),
-            est_ks = ks.test(scale(weight), "pnorm")$statistic, #solo estadístico
-            p_ks = ks.test(scale(weight), "pnorm")$p.value,     #solo p-valor
             est_sw = shapiro.test(weight)$statistic,
             p_sw = shapiro.test(weight)$p.value,
             est_l = lillie.test(weight)$statistic,
             p_l = lillie.test(weight)$p.value)
+#Shapiro-Wilk rechaza normalidad en AMBOS grupos (p < 0.001)
 
+#Homogeneidad de varianzas ----
+#Ho: sigma^2(smoker) = sigma^2(nonsmoker)
 leveneTest(weight ~ smoke, data = df, center = median)
+#No se rechaza homocedasticidad (p > 0.05): las varianzas son iguales
 
+#DECISION: aunque la normalidad no se cumple estrictamente, n1=100 y n2=50
+#son muestras suficientemente grandes (regla practica n>=30) para que el
+#Teorema del Limite Central haga razonablemente robusto al t-test frente a
+#la falta de normalidad. Sumado a que SI hay homogeneidad de varianzas,
+#es defendible usar el t-test como aproximacion valida. Por eso se corre
+#y se compara contra Mann-Whitney (Wilcoxon), en vez de descartarlo de entrada.
+
+#Prueba parametrica: t-test de Welch ----
+#Ho: mu(smoker) = mu(nonsmoker)
+t.test(weight ~ smoke, data = df, var.equal = FALSE)
+
+#Prueba no parametrica: Mann-Whitney (Wilcoxon) ----
+#Ho: mediana(smoker) = mediana(nonsmoker)
 wilcox.test(weight ~ smoke, data = df)
 
-#USAR PRUEBA PARAMETRICA
+#Comparacion: ambas pruebas dan p-valores muy similares (~0.13-0.14) y
+#llegan a la MISMA conclusion (no se rechaza Ho, no hay diferencia
+#significativa). Esta coincidencia respalda que, pese a la no-normalidad,
+#el t-test funciono de forma robusta gracias al tamano muestral.
+
+#Tamano del efecto (no parametrico, coherente con Wilcoxon) ----
+cliff.delta(weight ~ smoke, data = df)
+
