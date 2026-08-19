@@ -1,153 +1,135 @@
 #Librería ----
 library(readxl)
 library(tidyverse)
-library(effsize)
+library(effsize) # para cohen.d
 library(openintro)
 library(nortest)
-library(car)
-#data----
-df <- read_excel("~/Datos_Medicos/Data/datos_medicos.xlsx")
-summary(df)
+library(car) # para leveneTest
+library(moments)
 
-##transformación ----
-df$Presion <- factor(df$Presion)
-dfs <- df %>%
-  filter(Presion =="PresionSistolica") %>%
-  pull(Valores)#para quedarse solamente con los datos
-dfd <- df %>%
-  filter(Presion =="PresionDiastolica") %>%
-  pull(Valores)#para quedarse solamente con los datos
-#Resumen
-df %>%
-  group_by(Presion) %>%
-  summarise(n= length(Valores),
-            prom = mean(Valores),
-            ds = sd(Valores),
-            mediana = median(Valores),
-            RIC = IQR(Valores),
-            min = min(Valores),
-            max = max(Valores))
-
-# supuesto de normalidad ----
-# (x-media)/ds
-#Ho:x ~ N(miu,sigma**2)
-#Ha:x !~ N(miu,sigma**2)
-ks.test(dfs, "pnorm", mean = mean(dfs), sd = sd(dfs))
-ks.test(dfd, "pnorm", mean = mean(dfd), sd = sd(dfd))
-
-#Supuesto de homocedasticidad ----
-var.test(dfs,dfd)
-#Verificando paso a paso las salidas de var.test
-
-# t student (se puede usar normal porque las muestras son n1=n2=100>=30 y la t student
-#con muy altos grados de libertad converge a la distribucion normal)
-t.test(x=dfs,y=dfd,var.equal=TRUE,paired=FALSE)
-#con distribucion normal dada la ley de los grandes numeros se cumple
-#que se obtiene lo mismo
-z.test(x = dfs, y = dfd,
-       sigma.x = sd(dfs), sigma.y = sd(dfd),
-       alternative = "two.sided")
-#Verificando paso a paso las salidas de t.test
-
-#Tamaño del efecto ----
-cohen.d(dfs,dfd,paired=FALSE) # representa la distancia entre el efecto de cada grupo
-
-#Verificar las salidas con las notas de clase
-
-#Objetivo 2 ----
-#Ho:μ(ganancias) = μ(inversion)
-#Ha:μ(ganancias) != μ(inversion)
-
-#data 2 ----
+#EDA (minimo) ----
 df <- read_excel("~/Datos_Medicos/Data/datos_economia.xlsx")
 df$`Tipo de cuenta` <- factor(df$`Tipo de cuenta`)
 
-# transformacion 2 ----
-dfi <- df %>%
-  filter(`Tipo de cuenta`=="Inversion") %>%
-  pull(Precio)
-dfg <- df %>%
-  filter(`Tipo de cuenta`=="Ganancia") %>%
-  pull(Precio)
-#Supuestos----
-#1. normalidad
-#Ho:X~N(μ,σ**2)
-#Ha:X!~N(μ,σ**2)
+summary(df)
 
-#Kolmogorov-smirnov
-ks.test(scale(dfi),"pnorm")
-ks.test(scale(dfg),"pnorm")
+df %>%
+  group_by(`Tipo de cuenta`) %>%
+  summarise(n = length(Precio),
+            prom = mean(Precio),
+            ds = sd(Precio),
+            mediana = median(Precio),
+            RIC = IQR(Precio),
+            min = min(Precio),
+            max = max(Precio),
+            curtosis = kurtosis(Precio),
+            Coef_asim = skewness(Precio))
+#Ganancia: Se registraron un total de 100 mediciones de precio en cuentas de ganancia.
+#En promedio, el precio es de aproximadamente $778.491 (con una desviación estándar de
+#$193.397). Por otro lado, el 50% de las cuentas registran un precio de a lo sumo $754.834,
+#con un rango intercuartílico de $253.790, siendo el valor más bajo registrado de $389.351
+#y el más alto de $1.448.208. Si visualizamos los datos, su forma es ligeramente leptocúrtica
+#(curtosis = 3.66). Asimismo se evidencia una distribución algo más puntiguada que lo normal,
+#con colas más pesadas. Además, con un coeficiente de asimetría de 0.639, se observa una asimetría
+#o sesgo moderado hacia la derecha, lo que indica la presencia de algunas cuentas de ganancia
+#con precios relativamente altos respecto a la mayoría.
 
-#2. homocedasticidad(homogeneidad) ----
-#Ho:σ**2(ganancia)=σ**2(inversion)
-#Ha:σ**2(ganancia)=σ(inversion)
-#prueba de Welch
-var.test(dfi,dfg)
-#Tarea verificar las salidas, Y ADEMAS, para probar los resultados, aplicar Bartlett, Levene y
-#Fligner-Killeen, explicar en todas cuál estadistico se utiliza, su distribucion e interprete
+#Inversion: Se registraron un total de 100 mediciones de precio en cuentas de inversión.
+#En promedio, el precio es de aproximadamente $5.090.406 (con una desviación estándar de
+#$912.816). Por otro lado, el 50% de las cuentas registran un precio de a lo sumo $5.061.756,
+#con un rango intercuartílico de $1.185.673, siendo el valor más bajo registrado de $2.690.831
+#y el más alto de $7.187.333. Si visualizamos los datos, su forma es ligeramente platicúrtica
+#(curtosis = 2.84), lo que evidencia una distribución algo más aplanada que lo normal. Además,
+#con un coeficiente de asimetría muy cercano a cero (0.605), la distribución es prácticamente
+#simétrica, sin un sesgo relevante hacia ninguno de los dos extremos.
 
-#t-test con correlacion de Welch ----
-t.test(dfi,
-       dfg,
-       var.equal = FALSE,
-       paired=FALSE)
-#verificar las salidas, los grados de libertad son los de la formula larguisima
+df %>%
+  ggplot(aes(x = `Tipo de cuenta`, y = Precio)) +
+  geom_boxplot() +
+  labs(title = "Distribucion de Precio segun Tipo de cuenta")
+#El boxplot muestra que el precio de las cuentas de inversión es consistentemente mucho
+#más alto que el de las cuentas de ganancia, con una mediana cercana a $5.06 millones frente
+#a apenas $800 mil, lo cual es coherente con la naturaleza de cada tipo de cuenta (una
+#inversión acumula capital, mientras que una ganancia refleja un monto puntual). La
+#dispersión también es mucho mayor en inversión que en ganancia,
+#lo que indica más variabilidad entre las cuentas de ese grupo. Ambas cajas lucen
+#razonablemente simétricas, consistente con los coeficientes de asimetría calculados previamente.
 
-#Tamaño del efecto 2 ----
-cohen.d(dfi,
-        dfg,
-        paired = FALSE)
-#ejercicio usar otra prueba diferente a cohen (opcional)
+#Separar los dos grupos ----
+dfi <- df %>% filter(`Tipo de cuenta` == "Inversion") %>% pull(Precio)
+dfg <- df %>% filter(`Tipo de cuenta` == "Ganancia")  %>% pull(Precio)
 
-#Comparación de medias entre dos grupos pareados con estadística paramétrica
+#Supuestos ----
+#1. Normalidad
+#Ho: X ~ N(mu, sigma^2)
+#Ha: X !~ N(mu, sigma^2)
+shapiro.test(dfi)
+shapiro.test(dfg)
 
-# Datos de tiempos antes y después de la intervención educativa
-datos <- data.frame(
-  estudiante = c(1:10),
-  antes = c(12.9, 13.5, 12.8, 15.6, 17.2, 19.2, 12.6, 15.3, 14.4, 11.3),
-  despues = c(12.7, 13.6, 12.0, 15.2, 16.8, 20.0, 12.0, 15.9, 16.0, 11.1)
-)
-#realizar EDA tarea
+#2. Homocedasticidad (homogeneidad de varianzas)
+#Ho: sigma^2(Ganancia) = sigma^2(Inversion)
+#Ha: sigma^2(Ganancia) != sigma^2(Inversion)
 
-#Supuesto de normalidad ----
-shapiro.test(datos$antes)
-shapiro.test(datos$despues)
+#F de Fisher (dos grupos, asume normalidad)
+var.test(dfi, dfg)
 
-#Diferencia entre las medias ----
-t.test(x = datos$despues,
-       y = datos$antes,
-       paired = TRUE)
+#Bartlett: estadistico Chi-cuadrado, muy sensible a no-normalidad
+bartlett.test(list(dfi, dfg))
 
-#tamaño del efecto 3----
-cohen.d(datos$despues,
-        datos$antes,
-        paired = TRUE)
-#Usando el teorema de la diferencia de medias para datos pareados verifica la salida
-#de la función t.test con los datos de la intervención educativa
+#Levene: estadistico F, usa desviaciones absolutas respecto a la media (mas robusto que Bartlett ante no-normalidad)
+leveneTest(Precio ~ `Tipo de cuenta`, data = df)
 
+#Fligner-Killeen: no parametrico, estadistico Chi-cuadrado, el mas robusto ante outliers/no-normalidad
+fligner.test(list(dfi, dfg))
 
+#t-test con correccion de Welch ----
+t.test(dfi, dfg, var.equal = FALSE, paired = FALSE)
 
+#Tamano del efecto ----
+cohen.d(dfi, dfg, paired = FALSE)
 
-
-#diferencia de medianas con estadística no parmétrica ----
+#diferencia de medianas con estadistica no parametrica ----
 data('births')
 df <- births
 
-#Caracterizar el peso del bebé según si la madre es smoker o no smoker(TAREA) ----
+#4.3 Peso al nacer: decidir si es valido usar t-test en vez de Mann-Whitney ----
 
-#Supuesto de normalidad ----
+#Supuesto de normalidad por grupo ----
+#Ho: X ~ N(mu, sigma^2)
+#Ha: X !~ N(mu, sigma^2)
 df %>%
   group_by(smoke) %>%
   summarise(n = length(weight),
-            est_ks = ks.test(scale(weight), "pnorm")$statistic, #solo estadístico
-            p_ks = ks.test(scale(weight), "pnorm")$p.value,     #solo p-valor
             est_sw = shapiro.test(weight)$statistic,
             p_sw = shapiro.test(weight)$p.value,
             est_l = lillie.test(weight)$statistic,
             p_l = lillie.test(weight)$p.value)
+#Shapiro-Wilk rechaza normalidad en AMBOS grupos (p < 0.001)
 
+#Homogeneidad de varianzas ----
+#Ho: sigma^2(smoker) = sigma^2(nonsmoker)
 leveneTest(weight ~ smoke, data = df, center = median)
+#No se rechaza homocedasticidad (p > 0.05): las varianzas son iguales
 
+#DECISION: aunque la normalidad no se cumple estrictamente, n1=100 y n2=50
+#son muestras suficientemente grandes (regla practica n>=30) para la robustez
+#al t-test frente a la falta de normalidad. Sumando a que SI hay homogeneidad
+#de varianzas, es válido usar el t-test. Por eso se corre y se compara contra
+#Mann-Whitney (Wilcoxon), en vez de descartarlo de entrada.
+
+#Prueba parametrica: t-test de Welch ----
+#Ho: mu(smoker) = mu(nonsmoker)
+t.test(weight ~ smoke, data = df, var.equal = FALSE)
+
+#Prueba no parametrica: Mann-Whitney (Wilcoxon) ----
+#Ho: mediana(smoker) = mediana(nonsmoker)
 wilcox.test(weight ~ smoke, data = df)
 
-#USAR PRUEBA PARAMETRICA
+#Comparacion: ambas pruebas dan p-valores muy similares (~0.13-0.14) y
+#llegan a la MISMA conclusion (no se rechaza Ho, no hay diferencia
+#significativa). Esta coincidencia respalda que, pese a la no-normalidad,
+#el t-test funciono de forma robusta gracias al tamano muestral.
+
+#Tamano del efecto (no parametrico, coherente con Wilcoxon) ----
+cliff.delta(weight ~ smoke, data = df)
+
