@@ -109,6 +109,7 @@ df %>%
             p_sw = shapiro.test(weight)$p.value,
             est_l = lillie.test(weight)$statistic,
             p_l = lillie.test(weight)$p.value)
+#Shapiro-Wilk rechaza normalidad en AMBOS grupos (p < 0.001)
 
 
 df %>%

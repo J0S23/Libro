@@ -14,7 +14,7 @@ library(GGally)
 
 Conjunto de datos
 ```{r data}
-data <- read.csv("/cloud/project/Metodos_estadisticos/Data/housing.csv")
+data <- read.csv("/cloud/project/Data/housing.csv")
 ```
 
 Muestrame las 5 primeras filas
@@ -115,7 +115,7 @@ df %>%
   theme_bw()
 ```
 
-Ahora veamos la variable ocean_proximity
+## Análisis exploratorio univariado de cada variable independiente
 
 ```{r tablacarac}
 df %>% 
