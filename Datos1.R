@@ -5,7 +5,7 @@ library(effsize) # para cohen.d
 library(openintro)
 library(nortest)
 library(car) # para leveneTest
-
+library(moments)
 
 #EDA (minimo) ----
 df <- read_excel("~/Datos_Medicos/Data/datos_economia.xlsx")
@@ -24,11 +24,36 @@ df %>%
             max = max(Precio),
             curtosis = kurtosis(Precio),
             Coef_asim = skewness(Precio))
+#Ganancia: Se registraron un total de 100 mediciones de precio en cuentas de ganancia.
+#En promedio, el precio es de aproximadamente $778.491 (con una desviación estándar de
+#$193.397). Por otro lado, el 50% de las cuentas registran un precio de a lo sumo $754.834,
+#con un rango intercuartílico de $253.790, siendo el valor más bajo registrado de $389.351
+#y el más alto de $1.448.208. Si visualizamos los datos, su forma es ligeramente leptocúrtica
+#(curtosis = 3.66). Asimismo se evidencia una distribución algo más puntiguada que lo normal,
+#con colas más pesadas. Además, con un coeficiente de asimetría de 0.639, se observa una asimetría
+#o sesgo moderado hacia la derecha, lo que indica la presencia de algunas cuentas de ganancia
+#con precios relativamente altos respecto a la mayoría.
+
+#Inversion: Se registraron un total de 100 mediciones de precio en cuentas de inversión.
+#En promedio, el precio es de aproximadamente $5.090.406 (con una desviación estándar de
+#$912.816). Por otro lado, el 50% de las cuentas registran un precio de a lo sumo $5.061.756,
+#con un rango intercuartílico de $1.185.673, siendo el valor más bajo registrado de $2.690.831
+#y el más alto de $7.187.333. Si visualizamos los datos, su forma es ligeramente platicúrtica
+#(curtosis = 2.84), lo que evidencia una distribución algo más aplanada que lo normal. Además,
+#con un coeficiente de asimetría muy cercano a cero (0.605), la distribución es prácticamente
+#simétrica, sin un sesgo relevante hacia ninguno de los dos extremos.
 
 df %>%
   ggplot(aes(x = `Tipo de cuenta`, y = Precio)) +
   geom_boxplot() +
   labs(title = "Distribucion de Precio segun Tipo de cuenta")
+#El boxplot muestra que el precio de las cuentas de inversión es consistentemente mucho
+#más alto que el de las cuentas de ganancia, con una mediana cercana a $5.06 millones frente
+#a apenas $800 mil, lo cual es coherente con la naturaleza de cada tipo de cuenta (una
+#inversión acumula capital, mientras que una ganancia refleja un monto puntual). La
+#dispersión también es mucho mayor en inversión que en ganancia,
+#lo que indica más variabilidad entre las cuentas de ese grupo. Ambas cajas lucen
+#razonablemente simétricas, consistente con los coeficientes de asimetría calculados previamente.
 
 #Separar los dos grupos ----
 dfi <- df %>% filter(`Tipo de cuenta` == "Inversion") %>% pull(Precio)
@@ -63,7 +88,6 @@ t.test(dfi, dfg, var.equal = FALSE, paired = FALSE)
 #Tamano del efecto ----
 cohen.d(dfi, dfg, paired = FALSE)
 
-
 #diferencia de medianas con estadistica no parametrica ----
 data('births')
 df <- births
@@ -88,11 +112,10 @@ leveneTest(weight ~ smoke, data = df, center = median)
 #No se rechaza homocedasticidad (p > 0.05): las varianzas son iguales
 
 #DECISION: aunque la normalidad no se cumple estrictamente, n1=100 y n2=50
-#son muestras suficientemente grandes (regla practica n>=30) para que el
-#Teorema del Limite Central haga razonablemente robusto al t-test frente a
-#la falta de normalidad. Sumado a que SI hay homogeneidad de varianzas,
-#es defendible usar el t-test como aproximacion valida. Por eso se corre
-#y se compara contra Mann-Whitney (Wilcoxon), en vez de descartarlo de entrada.
+#son muestras suficientemente grandes (regla practica n>=30) para la robustez
+#al t-test frente a la falta de normalidad. Sumando a que SI hay homogeneidad
+#de varianzas, es válido usar el t-test. Por eso se corre y se compara contra
+#Mann-Whitney (Wilcoxon), en vez de descartarlo de entrada.
 
 #Prueba parametrica: t-test de Welch ----
 #Ho: mu(smoker) = mu(nonsmoker)
