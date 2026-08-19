@@ -7,68 +7,28 @@ library(nortest)
 library(car) # para leveneTest
 
 
-#EDA reducido ----
-df <- read_excel("~/Metodos_estadisticos/Data/datos_economia.xlsx")
+#EDA (minimo) ----
+df <- read_excel("~/Datos_Medicos/Data/datos_economia.xlsx")
 df$`Tipo de cuenta` <- factor(df$`Tipo de cuenta`)
 
-head(df, 5)
-str(df)
-# datos faltantes
-sum(is.na(df))
+summary(df)
 
-#Univariado: Precio (numerica) ----
-df %>%
-  summarise(n = length(Precio),
-            media = mean(Precio),
-            sd = sd(Precio),
-            mediana = median(Precio),
-            RIC = IQR(Precio),
-            Q1 = quantile(Precio, 0.25),
-            Q3 = quantile(Precio, 0.75),
-            min = min(Precio),
-            max = max(Precio))
-
-df %>%
-  ggplot(aes(x = Precio)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 30,
-                 fill = "#8ecae6", color = "white") +
-  geom_density(color = "#023047", linewidth = 1.1) +
-  theme_bw()
-
-df %>%
-  ggplot(aes(x = "", y = Precio)) +
-  geom_boxplot(fill = "#8ecae6", color = "#023047",
-               outlier.color = "darkred") +
-  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black') +
-  theme_bw()
-
-#Univariado: Tipo de cuenta (categorica) ----
-df %>%
-  count(`Tipo de cuenta`, name = "n") %>%
-  mutate(Porcentaje = round(n / sum(n) * 100, 2))
-
-df %>%
-  ggplot(aes(x = `Tipo de cuenta`)) +
-  geom_bar(fill = "#008B8B", width = 0.6) +
-  theme_bw()
-
-#Bivariado: Precio segun Tipo de cuenta ----
 df %>%
   group_by(`Tipo de cuenta`) %>%
   summarise(n = length(Precio),
-            media = mean(Precio),
-            sd = sd(Precio),
+            prom = mean(Precio),
+            ds = sd(Precio),
             mediana = median(Precio),
             RIC = IQR(Precio),
             min = min(Precio),
-            max = max(Precio))
+            max = max(Precio),
+            curtosis = kurtosis(Precio),
+            Coef_asim = skewness(Precio))
 
 df %>%
   ggplot(aes(x = `Tipo de cuenta`, y = Precio)) +
-  geom_boxplot(fill = "#8ecae6", color = "#023047",
-               outlier.color = "darkred") +
-  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black') +
-  theme_bw()
+  geom_boxplot() +
+  labs(title = "Distribucion de Precio segun Tipo de cuenta")
 
 #Separar los dos grupos ----
 dfi <- df %>% filter(`Tipo de cuenta` == "Inversion") %>% pull(Precio)
