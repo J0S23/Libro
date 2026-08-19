@@ -6,6 +6,7 @@ library(effsize)
 library(openintro)
 library(nortest)
 library(car)
+library(coin)
 #data----
 df <- read_excel("/cloud/project/Data/datos_medicos.xlsx")
 summary(df)
@@ -256,3 +257,45 @@ leveneTest(weight ~ smoke, data = df, center = median)
 wilcox.test(weight ~ smoke, data = df)
 
 #USAR PRUEBA PARAMETRICA
+df <- read.delim("/cloud/project/Data/dataQ.tsv")
+head(datos)
+df <- datos %>%
+  mutate(across(c(Experimento, Genero,`Nivel educativo`), as.factor))
+
+#Resumen
+df %>%
+  group_by(Experimento) %>%
+  summarise(n= length(Q1),
+            prom = mean(Q1),
+            ds = sd(Q1),
+            mediana = median(Q1),
+            RIC = IQR(Q1),
+            min = min(Q1),
+            max = max(Q1))
+#Supuesto de normalidad ----
+df %>%
+  group_by(Experimento) %>%
+  summarise(n = length(Q1),
+            est_ks = ks.test(scale(Q1), "pnorm")$statistic,
+            p_ks = ks.test(scale(Q1), "pnorm")$p.value,
+            est_sw = shapiro.test(Q1)$statistic,
+            p_sw = shapiro.test(Q1)$p.value,
+            est_l = lillie.test(Q1)$statistic,
+            p_l = lillie.test(Q1)$p.value)
+#wilcox asume que los datos no son pareados
+pretestq1 <- df %>%
+  select(Experimento,Q1) %>%
+  filter(Experimento == "Pretest")
+
+posttestq1 <- df %>%
+  select(Experimento,Q1) %>%
+  filter(Experimento == "Post-test")
+
+wilcox.test(x=pretestq1$Q1, y = posttestq1$Q1, paired=TRUE)
+#La prueba de rango del signo de Wilcoxon nos muestra que con una confianza del
+#95%, podemos decir que hay diferencias estadísticamente significativas entre
+#las percepciones de Q1 antes y después del experimento (V=0, p-valor<0.001).
+
+df %>%
+  rstatix::wilcox_effsize(Q1 ~ Experimento, paired=TRUE)
+# Con una confianza del 95% se concluye que el tamaño del efecto es grande
