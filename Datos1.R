@@ -6,6 +6,9 @@ library(openintro)
 library(nortest)
 library(car) # para leveneTest
 library(moments)
+library(GGally)
+library(rstatix)
+library(coin)
 
 #EDA (minimo) ----
 df <- read_excel("~/Datos_Medicos/Data/datos_economia.xlsx")
@@ -148,3 +151,46 @@ wilcox.test(weight ~ smoke, data = df)
 #Tamano del efecto (no parametrico, coherente con Wilcoxon) ----
 cliff.delta(weight ~ smoke, data = df)
 
+
+
+#Estadística no parametrica pareado----
+#url_dat <- "https://docs.google.com/spreadsheets/d/e/2PACX-1vQaVafuOSuEnOIiJJoB_OLF6GHib4EGqtAPnFBkNXFj29iB8yex4wYXYAAyIW16eA/pub?gid=1616716040&single=true&output=tsv"
+
+df <- read.delim("~/Metodos_estadisticos/Data/Resultados experimento.xlsx - Datos_ComOrg.tsv")
+
+summary(df)
+df %>%
+  summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
+
+df$Experimento <- factor(data$Experimento)
+df$Genero <- factor(df$Genero)
+df$Nivel.educativo <- factor(df$Nivel.educativo)
+
+
+df %>%
+  group_by(Experimento) %>%
+  summarise(n = length(Q1),
+            est_ks = ks.test(scale(Q1),'pnorm')$statistic,
+            p_ks = ks.test(scale(Q1),'pnorm')$p.value,
+            est_sw = shapiro.test(Q1)$statistic,
+            p_sw = shapiro.test(Q1)$p.value,
+            est_l = lillie.test(Q1)$statistic,
+            p_l = lillie.test(Q1)$p.value)
+
+pretestq1 <- df %>%
+  select(Experimento, Q1) %>%
+  filter(Experimento == 'Pretest')
+
+posttestq1 <- df %>%
+  select(Experimento, Q1) %>%
+  filter(Experimento == 'Post-test')
+
+wilcox.test(x = pretestq1$Q1, y = posttestq1$Q1, paired = TRUE)
+
+#La prueba de rango del signo de Wilcoxon nos muestra...
+
+#Con una confianza del 95%, podemos observar que hay diferencias estadísticamente significativas de
+#la pregunta de percepción Q1 según el Experimento (v = 0, p-valor < 0.001)
+
+df %>%
+  rstatix::wilcox_effsize(Q1 ~ Experimento, paired = TRUE)
