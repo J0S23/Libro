@@ -100,25 +100,10 @@ df <- births
 df %>%
   group_by(smoke) %>%
   summarise(n = length(weight),
-            est_ks = ks.test(weight)$statistic,
-            p_ks = ks.test(weight)$p.value,
             est_sw = shapiro.test(weight)$statistic,
             p_sw = shapiro.test(weight)$p.value,
             est_l = lillie.test(weight)$statistic,
             p_l = lillie.test(weight)$p.value)
-
-
-df %>%
-  group_by(`smoke`) %>%
-  summarise(n = length(weight),
-            prom = mean(weight),
-            ds = sd(weight),
-            mediana = median(weight),
-            RIC = IQR(weight),
-            min = min(weight),
-            max = max(weight),
-            curtosis = kurtosis(weight),
-            Coef_asim = skewness(weight))
 #Shapiro-Wilk rechaza normalidad en AMBOS grupos (p < 0.001)
 
 #Homogeneidad de varianzas ----
