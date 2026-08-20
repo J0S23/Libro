@@ -20,7 +20,7 @@ library(rstatix)
 Se cargan los datos de presión sistólica y diastólica.
 
 ```{r data-presion}
-df <- read_excel("/cloud/project/Data/datos_medicos.xlsx")
+df <- read_excel("Data/datos_medicos.xlsx")
 summary(df)
 ```
 
@@ -164,7 +164,7 @@ cohen.d(dfs, dfd, paired = FALSE)
 Ho: μ(ganancias) = μ(inversion) vs Ha: μ(ganancias) != μ(inversion)
 
 ```{r load-economia}
-df <- read_excel("/cloud/project/Data/datos_economia.xlsx")
+df <- read_excel("Data/datos_economia.xlsx")
 df$`Tipo de cuenta` <- factor(df$`Tipo de cuenta`)
 summary(df)
 ```

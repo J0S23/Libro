@@ -22,7 +22,7 @@ library(rstatix)
 
 Conjunto de datos
 ```{r data}
-data <- read.csv("/cloud/project/Data/housing.csv")
+data <- read.csv("Data/housing.csv")
 ```
 
 Muestrame las 5 primeras filas

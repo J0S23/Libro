@@ -10,7 +10,7 @@ library(car)
 #data ----
 
 #data----
-df <- read_excel("/cloud/project/Data/datos_medicos.xlsx")
+df <- read_excel("Data/datos_medicos.xlsx")
 summary(df)
 
 ##transformación ----

@@ -12,7 +12,7 @@
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos" />
-  <meta name="github-repo" content="rstudio/bookdown-demo" />
+  <meta name="github-repo" content="j0s23/Libro" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="References | Proyecto de Métodos Estadísticos" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Sebastian Ariza y Joseph Arias" />
 
 
-<meta name="date" content="2026-07-29" />
+<meta name="date" content="2026-08-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -123,29 +123,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 </style>
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -163,19 +140,44 @@ div.csl-indent {
 <li><a href="./">A Minimal Book Example</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
-<li class="chapter" data-level="3" data-path="literature.html"><a href="literature.html"><i class="fa fa-check"></i><b>3</b> Literature</a></li>
-<li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduccion</a></li>
+<li class="chapter" data-level="1" data-path="EDA.html"><a href="EDA.html"><i class="fa fa-check"></i><b>1</b> EDA</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="methods.html"><a href="methods.html#math-example"><i class="fa fa-check"></i><b>4.1</b> math example</a></li>
+<li class="chapter" data-level="1.1" data-path="EDA.html"><a href="EDA.html#an%C3%A1lisis-exploratorio-de-median_house_value-target"><i class="fa fa-check"></i><b>1.1</b> Análisis exploratorio de ‘median_house_value’ (Target)</a></li>
+<li class="chapter" data-level="1.2" data-path="EDA.html"><a href="EDA.html#an%C3%A1lisis-exploratorio-univariado-de-cada-variable-independiente"><i class="fa fa-check"></i><b>1.2</b> Análisis exploratorio univariado de cada variable independiente</a></li>
+<li class="chapter" data-level="1.3" data-path="EDA.html"><a href="EDA.html#an%C3%A1lisis-exploratorio-bivariado"><i class="fa fa-check"></i><b>1.3</b> Análisis exploratorio bivariado</a></li>
+<li class="chapter" data-level="1.4" data-path="EDA.html"><a href="EDA.html#ingenier%C3%ADa-de-caracter%C3%ADsticas"><i class="fa fa-check"></i><b>1.4</b> Ingeniería de características</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a>
+<li class="chapter" data-level="2" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html"><i class="fa fa-check"></i><b>2</b> Análisis paramétrico y no paramétrico</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>5.1</b> Example one</a></li>
-<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>5.2</b> Example two</a></li>
+<li class="chapter" data-level="2.1" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#librer%C3%ADas"><i class="fa fa-check"></i><b>2.1</b> Librerías —</a></li>
+<li class="chapter" data-level="2.2" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#presi%C3%B3n-arterial-carga-y-eda"><i class="fa fa-check"></i><b>2.2</b> 4.1 Presión arterial: carga y EDA</a></li>
+<li class="chapter" data-level="2.3" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#supuesto-de-normalidad-presi%C3%B3n"><i class="fa fa-check"></i><b>2.3</b> Supuesto de normalidad (presión)</a></li>
+<li class="chapter" data-level="2.4" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#homocedasticidad-raz%C3%B3n-de-varianzas"><i class="fa fa-check"></i><b>2.4</b> Homocedasticidad: razón de varianzas</a></li>
+<li class="chapter" data-level="2.5" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#diferencia-de-medias-varianzas-iguales"><i class="fa fa-check"></i><b>2.5</b> Diferencia de medias, varianzas iguales</a></li>
+<li class="chapter" data-level="2.6" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#diferencia-de-medias-con-distribuci%C3%B3n-normal-z"><i class="fa fa-check"></i><b>2.6</b> Diferencia de medias con distribución normal (z)</a></li>
+<li class="chapter" data-level="2.7" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#tama%C3%B1o-del-efecto-presi%C3%B3n"><i class="fa fa-check"></i><b>2.7</b> Tamaño del efecto (presión)</a></li>
+<li class="chapter" data-level="2.8" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#objetivo-2-precio-seg%C3%BAn-tipo-de-cuenta-inversi%C3%B3n-vs-ganancia"><i class="fa fa-check"></i><b>2.8</b> Objetivo 2: precio según tipo de cuenta (Inversión vs Ganancia)</a></li>
+<li class="chapter" data-level="2.9" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#supuesto-de-normalidad-econom%C3%ADa"><i class="fa fa-check"></i><b>2.9</b> Supuesto de normalidad (economía)</a></li>
+<li class="chapter" data-level="2.10" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#homocedasticidad-econom%C3%ADa"><i class="fa fa-check"></i><b>2.10</b> Homocedasticidad (economía)</a></li>
+<li class="chapter" data-level="2.11" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#t-test-de-welch-econom%C3%ADa"><i class="fa fa-check"></i><b>2.11</b> t-test de Welch (economía)</a></li>
+<li class="chapter" data-level="2.12" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#tama%C3%B1o-del-efecto-econom%C3%ADa"><i class="fa fa-check"></i><b>2.12</b> Tamaño del efecto (economía)</a></li>
+<li class="chapter" data-level="2.13" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#intervenci%C3%B3n-educativa-t-test-pareado"><i class="fa fa-check"></i><b>2.13</b> 4.2 Intervención educativa: t-test pareado</a></li>
+<li class="chapter" data-level="2.14" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#tama%C3%B1o-del-efecto-intervenci%C3%B3n"><i class="fa fa-check"></i><b>2.14</b> Tamaño del efecto (intervención)</a></li>
+<li class="chapter" data-level="2.15" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#peso-al-nacer-seg%C3%BAn-h%C3%A1bito-de-fumar-t-test-vs-mann-whitney"><i class="fa fa-check"></i><b>2.15</b> 4.3 Peso al nacer según hábito de fumar (t-test vs Mann-Whitney)</a></li>
+<li class="chapter" data-level="2.16" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#homogeneidad-de-varianzas-births"><i class="fa fa-check"></i><b>2.16</b> Homogeneidad de varianzas (births)</a></li>
+<li class="chapter" data-level="2.17" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#estad%C3%ADstica-no-param%C3%A9trica-pareada-percepci%C3%B3n-q1"><i class="fa fa-check"></i><b>2.17</b> Estadística no paramétrica pareada (percepción Q1)</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
+<li class="chapter" data-level="3" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>3</b> Methods</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="methods.html"><a href="methods.html#math-example"><i class="fa fa-check"></i><b>3.1</b> math example</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>4</b> Applications</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>4.1</b> Example one</a></li>
+<li class="chapter" data-level="4.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>4.2</b> Example two</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>5</b> Final Words</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -200,14 +202,6 @@ div.csl-indent {
 <div id="references" class="section level1 unnumbered hasAnchor">
 <h1>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div class="csl-entry">
-Xie, Yihui. 2015. <em>Dynamic Documents with <span>R</span> and Knitr</em>. 2nd ed. Boca Raton, Florida: Chapman; Hall/CRC. <a href="http://yihui.name/knitr/">http://yihui.name/knitr/</a>.
-</div>
-<div class="csl-entry">
-———. 2026. <em>Bookdown: Authoring Books and Technical Documents with r Markdown</em>. <a href="https://github.com/rstudio/bookdown">https://github.com/rstudio/bookdown</a>.
-</div>
-</div>
 </div>
 
 
