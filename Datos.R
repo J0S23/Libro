@@ -258,9 +258,9 @@ wilcox.test(weight ~ smoke, data = df)
 
 #USAR PRUEBA PARAMETRICA
 df <- read.delim("/cloud/project/Data/dataQ.tsv")
-head(datos)
-df <- datos %>%
-  mutate(across(c(Experimento, Genero,`Nivel educativo`), as.factor))
+head(df)
+df <- df %>%
+  mutate(across(c(Experimento, Genero,`Nivel.educativo`), as.factor))
 
 #Resumen
 df %>%
@@ -299,3 +299,4 @@ wilcox.test(x=pretestq1$Q1, y = posttestq1$Q1, paired=TRUE)
 df %>%
   rstatix::wilcox_effsize(Q1 ~ Experimento, paired=TRUE)
 # Con una confianza del 95% se concluye que el tamaño del efecto es grande
+
