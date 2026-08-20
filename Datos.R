@@ -8,6 +8,8 @@ library(openintro)
 library(nortest)
 library(car)
 #data ----
+
+#data----
 df <- read_excel("/cloud/project/Data/datos_medicos.xlsx")
 summary(df)
 
@@ -23,14 +25,12 @@ dfd <- df %>%
 df %>%
   group_by(Presion) %>%
   summarise(n = length(Valores),
-            media = mean(Valores),
-            sd = sd(Valores),
+            prom = mean(Valores),
+            ds = sd(Valores),
             mediana = median(Valores),
             RIC = IQR(Valores),
-            Q1 = quantile(Valores, 0.25),
-            Q3 = quantile(Valores, 0.75),
-            minimo = min(Valores),
-            maximo = max(Valores),
+            min = min(Valores),
+            max = max(Valores),
             curtosis = kurtosis(Valores),
             Coef_asim = skewness(Valores))
 
@@ -44,6 +44,41 @@ df %>%
   geom_density(alpha = 0.5) +
   labs(title = "Distribución de presión sistólica y diastólica")
 
+#Presión Sistólica: Se registraron un total de 100 mediciones de presión sistólica.
+#En promedio, la presión sistólica es de aproximadamente 121 mmHg (con una desviación
+#estándar de 9.13 mmHg). Por otro lado, el 50% de los pacientes registran una presión sistólica
+#de a lo sumo 121 mmHg, con un rango intercuartílico de 11.9 mmHg, siendo el valor más bajo
+#registrado de 96.9 mmHg y el más alto de 142 mmHg. Si visualizamos los datos, su forma es
+#ligeramente platicúrtica (curtosis = 2.84, menor a 3), es decir, se evidencia una distribución
+#algo más aplanada que la normal, con colas más livianas. Además, con un coeficiente de
+#asimetría muy cercano a cero (0.0605), la distribución es prácticamente simétrica,
+#sin un sesgo relevante hacia ninguno de los dos extremos.
+
+#Presión Diastólica: Se registraron un total de 100 mediciones de presión diastólica. En promedio,
+#la presión diastólica es de aproximadamente 78.9 mmHg (con una desviación estándar de 9.48 mmHg).
+#Por otro lado, el 50% de los pacientes registran una presión diastólica de a lo sumo 77.8 mmHg,
+#con un rango intercuartílico de 12.4 mmHg, siendo el valor más bajo registrado de 59.9 mmHg y el
+#más alto de 112 mmHg. Si visualizamos los datos, su forma es ligeramente leptocúrtica
+#(curtosis = 3.66, mayor a 3), es decir, se evidencia una distribución algo más apuntada que la
+#normal, con colas más pesadas. Además, con un coeficiente de asimetría de 0.639, se observa una
+#asimetría o sesgo moderado hacia la derecha, lo que indica la presencia de algunos valores de
+#presión diastólica relativamente altos respecto a la mayoría de los pacientes.
+
+#Visualización del EDA de Presión
+df %>%
+  ggplot(aes(x = Presion, y = Valores))+
+  geom_boxplot()+
+  labs(title = "Distribución de presión sistólica y diastólica")
+
+
+#El boxplot muestra que la presión sistólica es consistentemente más alta que la diastólica,
+#con una mediana cercana a 120 mmHg frente a 78 mmHg, lo cual es fisiológicamente esperado.
+#La dispersión (rango intercuartílico) es similar entre ambos grupos, sin diferencias marcadas
+#en variabilidad. Se observa un valor atípico en cada grupo: uno alto en la diastólica
+#(~112 mmHg) y uno bajo en la sistólica (~98 mmHg), que podrían corresponder a casos particulares
+#a revisar. Ambas cajas lucen razonablemente simétricas, consistente con los coeficientes de
+#asimetría calculados previamente.
+
 # supuesto de normalidad ----
 # (x-media)/ds
 #Ho:x ~ N(miu,sigma**2)
@@ -53,7 +88,24 @@ ks.test(dfd, "pnorm", mean = mean(dfd), sd = sd(dfd))
 
 #Supuesto de homocedasticidad ----
 var.test(dfs,dfd)
-#Verificando paso a paso las salidas de var.test
+
+# Verificación manual: razón de varianzas ----
+n1 <- length(dfs)
+n2 <- length(dfd)
+s1_2 <- var(dfs)
+s2_2 <- var(dfd)
+
+F_manual <- s1_2 / s2_2
+df1 <- n1 - 1
+df2 <- n2 - 1
+
+p_valor_F <- 2 * min(pf(F_manual, df1, df2), 1 - pf(F_manual, df1, df2))
+
+IC_inf_F <- (s1_2/s2_2) * (1/qf(0.975, df1, df2))
+IC_sup_F <- (s1_2/s2_2) * (1/qf(0.025, df1, df2))
+
+F_manual; df1; df2; p_valor_F
+c(IC_inf_F, IC_sup_F)
 
 # --- Verificación manual: razón de varianzas ---
 n1 <- length(dfs); n2 <- length(dfd)
@@ -75,12 +127,46 @@ c(IC_inf_F, IC_sup_F)
 # t student (se puede usar normal porque las muestras son n1=n2=100>=30 y la t student
 #con muy altos grados de libertad converge a la distribucion normal)
 t.test(x=dfs,y=dfd,var.equal=TRUE,paired=FALSE)
+
+# Verificación manual: t-test con varianza combinada ----
+
+media1 <- mean(dfs)
+media2 <- mean(dfd)
+
+Sp2 <- ((n1-1)*s1_2 + (n2-1)*s2_2) / (n1 + n2 - 2)
+
+t_manual <- (media1 - media2) / sqrt(Sp2 * (1/n1 + 1/n2))
+df_t <- n1 + n2 - 2
+
+p_valor_t <- 2 * (1 - pt(abs(t_manual), df_t))
+
+IC_inf_t <- (media1 - media2) - qt(0.975, df_t) * sqrt(Sp2 * (1/n1 + 1/n2))
+IC_sup_t <- (media1 - media2) + qt(0.975, df_t) * sqrt(Sp2 * (1/n1 + 1/n2))
+
+t_manual
+df_t
+p_valor_t
+c(IC_inf_t, IC_sup_t)
+
 #con distribucion normal dada la ley de los grandes numeros se cumple
 #que se obtiene lo mismo
 z.test(x = dfs, y = dfd,
        sigma.x = sd(dfs), sigma.y = sd(dfd),
        alternative = "two.sided")
-#Verificando paso a paso las salidas de t.test
+
+# Verificación manual: diferencia de medias con distribución normal (z) ----
+SE_z <- sqrt(s1_2/n1 + s2_2/n2)
+
+z_manual <- (media1 - media2) / SE_z
+
+p_valor_z <- 2 * (1 - pnorm(abs(z_manual)))
+
+IC_inf_z <- (media1 - media2) - qnorm(0.975) * SE_z
+IC_sup_z <- (media1 - media2) + qnorm(0.975) * SE_z
+
+z_manual
+p_valor_z
+c(IC_inf_z, IC_sup_z)
 
 # --- Verificación manual: t-test con varianza combinada (pooled) ---
 media1 <- mean(dfs); media2 <- mean(dfd)
@@ -124,7 +210,8 @@ cohen.d(dfs,dfd,paired=FALSE) # representa la distancia entre el efecto de cada 
 #Ha:μ(ganancias) != μ(inversion)
 
 #data 2 ----
-df <- read_excel("/cloud/project/datos_economia.xlsx")
+df <- read_excel("Data/datos_economia.xlsx")
+
 df$`Tipo de cuenta` <- factor(df$`Tipo de cuenta`)
 
 # transformacion 2 ----
@@ -209,6 +296,43 @@ IC_sup_pareado <- media_d + qt(0.975, df_pareado) * (sd_d / sqrt(n_pares))
 t_pareado_manual; df_pareado; p_valor_pareado
 c(IC_inf_pareado, IC_sup_pareado)
 # Comparar estos valores contra la salida de t.test(x=datos$despues, y=datos$antes, paired=TRUE)
+#Diferencia entre las medias ----
+#Ho:μ(despues) = μ(antes)
+#Ha:μ(despues) != μ(antes)
+t.test(x = datos$despues,
+       y = datos$antes,
+       paired = TRUE)
+
+# Verificación manual: t-test pareado ----
+d <- datos$despues - datos$antes
+
+media_d <- mean(d)
+sd_d <- sd(d)
+n_pares <- length(d)
+
+t_pareado_manual <- media_d / (sd_d / sqrt(n_pares))
+df_pareado <- n_pares - 1
+
+p_valor_pareado <- 2 * (1 - pt(abs(t_pareado_manual), df_pareado))
+
+IC_inf_pareado <- media_d - qt(0.975, df_pareado) * (sd_d / sqrt(n_pares))
+IC_sup_pareado <- media_d + qt(0.975, df_pareado) * (sd_d / sqrt(n_pares))
+
+t_pareado_manual
+df_pareado
+p_valor_pareado
+c(IC_inf_pareado, IC_sup_pareado)
+
+#tamaño del efecto 3----
+cohen.d(datos$despues,
+        datos$antes,
+        paired = TRUE)
+#Usando el teorema de la diferencia de medias para datos pareados verifica la salida
+#de la función t.test con los datos de la intervención educativa
+
+#diferencia de medianas con estadística no parmétrica ----
+data('births')
+df <- births
 
 # Tamaño del efecto (no es necesario porque el p-value es superior a alpha=0.05)
 cohen.d(datos$despues,datos$antes,paired=TRUE)
@@ -255,3 +379,5 @@ wilcox.test(weight ~ smoke, data=df)
 #No hay evidencia significativa entre los pesos de los bebes de las mamas que fuman o no
 
 #No se aplica tamaño del efecto porque no hay diferencias significativas
+
+

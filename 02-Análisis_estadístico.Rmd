@@ -1,0 +1,438 @@
+# Análisis paramétrico y no paramétrico {#Análisis_estadístico}
+
+## Librerías ---
+```{r Librerías}
+library(readxl)
+library(moments)
+library(tidyverse)
+library(effsize)
+library(openintro)
+library(nortest)
+library(car)
+library(coin)
+library(BSDA)
+library(rstatix)
+```
+
+
+## 4.1 Presión arterial: carga y EDA
+
+Se cargan los datos de presión sistólica y diastólica.
+
+```{r data-presion}
+df <- read_excel("/cloud/project/Data/datos_medicos.xlsx")
+summary(df)
+```
+
+Se transforma la variable `Presion` a factor y se separan los valores de presión sistólica y diastólica en vectores independientes.
+
+```{r transform-presion}
+df$Presion <- factor(df$Presion)
+dfs <- df %>%
+  filter(Presion == "PresionSistolica") %>%
+  pull(Valores)
+dfd <- df %>%
+  filter(Presion == "PresionDiastolica") %>%
+  pull(Valores)
+```
+
+Resumen estadístico de ambos grupos.
+
+```{r resumen-presion}
+df %>%
+  group_by(Presion) %>%
+  summarise(n = length(Valores),
+            prom = mean(Valores),
+            ds = sd(Valores),
+            mediana = median(Valores),
+            RIC = IQR(Valores),
+            min = min(Valores),
+            max = max(Valores),
+            curtosis = kurtosis(Valores),
+            Coef_asim = skewness(Valores))
+```
+
+**Presión Sistólica:** Se registraron un total de 100 mediciones de presión sistólica. En promedio, la presión sistólica es de aproximadamente 121 mmHg (con una desviación estándar de 9.13 mmHg). Por otro lado, el 50% de los pacientes registran una presión sistólica de a lo sumo 121 mmHg, con un rango intercuartílico de 11.9 mmHg, siendo el valor más bajo registrado de 96.9 mmHg y el más alto de 142 mmHg. Si visualizamos los datos, su forma es ligeramente platicúrtica (curtosis = 2.84, menor a 3), es decir, se evidencia una distribución algo más aplanada que la normal, con colas más livianas. Además, con un coeficiente de asimetría muy cercano a cero (0.0605), la distribución es prácticamente simétrica, sin un sesgo relevante hacia ninguno de los dos extremos.
+
+**Presión Diastólica:** Se registraron un total de 100 mediciones de presión diastólica. En promedio, la presión diastólica es de aproximadamente 78.9 mmHg (con una desviación estándar de 9.48 mmHg). Por otro lado, el 50% de los pacientes registran una presión diastólica de a lo sumo 77.8 mmHg, con un rango intercuartílico de 12.4 mmHg, siendo el valor más bajo registrado de 59.9 mmHg y el más alto de 112 mmHg. Si visualizamos los datos, su forma es ligeramente leptocúrtica (curtosis = 3.66, mayor a 3), es decir, se evidencia una distribución algo más apuntada que la normal, con colas más pesadas. Además, con un coeficiente de asimetría de 0.639, se observa una asimetría o sesgo moderado hacia la derecha, lo que indica la presencia de algunos valores de presión diastólica relativamente altos respecto a la mayoría de los pacientes.
+
+Visualización mediante boxplot.
+
+```{r boxplot-presion}
+df %>%
+  ggplot(aes(x = Presion, y = Valores)) +
+  geom_boxplot() +
+  labs(title = "Distribución de presión sistólica y diastólica")
+```
+
+El boxplot muestra que la presión sistólica es consistentemente más alta que la diastólica, con una mediana cercana a 120 mmHg frente a 78 mmHg, lo cual es fisiológicamente esperado. La dispersión (rango intercuartílico) es similar entre ambos grupos, sin diferencias marcadas en variabilidad. Se observa un valor atípico en cada grupo: uno alto en la diastólica (~112 mmHg) y uno bajo en la sistólica (~98 mmHg), que podrían corresponder a casos particulares a revisar. Ambas cajas lucen razonablemente simétricas, consistente con los coeficientes de asimetría calculados previamente.
+
+## Supuesto de normalidad (presión)
+
+Ho: x ~ N(μ, σ²) vs Ha: x !~ N(μ, σ²)
+
+```{r normalidad-presion}
+ks.test(dfs, "pnorm", mean = mean(dfs), sd = sd(dfs))
+ks.test(dfd, "pnorm", mean = mean(dfd), sd = sd(dfd))
+```
+
+## Homocedasticidad: razón de varianzas
+
+```{r vartest-presion}
+var.test(dfs, dfd)
+```
+
+Verificación manual, paso a paso, del teorema de la razón de varianzas.
+
+```{r vartest-manual}
+n1 <- length(dfs)
+n2 <- length(dfd)
+s1_2 <- var(dfs)
+s2_2 <- var(dfd)
+
+F_manual <- s1_2 / s2_2
+df1 <- n1 - 1
+df2 <- n2 - 1
+
+p_valor_F <- 2 * min(pf(F_manual, df1, df2), 1 - pf(F_manual, df1, df2))
+
+IC_inf_F <- (s1_2 / s2_2) * (1 / qf(0.975, df1, df2))
+IC_sup_F <- (s1_2 / s2_2) * (1 / qf(0.025, df1, df2))
+
+F_manual; df1; df2; p_valor_F
+c(IC_inf_F, IC_sup_F)
+```
+
+## Diferencia de medias, varianzas iguales
+
+```{r ttest-presion}
+t.test(x = dfs, y = dfd, var.equal = TRUE, paired = FALSE)
+```
+
+Verificación manual, paso a paso, del teorema de la diferencia de medias con varianza combinada.
+
+```{r ttest-manual}
+media1 <- mean(dfs)
+media2 <- mean(dfd)
+
+Sp2 <- ((n1 - 1) * s1_2 + (n2 - 1) * s2_2) / (n1 + n2 - 2)
+
+t_manual <- (media1 - media2) / sqrt(Sp2 * (1/n1 + 1/n2))
+df_t <- n1 + n2 - 2
+
+p_valor_t <- 2 * (1 - pt(abs(t_manual), df_t))
+
+IC_inf_t <- (media1 - media2) - qt(0.975, df_t) * sqrt(Sp2 * (1/n1 + 1/n2))
+IC_sup_t <- (media1 - media2) + qt(0.975, df_t) * sqrt(Sp2 * (1/n1 + 1/n2))
+
+t_manual; df_t; p_valor_t
+c(IC_inf_t, IC_sup_t)
+```
+
+## Diferencia de medias con distribución normal (z)
+
+```{r ztest-presion}
+z.test(x = dfs, y = dfd,
+       sigma.x = sd(dfs), sigma.y = sd(dfd),
+       alternative = "two.sided")
+```
+
+Verificación manual aplicando el mismo teorema pero con distribución normal en vez de t. Dada la ley de los grandes números, con n1=n2=100 se obtienen resultados prácticamente iguales al t-test.
+
+```{r ztest-manual}
+SE_z <- sqrt(s1_2/n1 + s2_2/n2)
+
+z_manual <- (media1 - media2) / SE_z
+
+p_valor_z <- 2 * (1 - pnorm(abs(z_manual)))
+
+IC_inf_z <- (media1 - media2) - qnorm(0.975) * SE_z
+IC_sup_z <- (media1 - media2) + qnorm(0.975) * SE_z
+
+z_manual; p_valor_z
+c(IC_inf_z, IC_sup_z)
+```
+
+## Tamaño del efecto (presión)
+
+```{r cohend-presion}
+cohen.d(dfs, dfd, paired = FALSE)
+```
+
+## Objetivo 2: precio según tipo de cuenta (Inversión vs Ganancia)
+
+Ho: μ(ganancias) = μ(inversion) vs Ha: μ(ganancias) != μ(inversion)
+
+```{r load-economia}
+df <- read_excel("/cloud/project/Data/datos_economia.xlsx")
+df$`Tipo de cuenta` <- factor(df$`Tipo de cuenta`)
+summary(df)
+```
+
+Resumen estadístico.
+
+```{r resumen-economia}
+df %>%
+  group_by(`Tipo de cuenta`) %>%
+  summarise(n = length(Precio),
+            prom = mean(Precio),
+            ds = sd(Precio),
+            mediana = median(Precio),
+            RIC = IQR(Precio),
+            min = min(Precio),
+            max = max(Precio),
+            curtosis = kurtosis(Precio),
+            Coef_asim = skewness(Precio))
+```
+
+**Ganancia:** Se registraron un total de 100 mediciones de precio en cuentas de ganancia. En promedio, el precio es de aproximadamente $778.491 (con una desviación estándar de $193.397). Por otro lado, el 50% de las cuentas registran un precio de a lo sumo $754.834, con un rango intercuartílico de $253.790, siendo el valor más bajo registrado de $389.351 y el más alto de $1.448.208. Si visualizamos los datos, su forma es ligeramente leptocúrtica (curtosis = 3.66). Asimismo se evidencia una distribución algo más puntiaguda que lo normal, con colas más pesadas. Además, con un coeficiente de asimetría de 0.639, se observa una asimetría o sesgo moderado hacia la derecha, lo que indica la presencia de algunas cuentas de ganancia con precios relativamente altos respecto a la mayoría.
+
+**Inversión:** Se registraron un total de 100 mediciones de precio en cuentas de inversión. En promedio, el precio es de aproximadamente $5.090.406 (con una desviación estándar de $912.816). Por otro lado, el 50% de las cuentas registran un precio de a lo sumo $5.061.756, con un rango intercuartílico de $1.185.673, siendo el valor más bajo registrado de $2.690.831 y el más alto de $7.187.333. Si visualizamos los datos, su forma es ligeramente platicúrtica (curtosis = 2.84), lo que evidencia una distribución algo más aplanada que lo normal. Además, con un coeficiente de asimetría muy cercano a cero (0.605), la distribución es prácticamente simétrica, sin un sesgo relevante hacia ninguno de los dos extremos.
+
+```{r boxplot-economia}
+df %>%
+  ggplot(aes(x = `Tipo de cuenta`, y = Precio)) +
+  geom_boxplot() +
+  labs(title = "Distribución de Precio según Tipo de cuenta")
+```
+
+El boxplot muestra que el precio de las cuentas de inversión es consistentemente mucho más alto que el de las cuentas de ganancia, con una mediana cercana a $5.06 millones frente a apenas $800 mil, lo cual es coherente con la naturaleza de cada tipo de cuenta. La dispersión también es mucho mayor en inversión que en ganancia, lo que indica más variabilidad entre las cuentas de ese grupo. Ambas cajas lucen razonablemente simétricas, consistente con los coeficientes de asimetría calculados previamente.
+
+```{r split-economia}
+dfi <- df %>% filter(`Tipo de cuenta` == "Inversion") %>% pull(Precio)
+dfg <- df %>% filter(`Tipo de cuenta` == "Ganancia") %>% pull(Precio)
+```
+
+## Supuesto de normalidad (economía)
+
+Ho: X ~ N(μ, σ²) vs Ha: X !~ N(μ, σ²)
+
+```{r normalidad-economia}
+shapiro.test(dfi)
+shapiro.test(dfg)
+```
+
+## Homocedasticidad (economía)
+
+Ho: σ²(Ganancia) = σ²(Inversión) vs Ha: distintas.
+
+F de Fisher (dos grupos, asume normalidad):
+
+```{r vartest-economia}
+var.test(dfi, dfg)
+```
+
+Bartlett: usa el estadístico Chi-cuadrado, es muy sensible a la no normalidad.
+
+```{r bartlett-economia}
+bartlett.test(list(dfi, dfg))
+```
+
+Levene: usa el estadístico F, basado en desviaciones absolutas respecto a la media (más robusto que Bartlett ante no normalidad).
+
+```{r levene-economia}
+leveneTest(Precio ~ `Tipo de cuenta`, data = df)
+```
+
+Fligner-Killeen: no paramétrico, usa el estadístico Chi-cuadrado, el más robusto ante outliers y no normalidad.
+
+```{r fligner-economia}
+fligner.test(list(dfi, dfg))
+```
+
+## t-test de Welch (economía)
+
+```{r ttest-economia}
+t.test(dfi, dfg, var.equal = FALSE, paired = FALSE)
+```
+
+## Tamaño del efecto (economía)
+
+```{r cohend-economia}
+cohen.d(dfi, dfg, paired = FALSE)
+```
+
+## 4.2 Intervención educativa: t-test pareado
+
+Datos de tiempos antes y después de la intervención educativa.
+
+```{r data-intervencion}
+datos <- data.frame(
+  estudiante = c(1:10),
+  antes = c(12.9, 13.5, 12.8, 15.6, 17.2, 19.2, 12.6, 15.3, 14.4, 11.3),
+  despues = c(12.7, 13.6, 12.0, 15.2, 16.8, 20.0, 12.0, 15.9, 16.0, 11.1)
+)
+```
+
+Supuesto de normalidad.
+
+```{r normalidad-intervencion}
+shapiro.test(datos$antes)
+shapiro.test(datos$despues)
+```
+
+Diferencia entre las medias: Ho: μ(despues) = μ(antes) vs Ha: μ(despues) != μ(antes)
+
+```{r ttest-pareado}
+t.test(x = datos$despues, y = datos$antes, paired = TRUE)
+```
+
+Verificación manual, paso a paso, del teorema de la diferencia de medias para datos pareados.
+
+```{r ttest-pareado-manual}
+d <- datos$despues - datos$antes
+
+media_d <- mean(d)
+sd_d <- sd(d)
+n_pares <- length(d)
+
+t_pareado_manual <- media_d / (sd_d / sqrt(n_pares))
+df_pareado <- n_pares - 1
+
+p_valor_pareado <- 2 * (1 - pt(abs(t_pareado_manual), df_pareado))
+
+IC_inf_pareado <- media_d - qt(0.975, df_pareado) * (sd_d / sqrt(n_pares))
+IC_sup_pareado <- media_d + qt(0.975, df_pareado) * (sd_d / sqrt(n_pares))
+
+t_pareado_manual; df_pareado; p_valor_pareado
+c(IC_inf_pareado, IC_sup_pareado)
+```
+
+## Tamaño del efecto (intervención)
+
+```{r cohend-intervencion}
+cohen.d(datos$despues, datos$antes, paired = TRUE)
+```
+
+## 4.3 Peso al nacer según hábito de fumar (t-test vs Mann-Whitney)
+
+```{r data-births}
+data('births')
+df <- births
+```
+
+Supuesto de normalidad por grupo.
+
+```{r normalidad-births}
+df %>%
+  group_by(smoke) %>%
+  summarise(n = length(weight),
+            est_ks = ks.test(scale(weight), "pnorm")$statistic,
+            p_ks = ks.test(scale(weight), "pnorm")$p.value,
+            est_sw = shapiro.test(weight)$statistic,
+            p_sw = shapiro.test(weight)$p.value,
+            est_l = lillie.test(weight)$statistic,
+            p_l = lillie.test(weight)$p.value)
+```
+
+Shapiro-Wilk rechaza normalidad en ambos grupos (p < 0.001).
+
+Resumen estadístico.
+
+```{r resumen-births}
+df %>%
+  group_by(smoke) %>%
+  summarise(n = length(weight),
+            prom = mean(weight),
+            ds = sd(weight),
+            mediana = median(weight),
+            RIC = IQR(weight),
+            min = min(weight),
+            max = max(weight),
+            curtosis = kurtosis(weight),
+            Coef_asim = skewness(weight))
+```
+
+## Homogeneidad de varianzas (births)
+
+Ho: σ²(smoker) = σ²(nonsmoker)
+
+```{r levene-births}
+leveneTest(weight ~ smoke, data = df, center = median)
+```
+
+No se rechaza homocedasticidad (p > 0.05): las varianzas son iguales.
+
+**Decisión:** aunque la normalidad no se cumple estrictamente, n1=100 y n2=50 son muestras suficientemente grandes (regla práctica n≥30) para la robustez del t-test frente a la falta de normalidad. Sumando que sí hay homogeneidad de varianzas, es válido usar el t-test. Por eso se corre y se compara contra Mann-Whitney (Wilcoxon), en vez de descartarlo de entrada.
+
+Prueba paramétrica: t-test de Welch. Ho: μ(smoker) = μ(nonsmoker) vs Ha: μ(smoker) != μ(nonsmoker)
+
+```{r ttest-births}
+t.test(weight ~ smoke, data = df, var.equal = FALSE)
+```
+
+Prueba no paramétrica: Mann-Whitney (Wilcoxon). Ho: mediana(smoker) = mediana(nonsmoker) vs Ha: mediana(smoker) != mediana(nonsmoker)
+
+```{r wilcox-births}
+wilcox.test(weight ~ smoke, data = df)
+```
+
+**Comparación:** ambas pruebas dan p-valores muy similares (~0.13-0.14) y llegan a la misma conclusión (no se rechaza Ho, no hay diferencia significativa). Esta coincidencia respalda que, pese a la no normalidad, el t-test funcionó de forma robusta gracias al tamaño muestral.
+
+Tamaño del efecto (no paramétrico, coherente con Wilcoxon).
+
+```{r cliffd-births}
+cliff.delta(weight ~ smoke, data = df)
+```
+
+## Estadística no paramétrica pareada (percepción Q1)
+
+```{r carga-dataq}
+df <- read.delim("Data/dataQ.tsv")
+head(df)
+df <- df %>%
+  mutate(across(c(Experimento, Genero, `Nivel.educativo`), as.factor))
+```
+
+Resumen estadístico.
+
+```{r resumen-dataq}
+df %>%
+  group_by(Experimento) %>%
+  summarise(n = length(Q1),
+            prom = mean(Q1),
+            ds = sd(Q1),
+            mediana = median(Q1),
+            RIC = IQR(Q1),
+            min = min(Q1),
+            max = max(Q1))
+```
+
+Supuesto de normalidad.
+
+```{r normalidad-dataq}
+df %>%
+  group_by(Experimento) %>%
+  summarise(n = length(Q1),
+            est_ks = ks.test(scale(Q1), "pnorm")$statistic,
+            p_ks = ks.test(scale(Q1), "pnorm")$p.value,
+            est_sw = shapiro.test(Q1)$statistic,
+            p_sw = shapiro.test(Q1)$p.value,
+            est_l = lillie.test(Q1)$statistic,
+            p_l = lillie.test(Q1)$p.value)
+```
+
+Wilcox asume que los datos no son pareados por defecto, por lo que se separan explícitamente los grupos antes de indicar `paired = TRUE`.
+
+```{r split-dataq}
+pretestq1 <- df %>%
+  select(Experimento, Q1) %>%
+  filter(Experimento == "Pretest")
+
+posttestq1 <- df %>%
+  select(Experimento, Q1) %>%
+  filter(Experimento == "Post-test")
+```
+
+```{r wilcox-dataq}
+wilcox.test(x = pretestq1$Q1, y = posttestq1$Q1, paired = TRUE)
+```
+
+La prueba de rango del signo de Wilcoxon nos muestra que, con una confianza del 95%, podemos decir que hay diferencias estadísticamente significativas entre las percepciones de Q1 antes y después del experimento (V = 0, p-valor < 0.001).
+
+```{r effsize-dataq}
+df %>%
+  rstatix::wilcox_effsize(Q1 ~ Experimento, paired = TRUE)
+```
+
+Con una confianza del 95% se concluye que el tamaño del efecto es grande.

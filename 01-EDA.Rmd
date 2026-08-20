@@ -1,4 +1,4 @@
-# EDA {#intro}
+# EDA {#EDA}
 
 Carguemos las librerias
 
@@ -10,6 +10,14 @@ library(moments)
 library(ggplot2)
 library(patchwork)
 library(GGally)
+library(readxl)
+library(effsize)
+library(openintro)
+library(nortest)
+library(car)
+library(coin)
+library(BSDA)
+library(rstatix)
 ```
 
 Conjunto de datos
