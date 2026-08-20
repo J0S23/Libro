@@ -195,3 +195,61 @@ wilcox.test(x = pretestq1$Q1, y = posttestq1$Q1, paired = TRUE)
 df %>%
   rstatix::wilcox_effsize(Q1 ~ Experimento, paired = TRUE)
 
+##ANOVA de un factor----
+# Datos de calificaciones por grupo de enseñanza
+df <- data.frame(Empleados = c(0.66, 0.63, 0.65, 0.69, 0.44, 0.63, 0.61, 0.42, 0.59, 0.46),
+                 Agricultores = c(0.65, 0.60, 0.69, 0.73, 0.52, 0.85, 0.81, NA, NA, NA),
+                 NoExpuestos = c(0.93, 0.99, 0.96, 0.74, 0.81, 0.93, 0.63, 0.68, 0.99, NA))
+
+empleados <- na.omit(df$Empleados)
+agricultores <- na.omit(df$Agricultores)
+no_expuestos <- na.omit(df$NoExpuestos)
+
+#Hallemos el tamaño de cada tratamiento
+n1 <- length(empleados)
+n2 <- length(agricultores)
+n3 <- length(no_expuestos)
+N <- n1+n2+n3
+k <- ncol(df)
+
+
+#Hallemos los promedios de los tratamientos
+
+xbar_1 <- mean(empleados)
+xbar_2 <- mean(agricultores)
+xbar_3 <- mean(no_expuestos)
+
+#Hallemos el promedio global
+xbar_total <- (sum(empleados)+sum(agricultores)+sum(no_expuestos))/N
+
+#Hallemos el SST
+SST = sum((empleados - xbar_total)^2)+
+  sum((no_expuestos - xbar_total)^2)+
+  sum((agricultores - xbar_total)^2)
+
+#Hallemos el SSA
+SSA = n1*(xbar_1 - xbar_total)^2+
+  n2*(xbar_2 - xbar_total)^2+
+  n3*(xbar_3 - xbar_total)^2
+
+#Hallemos SSE
+SSE = SST - SSA
+
+# MSA y MSE
+MSA = SSA/(k-1)
+MSE = SSE/(N-k)
+
+#Estadístico F
+F = MSA/MSE
+
+#F tabulado
+alpha = 0.05
+v1 = k-1
+v2 = N-k
+F_crit = qf(1 - alpha, df1 = v1, df2 = v2)
+
+#Se rechaza F porque F>F_crit, por ende, hay si quiera un promedio diferente
+
+#p-valor
+
+pvalor = 1 - pf(F, v1, v2)
