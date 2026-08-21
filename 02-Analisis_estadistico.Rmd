@@ -436,3 +436,68 @@ df %>%
 ```
 
 Con una confianza del 95% se concluye que el tamaño del efecto es grande.
+
+Ahora trabajemos con un conjunto de 3 poblaciones utilizando la prueba ANOVA
+```{r datos}
+df <- data.frame(Empleados = c(0.66, 0.63, 0.65, 0.69, 0.44, 0.63, 0.61, 0.42, 0.59, 0.46),
+                 Agricultores = c(0.65, 0.60, 0.69, 0.73, 0.52, 0.85, 0.81, NA, NA, NA),
+                 NoExpuestos = c(0.93, 0.99, 0.96, 0.74, 0.81, 0.93, 0.63, 0.68, 0.99, NA))
+```
+
+Omitiendo los datos nulos
+
+```{r omitir nulos}
+empleados <- na.omit(df$Empleados)
+agricultores <- na.omit(df$Agricultores)
+no_expuestos <- na.omit(df$NoExpuestos)
+```
+
+Hallemos el tamaño  y la cantidad de tratamientos
+```{r tamaño y cantidad de tratamientos}
+n1 <- length(empleados)
+n2 <- length(agricultores)
+n3 <- length(no_expuestos)
+N <- n1+n2+n3
+k = ncol(df)
+
+```
+
+Hallemos el promedio de cada tratamiento y el promedio global
+
+```{r promedio de cada tratamiento y global}
+xbar_1 <- mean(empleados)
+xbar_2 <- mean(agricultores)
+xbar_3 <- mean(no_expuestos)
+xbar_total <- (sum(empleados)+sum(agricultores)+sum(no_expuestos))/N
+```
+Hallamos SST, SSA y SSE
+```{r SST, SSA y SSE}
+SST = sum((empleados-xbar_total)^2)+sum((agricultores-xbar_total)^2)+sum((no_expuestos-xbar_total)^2)
+
+SSA = n1 * (xbar_1-xbar_total)^2 + n2 * (xbar_2-xbar_total)^2 + n3 * (xbar_3-xbar_total)^2
+
+SSE = SST-SSA
+```
+Hallamos MSE y MSA
+```{r MSE y MSA}
+MSE = SSE/(k-1)
+MSA = SSA/(N-1)
+```
+
+Hallamos el estadístico F de Fischer y el valor crítico con un 95% de confianza
+```{r F F_crit}
+F = MSA/MSE
+alpha = 0.05
+v1 = k-1
+v2 = N-k
+F_critico = qf(1-alpha,df1 = v1, df2=v2)
+F>F_critico
+```
+Hallamos el p_valor
+```{r p_valor}
+pvalor = 1-pf(F,v1,v2)
+pvalor
+```
+Finalmente, se evidencia que F<F_critico y también el p valor es 0.91>0.05, por lo tanto no se rechaza Ho, es decir, no existen diferencias significativas entre las medias de los tres tratamientos
+
+
