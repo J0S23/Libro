@@ -141,7 +141,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">A Minimal Book Example</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduccion</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introducción</a></li>
 <li class="chapter" data-level="1" data-path="EDA.html"><a href="EDA.html"><i class="fa fa-check"></i><b>1</b> EDA</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="EDA.html"><a href="EDA.html#an%C3%A1lisis-exploratorio-de-median_house_value-target"><i class="fa fa-check"></i><b>1.1</b> Análisis exploratorio de ‘median_house_value’ (Target)</a></li>
@@ -282,7 +282,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 1 20640 206855.8 115395.6  179700 145125 119600 264725  14999 500001   3.3275
 ##   Coef_asim
 ## 1 0.9776922</code></pre>
-<p>Se registraron un total de 20.640 casas. En promedio las casas cuestan aproximadamente $206.855 (con una desviación estándar de $115.395). Por otro lado, el 50% de las casas cuestan a lo sumo $180.000, mientras que, en caso de estar buscando casas más baratas, el 25% de las casas tienen un valor de $120.000 o menos (teniendo la más barata un costo de $14999). Asimismo, en caso de buscar una vivienda mejor valuada, el 75% de las casas cuestan por mucho $264.725 y el resto cuestan más que ese valor (siendo la más cara una con un valor de $500.001). Si visualizamos los datos también podemos observar que su forma es platicúrtica, es decir, se evidencia una forma de mesa. Además, por una asimetría o sesgo a la derecha se observa que existen valores de casas excesivamente altos con respecto a la mayoría.</p>
+<p>Se registraron un total de 20.640 casas. En promedio las casas cuestan aproximadamente $206.855 (con una desviación estándar de $115.395). Por otro lado, el 50% de las casas cuestan a lo sumo $180.000, mientras que, en caso de estar buscando casas más baratas, el 25% de las casas tienen un valor de $120.000 o menos (teniendo la más barata un costo de $14999). Asimismo, en caso de buscar una vivienda mejor valuada, el 75% de las casas cuestan por mucho $264.725 y el resto cuestan más que ese valor (siendo la más cara una con un valor de $500.001). Si visualizamos los datos también podemos observar que su forma es leptocúrtica (curtosis = 3.33, mayor a 3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, por una asimetría o sesgo a la derecha se observa que existen valores de casas excesivamente altos con respecto a la mayoría.</p>
 <p>Veamos un histograma</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="EDA.html#cb16-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb16-2"><a href="EDA.html#cb16-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> median_house_value))<span class="sc">+</span></span>

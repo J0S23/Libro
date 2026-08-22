@@ -21,9 +21,3 @@ tamaño-del-efecto-intervención
 peso-al-nacer-según-hábito-de-fumar-t-test-vs-mann-whitney
 homogeneidad-de-varianzas-births
 estadística-no-paramétrica-pareada-percepción-q1
-methods
-math-example
-applications
-example-one
-example-two
-final-words
