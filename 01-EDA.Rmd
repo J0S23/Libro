@@ -9,7 +9,6 @@ library(dplyr)
 library(moments)
 library(ggplot2)
 library(patchwork)
-library(GGally)
 library(readxl)
 library(effsize)
 library(openintro)
@@ -123,6 +122,8 @@ df %>%
   theme_bw()
 ```
 
+El diagrama de cajas y bigotes del valor medio de la vivienda complementa la información del histograma: el 50% central de las observaciones se ubica aproximadamente entre 120.000 y 264.725 USD, y el punto de la media se encuentra por encima de la mediana, confirmando el sesgo positivo descrito. Los valores atípicos superiores son escasos en número pero muy lejanos al bigote, concentrados cerca del techo de 500.000 USD, lo cual refuerza la acumulación en el límite superior detectada en el histograma. En síntesis, la variable respuesta presenta una distribución asimétrica, condición que deberá considerarse en la selección de transformaciones y supuestos del modelo de regresión.
+
 ## Análisis exploratorio univariado de cada variable independiente
 
 ```{r tablacarac}
@@ -192,6 +193,9 @@ for (v in vars_numericas) {
   print(v)
 }
 ```
+
+Se define la función plot_univariado, que genera de forma conjunta el histograma de polígonos y el diagrama de cajas y bigotes de una variable dada.
+
 ```{r longitude}
 plot_univariado(df, "longitude")
 ```
@@ -325,6 +329,7 @@ df %>%
 tabla_ocean
 ```
 
+La distribución de ocean_proximity muestra cinco categorías de tamaño muy desigual: la mayor parte de los bloques censales se concentra en INLAND y <1H OCEAN, que conjuntamente superan el 80% de las observaciones, mientras que ISLAND y NEAR BAY son marcadamente minoritarias. Este desbalance implica que los promedios calculados para los grupos pequeños tienen mayor incertidumbre, y que un modelo que incluya esta variable estimará con precisión las categorías dominantes y con menor precisión las minoritarias.
 
 ```{r histoceano}
 df %>% 
@@ -340,6 +345,8 @@ tabla_ocean_b %>%
   scale_y_continuous(expand = expansion(mult = c(0, 0.15)))+
   theme_bw()
 ```
+
+El gráfico de barras confirma el desbalance descrito: las categorías INLAND y <1H OCEAN dominan claramente, mientras que ISLAND y NEAR BAY apenas alcanzan una proporción visible. Este patrón es geográficamente esperable: California es una región mayoritariamente de costa e interior con muy pocas islas, de modo que ISLAND corresponde a zonas muy específicas. En síntesis, la variable es informativa pero altamente desbalanceada, lo cual condiciona su uso en modelos lineales y obliga a vigilar las estimaciones de los niveles pequeños.
 
 Ahora comparemos el valor medio de la vivienda según la aproximidad al oceano.
 
@@ -359,6 +366,8 @@ df %>%
                  Coef_asim = skewness(median_house_value))
 ```
 
+El resumen por categoría revela diferencias claras en el valor medio de la vivienda según la proximidad al océano: NEAR BAY y <1H OCEAN presentan los valores medios más altos, INLAND se ubica en el extremo inferior, y NEAR OCEAN e ISLAND ocupan posiciones intermedias. Además, la desviación estándar es considerable en todas las categorías, lo cual indica que la proximidad al océano explica parte de la variabilidad pero no la determina por completo. En síntesis, existe una relación entre proximidad al océano y valor de la vivienda, es decir, las zonas cercanas a la bahía y a la costa tienden a ser más costosas, aunque la gran dispersión interna de cada grupo sugiere que otras variables, como el ingreso, explican la mayor parte de la variación.
+
 Veamos un gráfico de cajas y bigotes
 
 ```{r biboxplot}
@@ -367,13 +376,7 @@ df %>%
   geom_boxplot()
   
 ```
-
-##Paquete GGally
-
-```{r ggally}
-df %>% 
-  ggpairs()
-```
+El diagrama de cajas por categoría corrobora el patrón anterior: los boxplots de NEAR BAY y <1H OCEAN se ubican en niveles superiores, mientras que INLAND presenta el nivel más bajo, con medianas que separan de manera clara los grupos. Aun así, los bigotes se solapan ampliamente entre categorías y todas exhiben numerosos valores atípicos superiores, lo cual refuerza que la proximidad al océano es un factor asociado al valor de la vivienda pero no un determinante único. En síntesis, la variable aporta información de agrupación útil, particularmente para distinguir las zonas más costosas del interior.
 
 Seguidamente, crearemos una función para analizar cada pareja de variables características numéricas 
 

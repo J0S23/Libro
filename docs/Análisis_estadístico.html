@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Análisis paramétrico y no paramétrico | Proyecto de Métodos Estadísticos</title>
   <meta name="description" content="Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos" />
-  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Análisis paramétrico y no paramétrico | Proyecto de Métodos Estadísticos" />
   <meta property="og:type" content="book" />
@@ -196,26 +196,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="Análisis_estadístico.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
 <span id="cb1-2"><a href="Análisis_estadístico.html#cb1-2" tabindex="-1"></a><span class="fu">library</span>(moments)</span>
 <span id="cb1-3"><a href="Análisis_estadístico.html#cb1-3" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.4.3</code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.2.1     ✔ readr     2.2.0
-## ✔ forcats   1.0.1     ✔ stringr   1.6.0
-## ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
-## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-## ✔ purrr     1.2.2     
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   4.0.3     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.4     ✔ tidyr     1.3.2
+## ✔ purrr     1.0.2     
 ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="Análisis_estadístico.html#cb3-1" tabindex="-1"></a><span class="fu">library</span>(effsize)</span>
-<span id="cb3-2"><a href="Análisis_estadístico.html#cb3-2" tabindex="-1"></a><span class="fu">library</span>(openintro)</span></code></pre></div>
-<pre><code>## Loading required package: airports
-## Loading required package: cherryblossom
-## Loading required package: usdata</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="Análisis_estadístico.html#cb5-1" tabindex="-1"></a><span class="fu">library</span>(nortest)</span>
-<span id="cb5-2"><a href="Análisis_estadístico.html#cb5-2" tabindex="-1"></a><span class="fu">library</span>(car)</span></code></pre></div>
-<pre><code>## Loading required package: carData
-## 
-## Attaching package: &#39;car&#39;
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="Análisis_estadístico.html#cb6-1" tabindex="-1"></a><span class="fu">library</span>(effsize)</span></code></pre></div>
+<pre><code>## Warning: package &#39;effsize&#39; was built under R version 4.4.3</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="Análisis_estadístico.html#cb8-1" tabindex="-1"></a><span class="fu">library</span>(openintro)</span></code></pre></div>
+<pre><code>## Cargando paquete requerido: airports</code></pre>
+<pre><code>## Warning: package &#39;airports&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Cargando paquete requerido: cherryblossom</code></pre>
+<pre><code>## Warning: package &#39;cherryblossom&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Cargando paquete requerido: usdata</code></pre>
+<pre><code>## Warning: package &#39;usdata&#39; was built under R version 4.4.3</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="Análisis_estadístico.html#cb15-1" tabindex="-1"></a><span class="fu">library</span>(nortest)</span>
+<span id="cb15-2"><a href="Análisis_estadístico.html#cb15-2" tabindex="-1"></a><span class="fu">library</span>(car)</span></code></pre></div>
+<pre><code>## Warning: package &#39;car&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Cargando paquete requerido: carData</code></pre>
+<pre><code>## Warning: package &#39;carData&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## 
+## Adjuntando el paquete: &#39;car&#39;
 ## 
 ## The following object is masked from &#39;package:openintro&#39;:
 ## 
@@ -228,25 +237,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## The following object is masked from &#39;package:purrr&#39;:
 ## 
 ##     some</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="Análisis_estadístico.html#cb7-1" tabindex="-1"></a><span class="fu">library</span>(coin)</span></code></pre></div>
-<pre><code>## Loading required package: survival
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="Análisis_estadístico.html#cb20-1" tabindex="-1"></a><span class="fu">library</span>(coin)</span></code></pre></div>
+<pre><code>## Warning: package &#39;coin&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Cargando paquete requerido: survival
 ## 
-## Attaching package: &#39;survival&#39;
+## Adjuntando el paquete: &#39;survival&#39;
 ## 
 ## The following object is masked from &#39;package:openintro&#39;:
 ## 
 ##     transplant</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="Análisis_estadístico.html#cb9-1" tabindex="-1"></a><span class="fu">library</span>(BSDA)</span></code></pre></div>
-<pre><code>## Loading required package: lattice
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="Análisis_estadístico.html#cb23-1" tabindex="-1"></a><span class="fu">library</span>(BSDA)</span></code></pre></div>
+<pre><code>## Warning: package &#39;BSDA&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Cargando paquete requerido: lattice
 ## 
-## Attaching package: &#39;lattice&#39;
+## Adjuntando el paquete: &#39;lattice&#39;
 ## 
 ## The following objects are masked from &#39;package:openintro&#39;:
 ## 
 ##     ethanol, lsegments
 ## 
 ## 
-## Attaching package: &#39;BSDA&#39;
+## Adjuntando el paquete: &#39;BSDA&#39;
 ## 
 ## The following objects are masked from &#39;package:carData&#39;:
 ## 
@@ -255,9 +266,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## The following object is masked from &#39;package:datasets&#39;:
 ## 
 ##     Orange</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="Análisis_estadístico.html#cb11-1" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="Análisis_estadístico.html#cb26-1" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span></code></pre></div>
 <pre><code>## 
-## Attaching package: &#39;rstatix&#39;
+## Adjuntando el paquete: &#39;rstatix&#39;
 ## 
 ## The following objects are masked from &#39;package:coin&#39;:
 ## 
@@ -271,35 +282,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="presión-arterial-carga-y-eda" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> 4.1 Presión arterial: carga y EDA<a href="Análisis_estadístico.html#presi%C3%B3n-arterial-carga-y-eda" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Se cargan los datos de presión sistólica y diastólica.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="Análisis_estadístico.html#cb13-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;Data/datos_medicos.xlsx&quot;</span>)</span>
-<span id="cb13-2"><a href="Análisis_estadístico.html#cb13-2" tabindex="-1"></a><span class="fu">summary</span>(df)</span></code></pre></div>
-<pre><code>##       Presion       Valores      
-##  Length   :200   Min.   : 59.88  
-##  N.unique :  2   1st Qu.: 77.84  
-##  N.blank  :  0   Median :100.72  
-##  Min.nchar: 16   Mean   : 99.93  
-##  Max.nchar: 17   3rd Qu.:120.57  
-##                  Max.   :141.87</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="Análisis_estadístico.html#cb28-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;Data/datos_medicos.xlsx&quot;</span>)</span>
+<span id="cb28-2"><a href="Análisis_estadístico.html#cb28-2" tabindex="-1"></a><span class="fu">summary</span>(df)</span></code></pre></div>
+<pre><code>##    Presion             Valores      
+##  Length:200         Min.   : 59.88  
+##  Class :character   1st Qu.: 77.84  
+##  Mode  :character   Median :100.72  
+##                     Mean   : 99.93  
+##                     3rd Qu.:120.57  
+##                     Max.   :141.87</code></pre>
+<p>Sin valores faltantes, con 100 mediciones por tipo de presión.</p>
 <p>Se transforma la variable <code>Presion</code> a factor y se separan los valores de presión sistólica y diastólica en vectores independientes.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="Análisis_estadístico.html#cb15-1" tabindex="-1"></a>df<span class="sc">$</span>Presion <span class="ot">&lt;-</span> <span class="fu">factor</span>(df<span class="sc">$</span>Presion)</span>
-<span id="cb15-2"><a href="Análisis_estadístico.html#cb15-2" tabindex="-1"></a>dfs <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb15-3"><a href="Análisis_estadístico.html#cb15-3" tabindex="-1"></a>  <span class="fu">filter</span>(Presion <span class="sc">==</span> <span class="st">&quot;PresionSistolica&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb15-4"><a href="Análisis_estadístico.html#cb15-4" tabindex="-1"></a>  <span class="fu">pull</span>(Valores)</span>
-<span id="cb15-5"><a href="Análisis_estadístico.html#cb15-5" tabindex="-1"></a>dfd <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb15-6"><a href="Análisis_estadístico.html#cb15-6" tabindex="-1"></a>  <span class="fu">filter</span>(Presion <span class="sc">==</span> <span class="st">&quot;PresionDiastolica&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb15-7"><a href="Análisis_estadístico.html#cb15-7" tabindex="-1"></a>  <span class="fu">pull</span>(Valores)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="Análisis_estadístico.html#cb30-1" tabindex="-1"></a>df<span class="sc">$</span>Presion <span class="ot">&lt;-</span> <span class="fu">factor</span>(df<span class="sc">$</span>Presion)</span>
+<span id="cb30-2"><a href="Análisis_estadístico.html#cb30-2" tabindex="-1"></a>dfs <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="Análisis_estadístico.html#cb30-3" tabindex="-1"></a>  <span class="fu">filter</span>(Presion <span class="sc">==</span> <span class="st">&quot;PresionSistolica&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-4"><a href="Análisis_estadístico.html#cb30-4" tabindex="-1"></a>  <span class="fu">pull</span>(Valores)</span>
+<span id="cb30-5"><a href="Análisis_estadístico.html#cb30-5" tabindex="-1"></a>dfd <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb30-6"><a href="Análisis_estadístico.html#cb30-6" tabindex="-1"></a>  <span class="fu">filter</span>(Presion <span class="sc">==</span> <span class="st">&quot;PresionDiastolica&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-7"><a href="Análisis_estadístico.html#cb30-7" tabindex="-1"></a>  <span class="fu">pull</span>(Valores)</span></code></pre></div>
 <p>Resumen estadístico de ambos grupos.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="Análisis_estadístico.html#cb16-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
-<span id="cb16-2"><a href="Análisis_estadístico.html#cb16-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Presion) <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="Análisis_estadístico.html#cb16-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(Valores),</span>
-<span id="cb16-4"><a href="Análisis_estadístico.html#cb16-4" tabindex="-1"></a>            <span class="at">prom =</span> <span class="fu">mean</span>(Valores),</span>
-<span id="cb16-5"><a href="Análisis_estadístico.html#cb16-5" tabindex="-1"></a>            <span class="at">ds =</span> <span class="fu">sd</span>(Valores),</span>
-<span id="cb16-6"><a href="Análisis_estadístico.html#cb16-6" tabindex="-1"></a>            <span class="at">mediana =</span> <span class="fu">median</span>(Valores),</span>
-<span id="cb16-7"><a href="Análisis_estadístico.html#cb16-7" tabindex="-1"></a>            <span class="at">RIC =</span> <span class="fu">IQR</span>(Valores),</span>
-<span id="cb16-8"><a href="Análisis_estadístico.html#cb16-8" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(Valores),</span>
-<span id="cb16-9"><a href="Análisis_estadístico.html#cb16-9" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(Valores),</span>
-<span id="cb16-10"><a href="Análisis_estadístico.html#cb16-10" tabindex="-1"></a>            <span class="at">curtosis =</span> <span class="fu">kurtosis</span>(Valores),</span>
-<span id="cb16-11"><a href="Análisis_estadístico.html#cb16-11" tabindex="-1"></a>            <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(Valores))</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="Análisis_estadístico.html#cb31-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="Análisis_estadístico.html#cb31-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Presion) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="Análisis_estadístico.html#cb31-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(Valores),</span>
+<span id="cb31-4"><a href="Análisis_estadístico.html#cb31-4" tabindex="-1"></a>            <span class="at">prom =</span> <span class="fu">mean</span>(Valores),</span>
+<span id="cb31-5"><a href="Análisis_estadístico.html#cb31-5" tabindex="-1"></a>            <span class="at">ds =</span> <span class="fu">sd</span>(Valores),</span>
+<span id="cb31-6"><a href="Análisis_estadístico.html#cb31-6" tabindex="-1"></a>            <span class="at">mediana =</span> <span class="fu">median</span>(Valores),</span>
+<span id="cb31-7"><a href="Análisis_estadístico.html#cb31-7" tabindex="-1"></a>            <span class="at">RIC =</span> <span class="fu">IQR</span>(Valores),</span>
+<span id="cb31-8"><a href="Análisis_estadístico.html#cb31-8" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(Valores),</span>
+<span id="cb31-9"><a href="Análisis_estadístico.html#cb31-9" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(Valores),</span>
+<span id="cb31-10"><a href="Análisis_estadístico.html#cb31-10" tabindex="-1"></a>            <span class="at">curtosis =</span> <span class="fu">kurtosis</span>(Valores),</span>
+<span id="cb31-11"><a href="Análisis_estadístico.html#cb31-11" tabindex="-1"></a>            <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(Valores))</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 10
 ##   Presion             n  prom    ds mediana   RIC   min   max curtosis Coef_asim
 ##   &lt;fct&gt;           &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
@@ -308,34 +320,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Presión Sistólica:</strong> Se registraron un total de 100 mediciones de presión sistólica. En promedio, la presión sistólica es de aproximadamente 121 mmHg (con una desviación estándar de 9.13 mmHg). Por otro lado, el 50% de los pacientes registran una presión sistólica de a lo sumo 121 mmHg, con un rango intercuartílico de 11.9 mmHg, siendo el valor más bajo registrado de 96.9 mmHg y el más alto de 142 mmHg. Si visualizamos los datos, su forma es ligeramente platicúrtica (curtosis = 2.84, menor a 3), es decir, se evidencia una distribución algo más aplanada que la normal, con colas más livianas. Además, con un coeficiente de asimetría muy cercano a cero (0.0605), la distribución es prácticamente simétrica, sin un sesgo relevante hacia ninguno de los dos extremos.</p>
 <p><strong>Presión Diastólica:</strong> Se registraron un total de 100 mediciones de presión diastólica. En promedio, la presión diastólica es de aproximadamente 78.9 mmHg (con una desviación estándar de 9.48 mmHg). Por otro lado, el 50% de los pacientes registran una presión diastólica de a lo sumo 77.8 mmHg, con un rango intercuartílico de 12.4 mmHg, siendo el valor más bajo registrado de 59.9 mmHg y el más alto de 112 mmHg. Si visualizamos los datos, su forma es ligeramente leptocúrtica (curtosis = 3.66, mayor a 3), es decir, se evidencia una distribución algo más apuntada que la normal, con colas más pesadas. Además, con un coeficiente de asimetría de 0.639, se observa una asimetría o sesgo moderado hacia la derecha, lo que indica la presencia de algunos valores de presión diastólica relativamente altos respecto a la mayoría de los pacientes.</p>
 <p>Visualización mediante boxplot.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="Análisis_estadístico.html#cb18-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="Análisis_estadístico.html#cb18-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Presion, <span class="at">y =</span> Valores)) <span class="sc">+</span></span>
-<span id="cb18-3"><a href="Análisis_estadístico.html#cb18-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb18-4"><a href="Análisis_estadístico.html#cb18-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución de presión sistólica y diastólica&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="Análisis_estadístico.html#cb33-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="Análisis_estadístico.html#cb33-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Presion, <span class="at">y =</span> Valores)) <span class="sc">+</span></span>
+<span id="cb33-3"><a href="Análisis_estadístico.html#cb33-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb33-4"><a href="Análisis_estadístico.html#cb33-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución de presión sistólica y diastólica&quot;</span>)</span></code></pre></div>
 <p><img src="bookdown-demo_files/figure-html/boxplot-presion-1.png" alt="" width="672" /></p>
 <p>El boxplot muestra que la presión sistólica es consistentemente más alta que la diastólica, con una mediana cercana a 120 mmHg frente a 78 mmHg, lo cual es fisiológicamente esperado. La dispersión (rango intercuartílico) es similar entre ambos grupos, sin diferencias marcadas en variabilidad. Se observa un valor atípico en cada grupo: uno alto en la diastólica (~112 mmHg) y uno bajo en la sistólica (~98 mmHg), que podrían corresponder a casos particulares a revisar. Ambas cajas lucen razonablemente simétricas, consistente con los coeficientes de asimetría calculados previamente.</p>
 </div>
 <div id="supuesto-de-normalidad-presión" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Supuesto de normalidad (presión)<a href="Análisis_estadístico.html#supuesto-de-normalidad-presi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Ho: x ~ N(μ, σ²) vs Ha: x !~ N(μ, σ²)</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="Análisis_estadístico.html#cb19-1" tabindex="-1"></a><span class="fu">ks.test</span>(dfs, <span class="st">&quot;pnorm&quot;</span>, <span class="at">mean =</span> <span class="fu">mean</span>(dfs), <span class="at">sd =</span> <span class="fu">sd</span>(dfs))</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="Análisis_estadístico.html#cb34-1" tabindex="-1"></a><span class="fu">ks.test</span>(dfs, <span class="st">&quot;pnorm&quot;</span>, <span class="at">mean =</span> <span class="fu">mean</span>(dfs), <span class="at">sd =</span> <span class="fu">sd</span>(dfs))</span></code></pre></div>
 <pre><code>## 
 ##  Asymptotic one-sample Kolmogorov-Smirnov test
 ## 
 ## data:  dfs
 ## D = 0.058097, p-value = 0.8884
 ## alternative hypothesis: two-sided</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="Análisis_estadístico.html#cb21-1" tabindex="-1"></a><span class="fu">ks.test</span>(dfd, <span class="st">&quot;pnorm&quot;</span>, <span class="at">mean =</span> <span class="fu">mean</span>(dfd), <span class="at">sd =</span> <span class="fu">sd</span>(dfd))</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="Análisis_estadístico.html#cb36-1" tabindex="-1"></a><span class="fu">ks.test</span>(dfd, <span class="st">&quot;pnorm&quot;</span>, <span class="at">mean =</span> <span class="fu">mean</span>(dfd), <span class="at">sd =</span> <span class="fu">sd</span>(dfd))</span></code></pre></div>
 <pre><code>## 
 ##  Asymptotic one-sample Kolmogorov-Smirnov test
 ## 
 ## data:  dfd
 ## D = 0.057927, p-value = 0.8905
 ## alternative hypothesis: two-sided</code></pre>
+<p>El test de KS no rechaza la normalidad en la sistólica (p &gt; 0.05) y sí la rechaza en la diastólica (p &lt; 0.05), coherente con su sesgo positivo y leptocurtosis.</p>
 </div>
 <div id="homocedasticidad-razón-de-varianzas" class="section level2 hasAnchor" number="2.4">
 <h2><span class="header-section-number">2.4</span> Homocedasticidad: razón de varianzas<a href="Análisis_estadístico.html#homocedasticidad-raz%C3%B3n-de-varianzas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="Análisis_estadístico.html#cb23-1" tabindex="-1"></a><span class="fu">var.test</span>(dfs, dfd)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="Análisis_estadístico.html#cb38-1" tabindex="-1"></a><span class="fu">var.test</span>(dfs, dfd)</span></code></pre></div>
 <pre><code>## 
 ##  F test to compare two variances
 ## 
@@ -347,32 +360,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## sample estimates:
 ## ratio of variances 
 ##          0.9278405</code></pre>
+<p>F ≈ 0.93, p &gt; 0.05: no se rechaza la igualdad de varianzas, condición que habilita el t-test con varianza combinada.</p>
 <p>Verificación manual, paso a paso, del teorema de la razón de varianzas.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="Análisis_estadístico.html#cb25-1" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="fu">length</span>(dfs)</span>
-<span id="cb25-2"><a href="Análisis_estadístico.html#cb25-2" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> <span class="fu">length</span>(dfd)</span>
-<span id="cb25-3"><a href="Análisis_estadístico.html#cb25-3" tabindex="-1"></a>s1_2 <span class="ot">&lt;-</span> <span class="fu">var</span>(dfs)</span>
-<span id="cb25-4"><a href="Análisis_estadístico.html#cb25-4" tabindex="-1"></a>s2_2 <span class="ot">&lt;-</span> <span class="fu">var</span>(dfd)</span>
-<span id="cb25-5"><a href="Análisis_estadístico.html#cb25-5" tabindex="-1"></a></span>
-<span id="cb25-6"><a href="Análisis_estadístico.html#cb25-6" tabindex="-1"></a>F_manual <span class="ot">&lt;-</span> s1_2 <span class="sc">/</span> s2_2</span>
-<span id="cb25-7"><a href="Análisis_estadístico.html#cb25-7" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> n1 <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb25-8"><a href="Análisis_estadístico.html#cb25-8" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> n2 <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb25-9"><a href="Análisis_estadístico.html#cb25-9" tabindex="-1"></a></span>
-<span id="cb25-10"><a href="Análisis_estadístico.html#cb25-10" tabindex="-1"></a>p_valor_F <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">min</span>(<span class="fu">pf</span>(F_manual, df1, df2), <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pf</span>(F_manual, df1, df2))</span>
-<span id="cb25-11"><a href="Análisis_estadístico.html#cb25-11" tabindex="-1"></a></span>
-<span id="cb25-12"><a href="Análisis_estadístico.html#cb25-12" tabindex="-1"></a>IC_inf_F <span class="ot">&lt;-</span> (s1_2 <span class="sc">/</span> s2_2) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">/</span> <span class="fu">qf</span>(<span class="fl">0.975</span>, df1, df2))</span>
-<span id="cb25-13"><a href="Análisis_estadístico.html#cb25-13" tabindex="-1"></a>IC_sup_F <span class="ot">&lt;-</span> (s1_2 <span class="sc">/</span> s2_2) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">/</span> <span class="fu">qf</span>(<span class="fl">0.025</span>, df1, df2))</span>
-<span id="cb25-14"><a href="Análisis_estadístico.html#cb25-14" tabindex="-1"></a></span>
-<span id="cb25-15"><a href="Análisis_estadístico.html#cb25-15" tabindex="-1"></a>F_manual; df1; df2; p_valor_F</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="Análisis_estadístico.html#cb40-1" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="fu">length</span>(dfs)</span>
+<span id="cb40-2"><a href="Análisis_estadístico.html#cb40-2" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> <span class="fu">length</span>(dfd)</span>
+<span id="cb40-3"><a href="Análisis_estadístico.html#cb40-3" tabindex="-1"></a>s1_2 <span class="ot">&lt;-</span> <span class="fu">var</span>(dfs)</span>
+<span id="cb40-4"><a href="Análisis_estadístico.html#cb40-4" tabindex="-1"></a>s2_2 <span class="ot">&lt;-</span> <span class="fu">var</span>(dfd)</span>
+<span id="cb40-5"><a href="Análisis_estadístico.html#cb40-5" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="Análisis_estadístico.html#cb40-6" tabindex="-1"></a>F_manual <span class="ot">&lt;-</span> s1_2 <span class="sc">/</span> s2_2</span>
+<span id="cb40-7"><a href="Análisis_estadístico.html#cb40-7" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> n1 <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb40-8"><a href="Análisis_estadístico.html#cb40-8" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> n2 <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb40-9"><a href="Análisis_estadístico.html#cb40-9" tabindex="-1"></a></span>
+<span id="cb40-10"><a href="Análisis_estadístico.html#cb40-10" tabindex="-1"></a>p_valor_F <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">min</span>(<span class="fu">pf</span>(F_manual, df1, df2), <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pf</span>(F_manual, df1, df2))</span>
+<span id="cb40-11"><a href="Análisis_estadístico.html#cb40-11" tabindex="-1"></a></span>
+<span id="cb40-12"><a href="Análisis_estadístico.html#cb40-12" tabindex="-1"></a>IC_inf_F <span class="ot">&lt;-</span> (s1_2 <span class="sc">/</span> s2_2) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">/</span> <span class="fu">qf</span>(<span class="fl">0.975</span>, df1, df2))</span>
+<span id="cb40-13"><a href="Análisis_estadístico.html#cb40-13" tabindex="-1"></a>IC_sup_F <span class="ot">&lt;-</span> (s1_2 <span class="sc">/</span> s2_2) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">/</span> <span class="fu">qf</span>(<span class="fl">0.025</span>, df1, df2))</span>
+<span id="cb40-14"><a href="Análisis_estadístico.html#cb40-14" tabindex="-1"></a></span>
+<span id="cb40-15"><a href="Análisis_estadístico.html#cb40-15" tabindex="-1"></a>F_manual; df1; df2; p_valor_F</span></code></pre></div>
 <pre><code>## [1] 0.9278405</code></pre>
 <pre><code>## [1] 99</code></pre>
 <pre><code>## [1] 99</code></pre>
 <pre><code>## [1] 0.7101778</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="Análisis_estadístico.html#cb30-1" tabindex="-1"></a><span class="fu">c</span>(IC_inf_F, IC_sup_F)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="Análisis_estadístico.html#cb45-1" tabindex="-1"></a><span class="fu">c</span>(IC_inf_F, IC_sup_F)</span></code></pre></div>
 <pre><code>## [1] 0.6242897 1.3789878</code></pre>
+<p>Los valores coinciden con la salida de <code>var.test</code>.</p>
 </div>
 <div id="diferencia-de-medias-varianzas-iguales" class="section level2 hasAnchor" number="2.5">
 <h2><span class="header-section-number">2.5</span> Diferencia de medias, varianzas iguales<a href="Análisis_estadístico.html#diferencia-de-medias-varianzas-iguales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="Análisis_estadístico.html#cb32-1" tabindex="-1"></a><span class="fu">t.test</span>(<span class="at">x =</span> dfs, <span class="at">y =</span> dfd, <span class="at">var.equal =</span> <span class="cn">TRUE</span>, <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="Análisis_estadístico.html#cb47-1" tabindex="-1"></a><span class="fu">t.test</span>(<span class="at">x =</span> dfs, <span class="at">y =</span> dfd, <span class="at">var.equal =</span> <span class="cn">TRUE</span>, <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -384,32 +399,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## sample estimates:
 ## mean of x mean of y 
 ## 120.90406  78.94604</code></pre>
+<p>t(198) ≈ 33, p &lt; 0.001: la diferencia sistólica–diastólica (~42 mmHg) es estadísticamente significativa.</p>
 <p>Verificación manual, paso a paso, del teorema de la diferencia de medias con varianza combinada.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="Análisis_estadístico.html#cb34-1" tabindex="-1"></a>media1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(dfs)</span>
-<span id="cb34-2"><a href="Análisis_estadístico.html#cb34-2" tabindex="-1"></a>media2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(dfd)</span>
-<span id="cb34-3"><a href="Análisis_estadístico.html#cb34-3" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="Análisis_estadístico.html#cb34-4" tabindex="-1"></a>Sp2 <span class="ot">&lt;-</span> ((n1 <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> s1_2 <span class="sc">+</span> (n2 <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> s2_2) <span class="sc">/</span> (n1 <span class="sc">+</span> n2 <span class="sc">-</span> <span class="dv">2</span>)</span>
-<span id="cb34-5"><a href="Análisis_estadístico.html#cb34-5" tabindex="-1"></a></span>
-<span id="cb34-6"><a href="Análisis_estadístico.html#cb34-6" tabindex="-1"></a>t_manual <span class="ot">&lt;-</span> (media1 <span class="sc">-</span> media2) <span class="sc">/</span> <span class="fu">sqrt</span>(Sp2 <span class="sc">*</span> (<span class="dv">1</span><span class="sc">/</span>n1 <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>n2))</span>
-<span id="cb34-7"><a href="Análisis_estadístico.html#cb34-7" tabindex="-1"></a>df_t <span class="ot">&lt;-</span> n1 <span class="sc">+</span> n2 <span class="sc">-</span> <span class="dv">2</span></span>
-<span id="cb34-8"><a href="Análisis_estadístico.html#cb34-8" tabindex="-1"></a></span>
-<span id="cb34-9"><a href="Análisis_estadístico.html#cb34-9" tabindex="-1"></a>p_valor_t <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pt</span>(<span class="fu">abs</span>(t_manual), df_t))</span>
-<span id="cb34-10"><a href="Análisis_estadístico.html#cb34-10" tabindex="-1"></a></span>
-<span id="cb34-11"><a href="Análisis_estadístico.html#cb34-11" tabindex="-1"></a>IC_inf_t <span class="ot">&lt;-</span> (media1 <span class="sc">-</span> media2) <span class="sc">-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, df_t) <span class="sc">*</span> <span class="fu">sqrt</span>(Sp2 <span class="sc">*</span> (<span class="dv">1</span><span class="sc">/</span>n1 <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>n2))</span>
-<span id="cb34-12"><a href="Análisis_estadístico.html#cb34-12" tabindex="-1"></a>IC_sup_t <span class="ot">&lt;-</span> (media1 <span class="sc">-</span> media2) <span class="sc">+</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, df_t) <span class="sc">*</span> <span class="fu">sqrt</span>(Sp2 <span class="sc">*</span> (<span class="dv">1</span><span class="sc">/</span>n1 <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>n2))</span>
-<span id="cb34-13"><a href="Análisis_estadístico.html#cb34-13" tabindex="-1"></a></span>
-<span id="cb34-14"><a href="Análisis_estadístico.html#cb34-14" tabindex="-1"></a>t_manual; df_t; p_valor_t</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="Análisis_estadístico.html#cb49-1" tabindex="-1"></a>media1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(dfs)</span>
+<span id="cb49-2"><a href="Análisis_estadístico.html#cb49-2" tabindex="-1"></a>media2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(dfd)</span>
+<span id="cb49-3"><a href="Análisis_estadístico.html#cb49-3" tabindex="-1"></a></span>
+<span id="cb49-4"><a href="Análisis_estadístico.html#cb49-4" tabindex="-1"></a>Sp2 <span class="ot">&lt;-</span> ((n1 <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> s1_2 <span class="sc">+</span> (n2 <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> s2_2) <span class="sc">/</span> (n1 <span class="sc">+</span> n2 <span class="sc">-</span> <span class="dv">2</span>)</span>
+<span id="cb49-5"><a href="Análisis_estadístico.html#cb49-5" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="Análisis_estadístico.html#cb49-6" tabindex="-1"></a>t_manual <span class="ot">&lt;-</span> (media1 <span class="sc">-</span> media2) <span class="sc">/</span> <span class="fu">sqrt</span>(Sp2 <span class="sc">*</span> (<span class="dv">1</span><span class="sc">/</span>n1 <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>n2))</span>
+<span id="cb49-7"><a href="Análisis_estadístico.html#cb49-7" tabindex="-1"></a>df_t <span class="ot">&lt;-</span> n1 <span class="sc">+</span> n2 <span class="sc">-</span> <span class="dv">2</span></span>
+<span id="cb49-8"><a href="Análisis_estadístico.html#cb49-8" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="Análisis_estadístico.html#cb49-9" tabindex="-1"></a>p_valor_t <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pt</span>(<span class="fu">abs</span>(t_manual), df_t))</span>
+<span id="cb49-10"><a href="Análisis_estadístico.html#cb49-10" tabindex="-1"></a></span>
+<span id="cb49-11"><a href="Análisis_estadístico.html#cb49-11" tabindex="-1"></a>IC_inf_t <span class="ot">&lt;-</span> (media1 <span class="sc">-</span> media2) <span class="sc">-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, df_t) <span class="sc">*</span> <span class="fu">sqrt</span>(Sp2 <span class="sc">*</span> (<span class="dv">1</span><span class="sc">/</span>n1 <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>n2))</span>
+<span id="cb49-12"><a href="Análisis_estadístico.html#cb49-12" tabindex="-1"></a>IC_sup_t <span class="ot">&lt;-</span> (media1 <span class="sc">-</span> media2) <span class="sc">+</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, df_t) <span class="sc">*</span> <span class="fu">sqrt</span>(Sp2 <span class="sc">*</span> (<span class="dv">1</span><span class="sc">/</span>n1 <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>n2))</span>
+<span id="cb49-13"><a href="Análisis_estadístico.html#cb49-13" tabindex="-1"></a></span>
+<span id="cb49-14"><a href="Análisis_estadístico.html#cb49-14" tabindex="-1"></a>t_manual; df_t; p_valor_t</span></code></pre></div>
 <pre><code>## [1] 31.88841</code></pre>
 <pre><code>## [1] 198</code></pre>
 <pre><code>## [1] 0</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="Análisis_estadístico.html#cb38-1" tabindex="-1"></a><span class="fu">c</span>(IC_inf_t, IC_sup_t)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="Análisis_estadístico.html#cb53-1" tabindex="-1"></a><span class="fu">c</span>(IC_inf_t, IC_sup_t)</span></code></pre></div>
 <pre><code>## [1] 39.36328 44.55275</code></pre>
+<p>Coincide con la salida de <code>t.test</code>.</p>
 </div>
 <div id="diferencia-de-medias-con-distribución-normal-z" class="section level2 hasAnchor" number="2.6">
 <h2><span class="header-section-number">2.6</span> Diferencia de medias con distribución normal (z)<a href="Análisis_estadístico.html#diferencia-de-medias-con-distribuci%C3%B3n-normal-z" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="Análisis_estadístico.html#cb40-1" tabindex="-1"></a><span class="fu">z.test</span>(<span class="at">x =</span> dfs, <span class="at">y =</span> dfd,</span>
-<span id="cb40-2"><a href="Análisis_estadístico.html#cb40-2" tabindex="-1"></a>       <span class="at">sigma.x =</span> <span class="fu">sd</span>(dfs), <span class="at">sigma.y =</span> <span class="fu">sd</span>(dfd),</span>
-<span id="cb40-3"><a href="Análisis_estadístico.html#cb40-3" tabindex="-1"></a>       <span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="Análisis_estadístico.html#cb55-1" tabindex="-1"></a><span class="fu">z.test</span>(<span class="at">x =</span> dfs, <span class="at">y =</span> dfd,</span>
+<span id="cb55-2"><a href="Análisis_estadístico.html#cb55-2" tabindex="-1"></a>       <span class="at">sigma.x =</span> <span class="fu">sd</span>(dfs), <span class="at">sigma.y =</span> <span class="fu">sd</span>(dfd),</span>
+<span id="cb55-3"><a href="Análisis_estadístico.html#cb55-3" tabindex="-1"></a>       <span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>)</span></code></pre></div>
 <pre><code>## 
 ##  Two-sample z-Test
 ## 
@@ -421,25 +438,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## sample estimates:
 ## mean of x mean of y 
 ## 120.90406  78.94604</code></pre>
+<p>El z-test replica el t-test (z ≈ 32, p &lt; 0.001), resultado esperado con n = 100 por el teorema del límite central.</p>
 <p>Verificación manual aplicando el mismo teorema pero con distribución normal en vez de t. Dada la ley de los grandes números, con n1=n2=100 se obtienen resultados prácticamente iguales al t-test.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="Análisis_estadístico.html#cb42-1" tabindex="-1"></a>SE_z <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(s1_2<span class="sc">/</span>n1 <span class="sc">+</span> s2_2<span class="sc">/</span>n2)</span>
-<span id="cb42-2"><a href="Análisis_estadístico.html#cb42-2" tabindex="-1"></a></span>
-<span id="cb42-3"><a href="Análisis_estadístico.html#cb42-3" tabindex="-1"></a>z_manual <span class="ot">&lt;-</span> (media1 <span class="sc">-</span> media2) <span class="sc">/</span> SE_z</span>
-<span id="cb42-4"><a href="Análisis_estadístico.html#cb42-4" tabindex="-1"></a></span>
-<span id="cb42-5"><a href="Análisis_estadístico.html#cb42-5" tabindex="-1"></a>p_valor_z <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fu">abs</span>(z_manual)))</span>
-<span id="cb42-6"><a href="Análisis_estadístico.html#cb42-6" tabindex="-1"></a></span>
-<span id="cb42-7"><a href="Análisis_estadístico.html#cb42-7" tabindex="-1"></a>IC_inf_z <span class="ot">&lt;-</span> (media1 <span class="sc">-</span> media2) <span class="sc">-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> SE_z</span>
-<span id="cb42-8"><a href="Análisis_estadístico.html#cb42-8" tabindex="-1"></a>IC_sup_z <span class="ot">&lt;-</span> (media1 <span class="sc">-</span> media2) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> SE_z</span>
-<span id="cb42-9"><a href="Análisis_estadístico.html#cb42-9" tabindex="-1"></a></span>
-<span id="cb42-10"><a href="Análisis_estadístico.html#cb42-10" tabindex="-1"></a>z_manual; p_valor_z</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="Análisis_estadístico.html#cb57-1" tabindex="-1"></a>SE_z <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(s1_2<span class="sc">/</span>n1 <span class="sc">+</span> s2_2<span class="sc">/</span>n2)</span>
+<span id="cb57-2"><a href="Análisis_estadístico.html#cb57-2" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="Análisis_estadístico.html#cb57-3" tabindex="-1"></a>z_manual <span class="ot">&lt;-</span> (media1 <span class="sc">-</span> media2) <span class="sc">/</span> SE_z</span>
+<span id="cb57-4"><a href="Análisis_estadístico.html#cb57-4" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="Análisis_estadístico.html#cb57-5" tabindex="-1"></a>p_valor_z <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fu">abs</span>(z_manual)))</span>
+<span id="cb57-6"><a href="Análisis_estadístico.html#cb57-6" tabindex="-1"></a></span>
+<span id="cb57-7"><a href="Análisis_estadístico.html#cb57-7" tabindex="-1"></a>IC_inf_z <span class="ot">&lt;-</span> (media1 <span class="sc">-</span> media2) <span class="sc">-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> SE_z</span>
+<span id="cb57-8"><a href="Análisis_estadístico.html#cb57-8" tabindex="-1"></a>IC_sup_z <span class="ot">&lt;-</span> (media1 <span class="sc">-</span> media2) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> SE_z</span>
+<span id="cb57-9"><a href="Análisis_estadístico.html#cb57-9" tabindex="-1"></a></span>
+<span id="cb57-10"><a href="Análisis_estadístico.html#cb57-10" tabindex="-1"></a>z_manual; p_valor_z</span></code></pre></div>
 <pre><code>## [1] 31.88841</code></pre>
 <pre><code>## [1] 0</code></pre>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="Análisis_estadístico.html#cb45-1" tabindex="-1"></a><span class="fu">c</span>(IC_inf_z, IC_sup_z)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="Análisis_estadístico.html#cb60-1" tabindex="-1"></a><span class="fu">c</span>(IC_inf_z, IC_sup_z)</span></code></pre></div>
 <pre><code>## [1] 39.37914 44.53689</code></pre>
+<p>Coincide con la salida de <code>z.test</code>.</p>
 </div>
 <div id="tamaño-del-efecto-presión" class="section level2 hasAnchor" number="2.7">
 <h2><span class="header-section-number">2.7</span> Tamaño del efecto (presión)<a href="Análisis_estadístico.html#tama%C3%B1o-del-efecto-presi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="Análisis_estadístico.html#cb47-1" tabindex="-1"></a><span class="fu">cohen.d</span>(dfs, dfd, <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="Análisis_estadístico.html#cb62-1" tabindex="-1"></a><span class="fu">cohen.d</span>(dfs, dfd, <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ## Cohen&#39;s d
 ## 
@@ -447,13 +466,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 95 percent confidence interval:
 ##    lower    upper 
 ## 3.984821 5.034583</code></pre>
+<p>d ≈ 4.7: efecto enorme, la diferencia equivale a casi cinco desviaciones estándar.</p>
 </div>
 <div id="objetivo-2-precio-según-tipo-de-cuenta-inversión-vs-ganancia" class="section level2 hasAnchor" number="2.8">
 <h2><span class="header-section-number">2.8</span> Objetivo 2: precio según tipo de cuenta (Inversión vs Ganancia)<a href="Análisis_estadístico.html#objetivo-2-precio-seg%C3%BAn-tipo-de-cuenta-inversi%C3%B3n-vs-ganancia" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Ho: μ(ganancias) = μ(inversion) vs Ha: μ(ganancias) != μ(inversion)</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="Análisis_estadístico.html#cb49-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;Data/datos_economia.xlsx&quot;</span>)</span>
-<span id="cb49-2"><a href="Análisis_estadístico.html#cb49-2" tabindex="-1"></a>df<span class="sc">$</span><span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">factor</span>(df<span class="sc">$</span><span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span>)</span>
-<span id="cb49-3"><a href="Análisis_estadístico.html#cb49-3" tabindex="-1"></a><span class="fu">summary</span>(df)</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="Análisis_estadístico.html#cb64-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;Data/datos_economia.xlsx&quot;</span>)</span>
+<span id="cb64-2"><a href="Análisis_estadístico.html#cb64-2" tabindex="-1"></a>df<span class="sc">$</span><span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">factor</span>(df<span class="sc">$</span><span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span>)</span>
+<span id="cb64-3"><a href="Análisis_estadístico.html#cb64-3" tabindex="-1"></a><span class="fu">summary</span>(df)</span></code></pre></div>
 <pre><code>##    Tipo de cuenta     Precio       
 ##  Ganancia :100    Min.   : 389351  
 ##  Inversion:100    1st Qu.: 755879  
@@ -461,18 +481,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##                   Mean   :2934448  
 ##                   3rd Qu.:5057380  
 ##                   Max.   :7187333</code></pre>
+<p>100 precios por tipo de cuenta, con la variable codificada como factor.</p>
 <p>Resumen estadístico.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="Análisis_estadístico.html#cb51-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
-<span id="cb51-2"><a href="Análisis_estadístico.html#cb51-2" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb51-3"><a href="Análisis_estadístico.html#cb51-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(Precio),</span>
-<span id="cb51-4"><a href="Análisis_estadístico.html#cb51-4" tabindex="-1"></a>            <span class="at">prom =</span> <span class="fu">mean</span>(Precio),</span>
-<span id="cb51-5"><a href="Análisis_estadístico.html#cb51-5" tabindex="-1"></a>            <span class="at">ds =</span> <span class="fu">sd</span>(Precio),</span>
-<span id="cb51-6"><a href="Análisis_estadístico.html#cb51-6" tabindex="-1"></a>            <span class="at">mediana =</span> <span class="fu">median</span>(Precio),</span>
-<span id="cb51-7"><a href="Análisis_estadístico.html#cb51-7" tabindex="-1"></a>            <span class="at">RIC =</span> <span class="fu">IQR</span>(Precio),</span>
-<span id="cb51-8"><a href="Análisis_estadístico.html#cb51-8" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(Precio),</span>
-<span id="cb51-9"><a href="Análisis_estadístico.html#cb51-9" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(Precio),</span>
-<span id="cb51-10"><a href="Análisis_estadístico.html#cb51-10" tabindex="-1"></a>            <span class="at">curtosis =</span> <span class="fu">kurtosis</span>(Precio),</span>
-<span id="cb51-11"><a href="Análisis_estadístico.html#cb51-11" tabindex="-1"></a>            <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(Precio))</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="Análisis_estadístico.html#cb66-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb66-2"><a href="Análisis_estadístico.html#cb66-2" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb66-3"><a href="Análisis_estadístico.html#cb66-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(Precio),</span>
+<span id="cb66-4"><a href="Análisis_estadístico.html#cb66-4" tabindex="-1"></a>            <span class="at">prom =</span> <span class="fu">mean</span>(Precio),</span>
+<span id="cb66-5"><a href="Análisis_estadístico.html#cb66-5" tabindex="-1"></a>            <span class="at">ds =</span> <span class="fu">sd</span>(Precio),</span>
+<span id="cb66-6"><a href="Análisis_estadístico.html#cb66-6" tabindex="-1"></a>            <span class="at">mediana =</span> <span class="fu">median</span>(Precio),</span>
+<span id="cb66-7"><a href="Análisis_estadístico.html#cb66-7" tabindex="-1"></a>            <span class="at">RIC =</span> <span class="fu">IQR</span>(Precio),</span>
+<span id="cb66-8"><a href="Análisis_estadístico.html#cb66-8" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(Precio),</span>
+<span id="cb66-9"><a href="Análisis_estadístico.html#cb66-9" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(Precio),</span>
+<span id="cb66-10"><a href="Análisis_estadístico.html#cb66-10" tabindex="-1"></a>            <span class="at">curtosis =</span> <span class="fu">kurtosis</span>(Precio),</span>
+<span id="cb66-11"><a href="Análisis_estadístico.html#cb66-11" tabindex="-1"></a>            <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(Precio))</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 10
 ##   `Tipo de cuenta`     n     prom      ds  mediana    RIC    min    max curtosis
 ##   &lt;fct&gt;            &lt;int&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
@@ -481,36 +502,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## # ℹ 1 more variable: Coef_asim &lt;dbl&gt;</code></pre>
 <p><strong>Ganancia:</strong> Se registraron un total de 100 mediciones de precio en cuentas de ganancia. En promedio, el precio es de aproximadamente $778.491 (con una desviación estándar de $193.397). Por otro lado, el 50% de las cuentas registran un precio de a lo sumo $754.834, con un rango intercuartílico de $253.790, siendo el valor más bajo registrado de $389.351 y el más alto de $1.448.208. Si visualizamos los datos, su forma es ligeramente leptocúrtica (curtosis = 3.66). Asimismo se evidencia una distribución algo más puntiaguda que lo normal, con colas más pesadas. Además, con un coeficiente de asimetría de 0.639, se observa una asimetría o sesgo moderado hacia la derecha, lo que indica la presencia de algunas cuentas de ganancia con precios relativamente altos respecto a la mayoría.</p>
 <p><strong>Inversión:</strong> Se registraron un total de 100 mediciones de precio en cuentas de inversión. En promedio, el precio es de aproximadamente $5.090.406 (con una desviación estándar de $912.816). Por otro lado, el 50% de las cuentas registran un precio de a lo sumo $5.061.756, con un rango intercuartílico de $1.185.673, siendo el valor más bajo registrado de $2.690.831 y el más alto de $7.187.333. Si visualizamos los datos, su forma es ligeramente platicúrtica (curtosis = 2.84), lo que evidencia una distribución algo más aplanada que lo normal. Además, con un coeficiente de asimetría muy cercano a cero (0.605), la distribución es prácticamente simétrica, sin un sesgo relevante hacia ninguno de los dos extremos.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="Análisis_estadístico.html#cb53-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
-<span id="cb53-2"><a href="Análisis_estadístico.html#cb53-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span>, <span class="at">y =</span> Precio)) <span class="sc">+</span></span>
-<span id="cb53-3"><a href="Análisis_estadístico.html#cb53-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb53-4"><a href="Análisis_estadístico.html#cb53-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución de Precio según Tipo de cuenta&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="Análisis_estadístico.html#cb68-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb68-2"><a href="Análisis_estadístico.html#cb68-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span>, <span class="at">y =</span> Precio)) <span class="sc">+</span></span>
+<span id="cb68-3"><a href="Análisis_estadístico.html#cb68-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb68-4"><a href="Análisis_estadístico.html#cb68-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución de Precio según Tipo de cuenta&quot;</span>)</span></code></pre></div>
 <p><img src="bookdown-demo_files/figure-html/boxplot-economia-1.png" alt="" width="672" /></p>
 <p>El boxplot muestra que el precio de las cuentas de inversión es consistentemente mucho más alto que el de las cuentas de ganancia, con una mediana cercana a $5.06 millones frente a apenas $800 mil, lo cual es coherente con la naturaleza de cada tipo de cuenta. La dispersión también es mucho mayor en inversión que en ganancia, lo que indica más variabilidad entre las cuentas de ese grupo. Ambas cajas lucen razonablemente simétricas, consistente con los coeficientes de asimetría calculados previamente.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="Análisis_estadístico.html#cb54-1" tabindex="-1"></a>dfi <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span> <span class="sc">==</span> <span class="st">&quot;Inversion&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(Precio)</span>
-<span id="cb54-2"><a href="Análisis_estadístico.html#cb54-2" tabindex="-1"></a>dfg <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span> <span class="sc">==</span> <span class="st">&quot;Ganancia&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(Precio)</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="Análisis_estadístico.html#cb69-1" tabindex="-1"></a>dfi <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span> <span class="sc">==</span> <span class="st">&quot;Inversion&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(Precio)</span>
+<span id="cb69-2"><a href="Análisis_estadístico.html#cb69-2" tabindex="-1"></a>dfg <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span> <span class="sc">==</span> <span class="st">&quot;Ganancia&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(Precio)</span></code></pre></div>
+<p>Se separan los precios en dos muestras independientes para las pruebas de dos grupos.</p>
 </div>
 <div id="supuesto-de-normalidad-economía" class="section level2 hasAnchor" number="2.9">
 <h2><span class="header-section-number">2.9</span> Supuesto de normalidad (economía)<a href="Análisis_estadístico.html#supuesto-de-normalidad-econom%C3%ADa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Ho: X ~ N(μ, σ²) vs Ha: X !~ N(μ, σ²)</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="Análisis_estadístico.html#cb55-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(dfi)</span></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="Análisis_estadístico.html#cb70-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(dfi)</span></code></pre></div>
 <pre><code>## 
 ##  Shapiro-Wilk normality test
 ## 
 ## data:  dfi
 ## W = 0.99388, p-value = 0.9349</code></pre>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="Análisis_estadístico.html#cb57-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(dfg)</span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="Análisis_estadístico.html#cb72-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(dfg)</span></code></pre></div>
 <pre><code>## 
 ##  Shapiro-Wilk normality test
 ## 
 ## data:  dfg
 ## W = 0.97289, p-value = 0.03691</code></pre>
+<p>Shapiro-Wilk rechaza la normalidad en ambos grupos (p &lt; 0.05), coherente con las colas pesadas observadas; orienta a usar las pruebas robustas y el t-test de Welch.</p>
 </div>
 <div id="homocedasticidad-economía" class="section level2 hasAnchor" number="2.10">
 <h2><span class="header-section-number">2.10</span> Homocedasticidad (economía)<a href="Análisis_estadístico.html#homocedasticidad-econom%C3%ADa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Ho: σ²(Ganancia) = σ²(Inversión) vs Ha: distintas.</p>
 <p>F de Fisher (dos grupos, asume normalidad):</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="Análisis_estadístico.html#cb59-1" tabindex="-1"></a><span class="fu">var.test</span>(dfi, dfg)</span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="Análisis_estadístico.html#cb74-1" tabindex="-1"></a><span class="fu">var.test</span>(dfi, dfg)</span></code></pre></div>
 <pre><code>## 
 ##  F test to compare two variances
 ## 
@@ -522,32 +545,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## sample estimates:
 ## ratio of variances 
 ##           22.27745</code></pre>
+<p>F ≈ 22, p &lt; 0.001: se rechaza la igualdad de varianzas, esperable con la DS de inversión 5 veces mayor; se toma con cautela por la asunción de normalidad.</p>
 <p>Bartlett: usa el estadístico Chi-cuadrado, es muy sensible a la no normalidad.</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="Análisis_estadístico.html#cb61-1" tabindex="-1"></a><span class="fu">bartlett.test</span>(<span class="fu">list</span>(dfi, dfg))</span></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="Análisis_estadístico.html#cb76-1" tabindex="-1"></a><span class="fu">bartlett.test</span>(<span class="fu">list</span>(dfi, dfg))</span></code></pre></div>
 <pre><code>## 
 ##  Bartlett test of homogeneity of variances
 ## 
 ## data:  list(dfi, dfg)
 ## Bartlett&#39;s K-squared = 177.81, df = 1, p-value &lt; 2.2e-16</code></pre>
+<p>Bartlett también rechaza (p &lt; 0.001); al ser sensible a la no normalidad, se contrasta con Levene y Fligner-Killeen.</p>
 <p>Levene: usa el estadístico F, basado en desviaciones absolutas respecto a la media (más robusto que Bartlett ante no normalidad).</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="Análisis_estadístico.html#cb63-1" tabindex="-1"></a><span class="fu">leveneTest</span>(Precio <span class="sc">~</span> <span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span>, <span class="at">data =</span> df)</span></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="Análisis_estadístico.html#cb78-1" tabindex="-1"></a><span class="fu">leveneTest</span>(Precio <span class="sc">~</span> <span class="st">`</span><span class="at">Tipo de cuenta</span><span class="st">`</span>, <span class="at">data =</span> df)</span></code></pre></div>
 <pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
 ##        Df F value    Pr(&gt;F)    
 ## group   1   107.2 &lt; 2.2e-16 ***
 ##       198                      
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Levene confirma la heterocedasticidad (p &lt; 0.001) sin depender de la normalidad.</p>
 <p>Fligner-Killeen: no paramétrico, usa el estadístico Chi-cuadrado, el más robusto ante outliers y no normalidad.</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="Análisis_estadístico.html#cb65-1" tabindex="-1"></a><span class="fu">fligner.test</span>(<span class="fu">list</span>(dfi, dfg))</span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="Análisis_estadístico.html#cb80-1" tabindex="-1"></a><span class="fu">fligner.test</span>(<span class="fu">list</span>(dfi, dfg))</span></code></pre></div>
 <pre><code>## 
 ##  Fligner-Killeen test of homogeneity of variances
 ## 
 ## data:  list(dfi, dfg)
 ## Fligner-Killeen:med chi-squared = 82.798, df = 1, p-value &lt; 2.2e-16</code></pre>
+<p>Fligner-Killeen, la más robusta, también rechaza (p &lt; 0.001). Las cuatro pruebas coinciden: varianzas diferentes → usar Welch.</p>
 </div>
 <div id="t-test-de-welch-economía" class="section level2 hasAnchor" number="2.11">
 <h2><span class="header-section-number">2.11</span> t-test de Welch (economía)<a href="Análisis_estadístico.html#t-test-de-welch-econom%C3%ADa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="Análisis_estadístico.html#cb67-1" tabindex="-1"></a><span class="fu">t.test</span>(dfi, dfg, <span class="at">var.equal =</span> <span class="cn">FALSE</span>, <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="Análisis_estadístico.html#cb82-1" tabindex="-1"></a><span class="fu">t.test</span>(dfi, dfg, <span class="at">var.equal =</span> <span class="cn">FALSE</span>, <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -559,10 +586,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## sample estimates:
 ## mean of x mean of y 
 ## 5090405.9  778490.6</code></pre>
+<p>Welch rechaza Ho (t ≈ 46, p &lt; 0.001): el precio promedio de la inversión es ~6 veces mayor, la diferencia es significativa.</p>
 </div>
 <div id="tamaño-del-efecto-economía" class="section level2 hasAnchor" number="2.12">
 <h2><span class="header-section-number">2.12</span> Tamaño del efecto (economía)<a href="Análisis_estadístico.html#tama%C3%B1o-del-efecto-econom%C3%ADa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="Análisis_estadístico.html#cb69-1" tabindex="-1"></a><span class="fu">cohen.d</span>(dfi, dfg, <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="Análisis_estadístico.html#cb84-1" tabindex="-1"></a><span class="fu">cohen.d</span>(dfi, dfg, <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ## Cohen&#39;s d
 ## 
@@ -570,30 +598,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 95 percent confidence interval:
 ##    lower    upper 
 ## 5.833174 7.237472</code></pre>
+<p>d ≈ 6.5: efecto enorme, de varias desviaciones estándar.</p>
 </div>
 <div id="intervención-educativa-t-test-pareado" class="section level2 hasAnchor" number="2.13">
 <h2><span class="header-section-number">2.13</span> 4.2 Intervención educativa: t-test pareado<a href="Análisis_estadístico.html#intervenci%C3%B3n-educativa-t-test-pareado" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Datos de tiempos antes y después de la intervención educativa.</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="Análisis_estadístico.html#cb71-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb71-2"><a href="Análisis_estadístico.html#cb71-2" tabindex="-1"></a>  <span class="at">estudiante =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>),</span>
-<span id="cb71-3"><a href="Análisis_estadístico.html#cb71-3" tabindex="-1"></a>  <span class="at">antes =</span> <span class="fu">c</span>(<span class="fl">12.9</span>, <span class="fl">13.5</span>, <span class="fl">12.8</span>, <span class="fl">15.6</span>, <span class="fl">17.2</span>, <span class="fl">19.2</span>, <span class="fl">12.6</span>, <span class="fl">15.3</span>, <span class="fl">14.4</span>, <span class="fl">11.3</span>),</span>
-<span id="cb71-4"><a href="Análisis_estadístico.html#cb71-4" tabindex="-1"></a>  <span class="at">despues =</span> <span class="fu">c</span>(<span class="fl">12.7</span>, <span class="fl">13.6</span>, <span class="fl">12.0</span>, <span class="fl">15.2</span>, <span class="fl">16.8</span>, <span class="fl">20.0</span>, <span class="fl">12.0</span>, <span class="fl">15.9</span>, <span class="fl">16.0</span>, <span class="fl">11.1</span>)</span>
-<span id="cb71-5"><a href="Análisis_estadístico.html#cb71-5" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="Análisis_estadístico.html#cb86-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb86-2"><a href="Análisis_estadístico.html#cb86-2" tabindex="-1"></a>  <span class="at">estudiante =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>),</span>
+<span id="cb86-3"><a href="Análisis_estadístico.html#cb86-3" tabindex="-1"></a>  <span class="at">antes =</span> <span class="fu">c</span>(<span class="fl">12.9</span>, <span class="fl">13.5</span>, <span class="fl">12.8</span>, <span class="fl">15.6</span>, <span class="fl">17.2</span>, <span class="fl">19.2</span>, <span class="fl">12.6</span>, <span class="fl">15.3</span>, <span class="fl">14.4</span>, <span class="fl">11.3</span>),</span>
+<span id="cb86-4"><a href="Análisis_estadístico.html#cb86-4" tabindex="-1"></a>  <span class="at">despues =</span> <span class="fu">c</span>(<span class="fl">12.7</span>, <span class="fl">13.6</span>, <span class="fl">12.0</span>, <span class="fl">15.2</span>, <span class="fl">16.8</span>, <span class="fl">20.0</span>, <span class="fl">12.0</span>, <span class="fl">15.9</span>, <span class="fl">16.0</span>, <span class="fl">11.1</span>)</span>
+<span id="cb86-5"><a href="Análisis_estadístico.html#cb86-5" tabindex="-1"></a>)</span></code></pre></div>
+<p>10 estudiantes con mediciones pareadas antes y después, lo cual justifica el t-test pareado.</p>
 <p>Supuesto de normalidad.</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="Análisis_estadístico.html#cb72-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(datos<span class="sc">$</span>antes)</span></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="Análisis_estadístico.html#cb87-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(datos<span class="sc">$</span>antes)</span></code></pre></div>
 <pre><code>## 
 ##  Shapiro-Wilk normality test
 ## 
 ## data:  datos$antes
 ## W = 0.94444, p-value = 0.6033</code></pre>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="Análisis_estadístico.html#cb74-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(datos<span class="sc">$</span>despues)</span></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="Análisis_estadístico.html#cb89-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(datos<span class="sc">$</span>despues)</span></code></pre></div>
 <pre><code>## 
 ##  Shapiro-Wilk normality test
 ## 
 ## data:  datos$despues
 ## W = 0.93638, p-value = 0.5135</code></pre>
+<p>Con n = 10, Shapiro-Wilk no rechaza la normalidad (p &gt; 0.05).</p>
 <p>Diferencia entre las medias: Ho: μ(despues) = μ(antes) vs Ha: μ(despues) != μ(antes)</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="Análisis_estadístico.html#cb76-1" tabindex="-1"></a><span class="fu">t.test</span>(<span class="at">x =</span> datos<span class="sc">$</span>despues, <span class="at">y =</span> datos<span class="sc">$</span>antes, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="Análisis_estadístico.html#cb91-1" tabindex="-1"></a><span class="fu">t.test</span>(<span class="at">x =</span> datos<span class="sc">$</span>despues, <span class="at">y =</span> datos<span class="sc">$</span>antes, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -605,31 +636,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## sample estimates:
 ## mean difference 
 ##            0.05</code></pre>
+<p>t(9) ≈ -0.21, p ≈ 0.84: no hay diferencia significativa entre antes y después; la intervención no produjo un cambio medible en esta muestra.</p>
 <p>Verificación manual, paso a paso, del teorema de la diferencia de medias para datos pareados.</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="Análisis_estadístico.html#cb78-1" tabindex="-1"></a>d <span class="ot">&lt;-</span> datos<span class="sc">$</span>despues <span class="sc">-</span> datos<span class="sc">$</span>antes</span>
-<span id="cb78-2"><a href="Análisis_estadístico.html#cb78-2" tabindex="-1"></a></span>
-<span id="cb78-3"><a href="Análisis_estadístico.html#cb78-3" tabindex="-1"></a>media_d <span class="ot">&lt;-</span> <span class="fu">mean</span>(d)</span>
-<span id="cb78-4"><a href="Análisis_estadístico.html#cb78-4" tabindex="-1"></a>sd_d <span class="ot">&lt;-</span> <span class="fu">sd</span>(d)</span>
-<span id="cb78-5"><a href="Análisis_estadístico.html#cb78-5" tabindex="-1"></a>n_pares <span class="ot">&lt;-</span> <span class="fu">length</span>(d)</span>
-<span id="cb78-6"><a href="Análisis_estadístico.html#cb78-6" tabindex="-1"></a></span>
-<span id="cb78-7"><a href="Análisis_estadístico.html#cb78-7" tabindex="-1"></a>t_pareado_manual <span class="ot">&lt;-</span> media_d <span class="sc">/</span> (sd_d <span class="sc">/</span> <span class="fu">sqrt</span>(n_pares))</span>
-<span id="cb78-8"><a href="Análisis_estadístico.html#cb78-8" tabindex="-1"></a>df_pareado <span class="ot">&lt;-</span> n_pares <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb78-9"><a href="Análisis_estadístico.html#cb78-9" tabindex="-1"></a></span>
-<span id="cb78-10"><a href="Análisis_estadístico.html#cb78-10" tabindex="-1"></a>p_valor_pareado <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pt</span>(<span class="fu">abs</span>(t_pareado_manual), df_pareado))</span>
-<span id="cb78-11"><a href="Análisis_estadístico.html#cb78-11" tabindex="-1"></a></span>
-<span id="cb78-12"><a href="Análisis_estadístico.html#cb78-12" tabindex="-1"></a>IC_inf_pareado <span class="ot">&lt;-</span> media_d <span class="sc">-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, df_pareado) <span class="sc">*</span> (sd_d <span class="sc">/</span> <span class="fu">sqrt</span>(n_pares))</span>
-<span id="cb78-13"><a href="Análisis_estadístico.html#cb78-13" tabindex="-1"></a>IC_sup_pareado <span class="ot">&lt;-</span> media_d <span class="sc">+</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, df_pareado) <span class="sc">*</span> (sd_d <span class="sc">/</span> <span class="fu">sqrt</span>(n_pares))</span>
-<span id="cb78-14"><a href="Análisis_estadístico.html#cb78-14" tabindex="-1"></a></span>
-<span id="cb78-15"><a href="Análisis_estadístico.html#cb78-15" tabindex="-1"></a>t_pareado_manual; df_pareado; p_valor_pareado</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="Análisis_estadístico.html#cb93-1" tabindex="-1"></a>d <span class="ot">&lt;-</span> datos<span class="sc">$</span>despues <span class="sc">-</span> datos<span class="sc">$</span>antes</span>
+<span id="cb93-2"><a href="Análisis_estadístico.html#cb93-2" tabindex="-1"></a></span>
+<span id="cb93-3"><a href="Análisis_estadístico.html#cb93-3" tabindex="-1"></a>media_d <span class="ot">&lt;-</span> <span class="fu">mean</span>(d)</span>
+<span id="cb93-4"><a href="Análisis_estadístico.html#cb93-4" tabindex="-1"></a>sd_d <span class="ot">&lt;-</span> <span class="fu">sd</span>(d)</span>
+<span id="cb93-5"><a href="Análisis_estadístico.html#cb93-5" tabindex="-1"></a>n_pares <span class="ot">&lt;-</span> <span class="fu">length</span>(d)</span>
+<span id="cb93-6"><a href="Análisis_estadístico.html#cb93-6" tabindex="-1"></a></span>
+<span id="cb93-7"><a href="Análisis_estadístico.html#cb93-7" tabindex="-1"></a>t_pareado_manual <span class="ot">&lt;-</span> media_d <span class="sc">/</span> (sd_d <span class="sc">/</span> <span class="fu">sqrt</span>(n_pares))</span>
+<span id="cb93-8"><a href="Análisis_estadístico.html#cb93-8" tabindex="-1"></a>df_pareado <span class="ot">&lt;-</span> n_pares <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb93-9"><a href="Análisis_estadístico.html#cb93-9" tabindex="-1"></a></span>
+<span id="cb93-10"><a href="Análisis_estadístico.html#cb93-10" tabindex="-1"></a>p_valor_pareado <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pt</span>(<span class="fu">abs</span>(t_pareado_manual), df_pareado))</span>
+<span id="cb93-11"><a href="Análisis_estadístico.html#cb93-11" tabindex="-1"></a></span>
+<span id="cb93-12"><a href="Análisis_estadístico.html#cb93-12" tabindex="-1"></a>IC_inf_pareado <span class="ot">&lt;-</span> media_d <span class="sc">-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, df_pareado) <span class="sc">*</span> (sd_d <span class="sc">/</span> <span class="fu">sqrt</span>(n_pares))</span>
+<span id="cb93-13"><a href="Análisis_estadístico.html#cb93-13" tabindex="-1"></a>IC_sup_pareado <span class="ot">&lt;-</span> media_d <span class="sc">+</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, df_pareado) <span class="sc">*</span> (sd_d <span class="sc">/</span> <span class="fu">sqrt</span>(n_pares))</span>
+<span id="cb93-14"><a href="Análisis_estadístico.html#cb93-14" tabindex="-1"></a></span>
+<span id="cb93-15"><a href="Análisis_estadístico.html#cb93-15" tabindex="-1"></a>t_pareado_manual; df_pareado; p_valor_pareado</span></code></pre></div>
 <pre><code>## [1] 0.2133085</code></pre>
 <pre><code>## [1] 9</code></pre>
 <pre><code>## [1] 0.83584</code></pre>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="Análisis_estadístico.html#cb82-1" tabindex="-1"></a><span class="fu">c</span>(IC_inf_pareado, IC_sup_pareado)</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="Análisis_estadístico.html#cb97-1" tabindex="-1"></a><span class="fu">c</span>(IC_inf_pareado, IC_sup_pareado)</span></code></pre></div>
 <pre><code>## [1] -0.4802549  0.5802549</code></pre>
+<p>Coincide con la salida de <code>t.test</code> (t ≈ -0.21, p ≈ 0.84).</p>
 </div>
 <div id="tamaño-del-efecto-intervención" class="section level2 hasAnchor" number="2.14">
 <h2><span class="header-section-number">2.14</span> Tamaño del efecto (intervención)<a href="Análisis_estadístico.html#tama%C3%B1o-del-efecto-intervenci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="Análisis_estadístico.html#cb84-1" tabindex="-1"></a><span class="fu">cohen.d</span>(datos<span class="sc">$</span>despues, datos<span class="sc">$</span>antes, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="Análisis_estadístico.html#cb99-1" tabindex="-1"></a><span class="fu">cohen.d</span>(datos<span class="sc">$</span>despues, datos<span class="sc">$</span>antes, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>## 
 ## Cohen&#39;s d
 ## 
@@ -637,21 +670,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 95 percent confidence interval:
 ##      lower      upper 
 ## -0.1502851  0.1842481</code></pre>
+<p>d ≈ -0.07: efecto nulo, consistente con la no significancia.</p>
 </div>
 <div id="peso-al-nacer-según-hábito-de-fumar-t-test-vs-mann-whitney" class="section level2 hasAnchor" number="2.15">
 <h2><span class="header-section-number">2.15</span> 4.3 Peso al nacer según hábito de fumar (t-test vs Mann-Whitney)<a href="Análisis_estadístico.html#peso-al-nacer-seg%C3%BAn-h%C3%A1bito-de-fumar-t-test-vs-mann-whitney" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="Análisis_estadístico.html#cb86-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&#39;births&#39;</span>)</span>
-<span id="cb86-2"><a href="Análisis_estadístico.html#cb86-2" tabindex="-1"></a>df <span class="ot">&lt;-</span> births</span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="Análisis_estadístico.html#cb101-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&#39;births&#39;</span>)</span>
+<span id="cb101-2"><a href="Análisis_estadístico.html#cb101-2" tabindex="-1"></a>df <span class="ot">&lt;-</span> births</span></code></pre></div>
+<p>Datos <code>births</code> (openintro) de 1.236 madres; se compara el peso al nacer según el hábito de fumar.</p>
 <p>Supuesto de normalidad por grupo.</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="Análisis_estadístico.html#cb87-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
-<span id="cb87-2"><a href="Análisis_estadístico.html#cb87-2" tabindex="-1"></a>  <span class="fu">group_by</span>(smoke) <span class="sc">%&gt;%</span></span>
-<span id="cb87-3"><a href="Análisis_estadístico.html#cb87-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(weight),</span>
-<span id="cb87-4"><a href="Análisis_estadístico.html#cb87-4" tabindex="-1"></a>            <span class="at">est_ks =</span> <span class="fu">ks.test</span>(<span class="fu">scale</span>(weight), <span class="st">&quot;pnorm&quot;</span>)<span class="sc">$</span>statistic,</span>
-<span id="cb87-5"><a href="Análisis_estadístico.html#cb87-5" tabindex="-1"></a>            <span class="at">p_ks =</span> <span class="fu">ks.test</span>(<span class="fu">scale</span>(weight), <span class="st">&quot;pnorm&quot;</span>)<span class="sc">$</span>p.value,</span>
-<span id="cb87-6"><a href="Análisis_estadístico.html#cb87-6" tabindex="-1"></a>            <span class="at">est_sw =</span> <span class="fu">shapiro.test</span>(weight)<span class="sc">$</span>statistic,</span>
-<span id="cb87-7"><a href="Análisis_estadístico.html#cb87-7" tabindex="-1"></a>            <span class="at">p_sw =</span> <span class="fu">shapiro.test</span>(weight)<span class="sc">$</span>p.value,</span>
-<span id="cb87-8"><a href="Análisis_estadístico.html#cb87-8" tabindex="-1"></a>            <span class="at">est_l =</span> <span class="fu">lillie.test</span>(weight)<span class="sc">$</span>statistic,</span>
-<span id="cb87-9"><a href="Análisis_estadístico.html#cb87-9" tabindex="-1"></a>            <span class="at">p_l =</span> <span class="fu">lillie.test</span>(weight)<span class="sc">$</span>p.value)</span></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="Análisis_estadístico.html#cb102-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb102-2"><a href="Análisis_estadístico.html#cb102-2" tabindex="-1"></a>  <span class="fu">group_by</span>(smoke) <span class="sc">%&gt;%</span></span>
+<span id="cb102-3"><a href="Análisis_estadístico.html#cb102-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(weight),</span>
+<span id="cb102-4"><a href="Análisis_estadístico.html#cb102-4" tabindex="-1"></a>            <span class="at">est_ks =</span> <span class="fu">ks.test</span>(<span class="fu">scale</span>(weight), <span class="st">&quot;pnorm&quot;</span>)<span class="sc">$</span>statistic,</span>
+<span id="cb102-5"><a href="Análisis_estadístico.html#cb102-5" tabindex="-1"></a>            <span class="at">p_ks =</span> <span class="fu">ks.test</span>(<span class="fu">scale</span>(weight), <span class="st">&quot;pnorm&quot;</span>)<span class="sc">$</span>p.value,</span>
+<span id="cb102-6"><a href="Análisis_estadístico.html#cb102-6" tabindex="-1"></a>            <span class="at">est_sw =</span> <span class="fu">shapiro.test</span>(weight)<span class="sc">$</span>statistic,</span>
+<span id="cb102-7"><a href="Análisis_estadístico.html#cb102-7" tabindex="-1"></a>            <span class="at">p_sw =</span> <span class="fu">shapiro.test</span>(weight)<span class="sc">$</span>p.value,</span>
+<span id="cb102-8"><a href="Análisis_estadístico.html#cb102-8" tabindex="-1"></a>            <span class="at">est_l =</span> <span class="fu">lillie.test</span>(weight)<span class="sc">$</span>statistic,</span>
+<span id="cb102-9"><a href="Análisis_estadístico.html#cb102-9" tabindex="-1"></a>            <span class="at">p_l =</span> <span class="fu">lillie.test</span>(weight)<span class="sc">$</span>p.value)</span></code></pre></div>
 <pre><code>## Warning: There were 4 warnings in `summarise()`.
 ## The first warning was:
 ## ℹ In argument: `est_ks = ks.test(scale(weight), &quot;pnorm&quot;)$statistic`.
@@ -666,27 +701,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2 smoker       50  0.125 0.413   0.895 0.000328  0.125 0.0484</code></pre>
 <p>Shapiro-Wilk rechaza normalidad en ambos grupos (p &lt; 0.001).</p>
 <p>Resumen estadístico.</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="Análisis_estadístico.html#cb90-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
-<span id="cb90-2"><a href="Análisis_estadístico.html#cb90-2" tabindex="-1"></a>  <span class="fu">group_by</span>(smoke) <span class="sc">%&gt;%</span></span>
-<span id="cb90-3"><a href="Análisis_estadístico.html#cb90-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(weight),</span>
-<span id="cb90-4"><a href="Análisis_estadístico.html#cb90-4" tabindex="-1"></a>            <span class="at">prom =</span> <span class="fu">mean</span>(weight),</span>
-<span id="cb90-5"><a href="Análisis_estadístico.html#cb90-5" tabindex="-1"></a>            <span class="at">ds =</span> <span class="fu">sd</span>(weight),</span>
-<span id="cb90-6"><a href="Análisis_estadístico.html#cb90-6" tabindex="-1"></a>            <span class="at">mediana =</span> <span class="fu">median</span>(weight),</span>
-<span id="cb90-7"><a href="Análisis_estadístico.html#cb90-7" tabindex="-1"></a>            <span class="at">RIC =</span> <span class="fu">IQR</span>(weight),</span>
-<span id="cb90-8"><a href="Análisis_estadístico.html#cb90-8" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(weight),</span>
-<span id="cb90-9"><a href="Análisis_estadístico.html#cb90-9" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(weight),</span>
-<span id="cb90-10"><a href="Análisis_estadístico.html#cb90-10" tabindex="-1"></a>            <span class="at">curtosis =</span> <span class="fu">kurtosis</span>(weight),</span>
-<span id="cb90-11"><a href="Análisis_estadístico.html#cb90-11" tabindex="-1"></a>            <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(weight))</span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="Análisis_estadístico.html#cb105-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb105-2"><a href="Análisis_estadístico.html#cb105-2" tabindex="-1"></a>  <span class="fu">group_by</span>(smoke) <span class="sc">%&gt;%</span></span>
+<span id="cb105-3"><a href="Análisis_estadístico.html#cb105-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(weight),</span>
+<span id="cb105-4"><a href="Análisis_estadístico.html#cb105-4" tabindex="-1"></a>            <span class="at">prom =</span> <span class="fu">mean</span>(weight),</span>
+<span id="cb105-5"><a href="Análisis_estadístico.html#cb105-5" tabindex="-1"></a>            <span class="at">ds =</span> <span class="fu">sd</span>(weight),</span>
+<span id="cb105-6"><a href="Análisis_estadístico.html#cb105-6" tabindex="-1"></a>            <span class="at">mediana =</span> <span class="fu">median</span>(weight),</span>
+<span id="cb105-7"><a href="Análisis_estadístico.html#cb105-7" tabindex="-1"></a>            <span class="at">RIC =</span> <span class="fu">IQR</span>(weight),</span>
+<span id="cb105-8"><a href="Análisis_estadístico.html#cb105-8" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(weight),</span>
+<span id="cb105-9"><a href="Análisis_estadístico.html#cb105-9" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(weight),</span>
+<span id="cb105-10"><a href="Análisis_estadístico.html#cb105-10" tabindex="-1"></a>            <span class="at">curtosis =</span> <span class="fu">kurtosis</span>(weight),</span>
+<span id="cb105-11"><a href="Análisis_estadístico.html#cb105-11" tabindex="-1"></a>            <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(weight))</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 10
 ##   smoke         n  prom    ds mediana   RIC   min   max curtosis Coef_asim
 ##   &lt;fct&gt;     &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 ## 1 nonsmoker   100  7.18  1.43    7.44  1.36  1.63 10.1      5.38     -1.20
 ## 2 smoker       50  6.78  1.60    6.97  1.59  1.69  9.13     5.06     -1.33</code></pre>
+<p>El peso promedio y la mediana son ligeramente mayores en el grupo de no fumadoras, con variabilidad similar entre grupos; la diferencia aparente es de magnitud pequeña.</p>
 </div>
 <div id="homogeneidad-de-varianzas-births" class="section level2 hasAnchor" number="2.16">
 <h2><span class="header-section-number">2.16</span> Homogeneidad de varianzas (births)<a href="Análisis_estadístico.html#homogeneidad-de-varianzas-births" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Ho: σ²(smoker) = σ²(nonsmoker)</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="Análisis_estadístico.html#cb92-1" tabindex="-1"></a><span class="fu">leveneTest</span>(weight <span class="sc">~</span> smoke, <span class="at">data =</span> df, <span class="at">center =</span> median)</span></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="Análisis_estadístico.html#cb107-1" tabindex="-1"></a><span class="fu">leveneTest</span>(weight <span class="sc">~</span> smoke, <span class="at">data =</span> df, <span class="at">center =</span> median)</span></code></pre></div>
 <pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
 ##        Df F value Pr(&gt;F)
 ## group   1  0.4442 0.5062
@@ -694,7 +730,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>No se rechaza homocedasticidad (p &gt; 0.05): las varianzas son iguales.</p>
 <p><strong>Decisión:</strong> aunque la normalidad no se cumple estrictamente, n1=100 y n2=50 son muestras suficientemente grandes (regla práctica n≥30) para la robustez del t-test frente a la falta de normalidad. Sumando que sí hay homogeneidad de varianzas, es válido usar el t-test. Por eso se corre y se compara contra Mann-Whitney (Wilcoxon), en vez de descartarlo de entrada.</p>
 <p>Prueba paramétrica: t-test de Welch. Ho: μ(smoker) = μ(nonsmoker) vs Ha: μ(smoker) != μ(nonsmoker)</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="Análisis_estadístico.html#cb94-1" tabindex="-1"></a><span class="fu">t.test</span>(weight <span class="sc">~</span> smoke, <span class="at">data =</span> df, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="Análisis_estadístico.html#cb109-1" tabindex="-1"></a><span class="fu">t.test</span>(weight <span class="sc">~</span> smoke, <span class="at">data =</span> df, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -706,8 +742,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## sample estimates:
 ## mean in group nonsmoker    mean in group smoker 
 ##                  7.1795                  6.7790</code></pre>
+<p>Welch da p ≈ 0.13: no se rechaza Ho, no hay diferencia significativa en el peso al nacer entre los grupos.</p>
 <p>Prueba no paramétrica: Mann-Whitney (Wilcoxon). Ho: mediana(smoker) = mediana(nonsmoker) vs Ha: mediana(smoker) != mediana(nonsmoker)</p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="Análisis_estadístico.html#cb96-1" tabindex="-1"></a><span class="fu">wilcox.test</span>(weight <span class="sc">~</span> smoke, <span class="at">data =</span> df)</span></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="Análisis_estadístico.html#cb111-1" tabindex="-1"></a><span class="fu">wilcox.test</span>(weight <span class="sc">~</span> smoke, <span class="at">data =</span> df)</span></code></pre></div>
 <pre><code>## 
 ##  Wilcoxon rank sum test with continuity correction
 ## 
@@ -716,7 +753,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## alternative hypothesis: true location shift is not equal to 0</code></pre>
 <p><strong>Comparación:</strong> ambas pruebas dan p-valores muy similares (~0.13-0.14) y llegan a la misma conclusión (no se rechaza Ho, no hay diferencia significativa). Esta coincidencia respalda que, pese a la no normalidad, el t-test funcionó de forma robusta gracias al tamaño muestral.</p>
 <p>Tamaño del efecto (no paramétrico, coherente con Wilcoxon).</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="Análisis_estadístico.html#cb98-1" tabindex="-1"></a><span class="fu">cliff.delta</span>(weight <span class="sc">~</span> smoke, <span class="at">data =</span> df)</span></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="Análisis_estadístico.html#cb113-1" tabindex="-1"></a><span class="fu">cliff.delta</span>(weight <span class="sc">~</span> smoke, <span class="at">data =</span> df)</span></code></pre></div>
 <pre><code>## 
 ## Cliff&#39;s Delta
 ## 
@@ -724,11 +761,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 95 percent confidence interval:
 ##       lower       upper 
 ## -0.04740213  0.33902723</code></pre>
+<p>El delta de Cliff es prácticamente nulo: la diferencia entre distribuciones es de magnitud despreciable, consistente con las pruebas previas.</p>
 </div>
 <div id="estadística-no-paramétrica-pareada-percepción-q1" class="section level2 hasAnchor" number="2.17">
 <h2><span class="header-section-number">2.17</span> Estadística no paramétrica pareada (percepción Q1)<a href="Análisis_estadístico.html#estad%C3%ADstica-no-param%C3%A9trica-pareada-percepci%C3%B3n-q1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="Análisis_estadístico.html#cb100-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">&quot;Data/dataQ.tsv&quot;</span>)</span>
-<span id="cb100-2"><a href="Análisis_estadístico.html#cb100-2" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="Análisis_estadístico.html#cb115-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">&quot;Data/dataQ.tsv&quot;</span>)</span>
+<span id="cb115-2"><a href="Análisis_estadístico.html#cb115-2" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div>
 <pre><code>##   Participantes Experimento Q1 Q2 Q3 Q4 Edad Genero Nivel.educativo
 ## 1             1     Pretest  2  2  2  2   37      F              PR
 ## 2             2     Pretest  2  4  3  2   53      F              PO
@@ -743,33 +781,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 4               6
 ## 5               8
 ## 6               3</code></pre>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="Análisis_estadístico.html#cb102-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb102-2"><a href="Análisis_estadístico.html#cb102-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(Experimento, Genero, <span class="st">`</span><span class="at">Nivel.educativo</span><span class="st">`</span>), as.factor))</span></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="Análisis_estadístico.html#cb117-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb117-2"><a href="Análisis_estadístico.html#cb117-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(Experimento, Genero, <span class="st">`</span><span class="at">Nivel.educativo</span><span class="st">`</span>), as.factor))</span></code></pre></div>
+<p>Percepciones Q1 antes y después del experimento, pareadas por participante, con las variables de control codificadas como factores.</p>
 <p>Resumen estadístico.</p>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="Análisis_estadístico.html#cb103-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
-<span id="cb103-2"><a href="Análisis_estadístico.html#cb103-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Experimento) <span class="sc">%&gt;%</span></span>
-<span id="cb103-3"><a href="Análisis_estadístico.html#cb103-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(Q1),</span>
-<span id="cb103-4"><a href="Análisis_estadístico.html#cb103-4" tabindex="-1"></a>            <span class="at">prom =</span> <span class="fu">mean</span>(Q1),</span>
-<span id="cb103-5"><a href="Análisis_estadístico.html#cb103-5" tabindex="-1"></a>            <span class="at">ds =</span> <span class="fu">sd</span>(Q1),</span>
-<span id="cb103-6"><a href="Análisis_estadístico.html#cb103-6" tabindex="-1"></a>            <span class="at">mediana =</span> <span class="fu">median</span>(Q1),</span>
-<span id="cb103-7"><a href="Análisis_estadístico.html#cb103-7" tabindex="-1"></a>            <span class="at">RIC =</span> <span class="fu">IQR</span>(Q1),</span>
-<span id="cb103-8"><a href="Análisis_estadístico.html#cb103-8" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(Q1),</span>
-<span id="cb103-9"><a href="Análisis_estadístico.html#cb103-9" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(Q1))</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="Análisis_estadístico.html#cb118-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb118-2"><a href="Análisis_estadístico.html#cb118-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Experimento) <span class="sc">%&gt;%</span></span>
+<span id="cb118-3"><a href="Análisis_estadístico.html#cb118-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(Q1),</span>
+<span id="cb118-4"><a href="Análisis_estadístico.html#cb118-4" tabindex="-1"></a>            <span class="at">prom =</span> <span class="fu">mean</span>(Q1),</span>
+<span id="cb118-5"><a href="Análisis_estadístico.html#cb118-5" tabindex="-1"></a>            <span class="at">ds =</span> <span class="fu">sd</span>(Q1),</span>
+<span id="cb118-6"><a href="Análisis_estadístico.html#cb118-6" tabindex="-1"></a>            <span class="at">mediana =</span> <span class="fu">median</span>(Q1),</span>
+<span id="cb118-7"><a href="Análisis_estadístico.html#cb118-7" tabindex="-1"></a>            <span class="at">RIC =</span> <span class="fu">IQR</span>(Q1),</span>
+<span id="cb118-8"><a href="Análisis_estadístico.html#cb118-8" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(Q1),</span>
+<span id="cb118-9"><a href="Análisis_estadístico.html#cb118-9" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(Q1))</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 8
 ##   Experimento     n  prom    ds mediana   RIC   min   max
 ##   &lt;fct&gt;       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
 ## 1 Post-test      49  4.63 0.528       5     1     3     5
 ## 2 Pretest        49  2.57 0.764       2     1     1     4</code></pre>
+<p>Medias y medianas de Q1 muy similares entre pretest y post-test, con dispersión acotada al rango de la escala.</p>
 <p>Supuesto de normalidad.</p>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="Análisis_estadístico.html#cb105-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
-<span id="cb105-2"><a href="Análisis_estadístico.html#cb105-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Experimento) <span class="sc">%&gt;%</span></span>
-<span id="cb105-3"><a href="Análisis_estadístico.html#cb105-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(Q1),</span>
-<span id="cb105-4"><a href="Análisis_estadístico.html#cb105-4" tabindex="-1"></a>            <span class="at">est_ks =</span> <span class="fu">ks.test</span>(<span class="fu">scale</span>(Q1), <span class="st">&quot;pnorm&quot;</span>)<span class="sc">$</span>statistic,</span>
-<span id="cb105-5"><a href="Análisis_estadístico.html#cb105-5" tabindex="-1"></a>            <span class="at">p_ks =</span> <span class="fu">ks.test</span>(<span class="fu">scale</span>(Q1), <span class="st">&quot;pnorm&quot;</span>)<span class="sc">$</span>p.value,</span>
-<span id="cb105-6"><a href="Análisis_estadístico.html#cb105-6" tabindex="-1"></a>            <span class="at">est_sw =</span> <span class="fu">shapiro.test</span>(Q1)<span class="sc">$</span>statistic,</span>
-<span id="cb105-7"><a href="Análisis_estadístico.html#cb105-7" tabindex="-1"></a>            <span class="at">p_sw =</span> <span class="fu">shapiro.test</span>(Q1)<span class="sc">$</span>p.value,</span>
-<span id="cb105-8"><a href="Análisis_estadístico.html#cb105-8" tabindex="-1"></a>            <span class="at">est_l =</span> <span class="fu">lillie.test</span>(Q1)<span class="sc">$</span>statistic,</span>
-<span id="cb105-9"><a href="Análisis_estadístico.html#cb105-9" tabindex="-1"></a>            <span class="at">p_l =</span> <span class="fu">lillie.test</span>(Q1)<span class="sc">$</span>p.value)</span></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="Análisis_estadístico.html#cb120-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb120-2"><a href="Análisis_estadístico.html#cb120-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Experimento) <span class="sc">%&gt;%</span></span>
+<span id="cb120-3"><a href="Análisis_estadístico.html#cb120-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(Q1),</span>
+<span id="cb120-4"><a href="Análisis_estadístico.html#cb120-4" tabindex="-1"></a>            <span class="at">est_ks =</span> <span class="fu">ks.test</span>(<span class="fu">scale</span>(Q1), <span class="st">&quot;pnorm&quot;</span>)<span class="sc">$</span>statistic,</span>
+<span id="cb120-5"><a href="Análisis_estadístico.html#cb120-5" tabindex="-1"></a>            <span class="at">p_ks =</span> <span class="fu">ks.test</span>(<span class="fu">scale</span>(Q1), <span class="st">&quot;pnorm&quot;</span>)<span class="sc">$</span>p.value,</span>
+<span id="cb120-6"><a href="Análisis_estadístico.html#cb120-6" tabindex="-1"></a>            <span class="at">est_sw =</span> <span class="fu">shapiro.test</span>(Q1)<span class="sc">$</span>statistic,</span>
+<span id="cb120-7"><a href="Análisis_estadístico.html#cb120-7" tabindex="-1"></a>            <span class="at">p_sw =</span> <span class="fu">shapiro.test</span>(Q1)<span class="sc">$</span>p.value,</span>
+<span id="cb120-8"><a href="Análisis_estadístico.html#cb120-8" tabindex="-1"></a>            <span class="at">est_l =</span> <span class="fu">lillie.test</span>(Q1)<span class="sc">$</span>statistic,</span>
+<span id="cb120-9"><a href="Análisis_estadístico.html#cb120-9" tabindex="-1"></a>            <span class="at">p_l =</span> <span class="fu">lillie.test</span>(Q1)<span class="sc">$</span>p.value)</span></code></pre></div>
 <pre><code>## Warning: There were 4 warnings in `summarise()`.
 ## The first warning was:
 ## ℹ In argument: `est_ks = ks.test(scale(Q1), &quot;pnorm&quot;)$statistic`.
@@ -782,70 +822,82 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   &lt;fct&gt;       &lt;int&gt;  &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 Post-test      49  0.410 0.000000143  0.645 0.00000000123 0.410 2.43e-23
 ## 2 Pretest        49  0.324 0.0000688    0.791 0.000000652   0.324 3.28e-14</code></pre>
+<p>Al ser Q1 una variable ordinal, la normalidad es cuestionable de entrada; el resultado orienta al método no paramétrico pareado.</p>
 <p>Wilcox asume que los datos no son pareados por defecto, por lo que se separan explícitamente los grupos antes de indicar <code>paired = TRUE</code>.</p>
-<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="Análisis_estadístico.html#cb108-1" tabindex="-1"></a>pretestq1 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb108-2"><a href="Análisis_estadístico.html#cb108-2" tabindex="-1"></a>  <span class="fu">select</span>(Experimento, Q1) <span class="sc">%&gt;%</span></span>
-<span id="cb108-3"><a href="Análisis_estadístico.html#cb108-3" tabindex="-1"></a>  <span class="fu">filter</span>(Experimento <span class="sc">==</span> <span class="st">&quot;Pretest&quot;</span>)</span>
-<span id="cb108-4"><a href="Análisis_estadístico.html#cb108-4" tabindex="-1"></a></span>
-<span id="cb108-5"><a href="Análisis_estadístico.html#cb108-5" tabindex="-1"></a>posttestq1 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb108-6"><a href="Análisis_estadístico.html#cb108-6" tabindex="-1"></a>  <span class="fu">select</span>(Experimento, Q1) <span class="sc">%&gt;%</span></span>
-<span id="cb108-7"><a href="Análisis_estadístico.html#cb108-7" tabindex="-1"></a>  <span class="fu">filter</span>(Experimento <span class="sc">==</span> <span class="st">&quot;Post-test&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="Análisis_estadístico.html#cb109-1" tabindex="-1"></a><span class="fu">wilcox.test</span>(<span class="at">x =</span> pretestq1<span class="sc">$</span>Q1, <span class="at">y =</span> posttestq1<span class="sc">$</span>Q1, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="Análisis_estadístico.html#cb123-1" tabindex="-1"></a>pretestq1 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb123-2"><a href="Análisis_estadístico.html#cb123-2" tabindex="-1"></a>  <span class="fu">select</span>(Experimento, Q1) <span class="sc">%&gt;%</span></span>
+<span id="cb123-3"><a href="Análisis_estadístico.html#cb123-3" tabindex="-1"></a>  <span class="fu">filter</span>(Experimento <span class="sc">==</span> <span class="st">&quot;Pretest&quot;</span>)</span>
+<span id="cb123-4"><a href="Análisis_estadístico.html#cb123-4" tabindex="-1"></a></span>
+<span id="cb123-5"><a href="Análisis_estadístico.html#cb123-5" tabindex="-1"></a>posttestq1 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb123-6"><a href="Análisis_estadístico.html#cb123-6" tabindex="-1"></a>  <span class="fu">select</span>(Experimento, Q1) <span class="sc">%&gt;%</span></span>
+<span id="cb123-7"><a href="Análisis_estadístico.html#cb123-7" tabindex="-1"></a>  <span class="fu">filter</span>(Experimento <span class="sc">==</span> <span class="st">&quot;Post-test&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="Análisis_estadístico.html#cb124-1" tabindex="-1"></a><span class="fu">wilcox.test</span>(<span class="at">x =</span> pretestq1<span class="sc">$</span>Q1, <span class="at">y =</span> posttestq1<span class="sc">$</span>Q1, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Warning in wilcox.test.default(x = pretestq1$Q1, y = posttestq1$Q1, paired =
+## TRUE): cannot compute exact p-value with ties</code></pre>
+<pre><code>## Warning in wilcox.test.default(x = pretestq1$Q1, y = posttestq1$Q1, paired =
+## TRUE): cannot compute exact p-value with zeroes</code></pre>
 <pre><code>## 
-##  Wilcoxon signed rank exact test
+##  Wilcoxon signed rank test with continuity correction
 ## 
 ## data:  pretestq1$Q1 and posttestq1$Q1
-## V = 0, p-value = 1.421e-14
+## V = 0, p-value = 1.448e-09
 ## alternative hypothesis: true location shift is not equal to 0</code></pre>
 <p>La prueba de rango del signo de Wilcoxon nos muestra que, con una confianza del 95%, podemos decir que hay diferencias estadísticamente significativas entre las percepciones de Q1 antes y después del experimento (V = 0, p-valor &lt; 0.001).</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="Análisis_estadístico.html#cb111-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
-<span id="cb111-2"><a href="Análisis_estadístico.html#cb111-2" tabindex="-1"></a>  rstatix<span class="sc">::</span><span class="fu">wilcox_effsize</span>(Q1 <span class="sc">~</span> Experimento, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="Análisis_estadístico.html#cb128-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb128-2"><a href="Análisis_estadístico.html#cb128-2" tabindex="-1"></a>  rstatix<span class="sc">::</span><span class="fu">wilcox_effsize</span>(Q1 <span class="sc">~</span> Experimento, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 1 × 7
 ##   .y.   group1    group2  effsize    n1    n2 magnitude
 ## * &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;ord&gt;    
 ## 1 Q1    Post-test Pretest   0.879    49    49 large</code></pre>
 <p>Con una confianza del 95% se concluye que el tamaño del efecto es grande.</p>
 <p>Ahora trabajemos con un conjunto de 3 poblaciones utilizando la prueba ANOVA</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="Análisis_estadístico.html#cb113-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Empleados =</span> <span class="fu">c</span>(<span class="fl">0.66</span>, <span class="fl">0.63</span>, <span class="fl">0.65</span>, <span class="fl">0.69</span>, <span class="fl">0.44</span>, <span class="fl">0.63</span>, <span class="fl">0.61</span>, <span class="fl">0.42</span>, <span class="fl">0.59</span>, <span class="fl">0.46</span>),</span>
-<span id="cb113-2"><a href="Análisis_estadístico.html#cb113-2" tabindex="-1"></a>                 <span class="at">Agricultores =</span> <span class="fu">c</span>(<span class="fl">0.65</span>, <span class="fl">0.60</span>, <span class="fl">0.69</span>, <span class="fl">0.73</span>, <span class="fl">0.52</span>, <span class="fl">0.85</span>, <span class="fl">0.81</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>),</span>
-<span id="cb113-3"><a href="Análisis_estadístico.html#cb113-3" tabindex="-1"></a>                 <span class="at">NoExpuestos =</span> <span class="fu">c</span>(<span class="fl">0.93</span>, <span class="fl">0.99</span>, <span class="fl">0.96</span>, <span class="fl">0.74</span>, <span class="fl">0.81</span>, <span class="fl">0.93</span>, <span class="fl">0.63</span>, <span class="fl">0.68</span>, <span class="fl">0.99</span>, <span class="cn">NA</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="Análisis_estadístico.html#cb130-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Empleados =</span> <span class="fu">c</span>(<span class="fl">0.66</span>, <span class="fl">0.63</span>, <span class="fl">0.65</span>, <span class="fl">0.69</span>, <span class="fl">0.44</span>, <span class="fl">0.63</span>, <span class="fl">0.61</span>, <span class="fl">0.42</span>, <span class="fl">0.59</span>, <span class="fl">0.46</span>),</span>
+<span id="cb130-2"><a href="Análisis_estadístico.html#cb130-2" tabindex="-1"></a>                 <span class="at">Agricultores =</span> <span class="fu">c</span>(<span class="fl">0.65</span>, <span class="fl">0.60</span>, <span class="fl">0.69</span>, <span class="fl">0.73</span>, <span class="fl">0.52</span>, <span class="fl">0.85</span>, <span class="fl">0.81</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>),</span>
+<span id="cb130-3"><a href="Análisis_estadístico.html#cb130-3" tabindex="-1"></a>                 <span class="at">NoExpuestos =</span> <span class="fu">c</span>(<span class="fl">0.93</span>, <span class="fl">0.99</span>, <span class="fl">0.96</span>, <span class="fl">0.74</span>, <span class="fl">0.81</span>, <span class="fl">0.93</span>, <span class="fl">0.63</span>, <span class="fl">0.68</span>, <span class="fl">0.99</span>, <span class="cn">NA</span>))</span></code></pre></div>
+<p>Tres poblaciones con faltantes no balanceados (10, 7 y 9 observaciones válidas).</p>
 <p>Omitiendo los datos nulos</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="Análisis_estadístico.html#cb114-1" tabindex="-1"></a>empleados <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(df<span class="sc">$</span>Empleados)</span>
-<span id="cb114-2"><a href="Análisis_estadístico.html#cb114-2" tabindex="-1"></a>agricultores <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(df<span class="sc">$</span>Agricultores)</span>
-<span id="cb114-3"><a href="Análisis_estadístico.html#cb114-3" tabindex="-1"></a>no_expuestos <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(df<span class="sc">$</span>NoExpuestos)</span></code></pre></div>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="Análisis_estadístico.html#cb131-1" tabindex="-1"></a>empleados <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(df<span class="sc">$</span>Empleados)</span>
+<span id="cb131-2"><a href="Análisis_estadístico.html#cb131-2" tabindex="-1"></a>agricultores <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(df<span class="sc">$</span>Agricultores)</span>
+<span id="cb131-3"><a href="Análisis_estadístico.html#cb131-3" tabindex="-1"></a>no_expuestos <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(df<span class="sc">$</span>NoExpuestos)</span></code></pre></div>
+<p>Quedan 10 empleados, 7 agricultores y 9 no expuestos (N = 26).</p>
 <p>Hallemos el tamaño y la cantidad de tratamientos</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="Análisis_estadístico.html#cb115-1" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="fu">length</span>(empleados)</span>
-<span id="cb115-2"><a href="Análisis_estadístico.html#cb115-2" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> <span class="fu">length</span>(agricultores)</span>
-<span id="cb115-3"><a href="Análisis_estadístico.html#cb115-3" tabindex="-1"></a>n3 <span class="ot">&lt;-</span> <span class="fu">length</span>(no_expuestos)</span>
-<span id="cb115-4"><a href="Análisis_estadístico.html#cb115-4" tabindex="-1"></a>N <span class="ot">&lt;-</span> n1<span class="sc">+</span>n2<span class="sc">+</span>n3</span>
-<span id="cb115-5"><a href="Análisis_estadístico.html#cb115-5" tabindex="-1"></a>k <span class="ot">=</span> <span class="fu">ncol</span>(df)</span></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="Análisis_estadístico.html#cb132-1" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="fu">length</span>(empleados)</span>
+<span id="cb132-2"><a href="Análisis_estadístico.html#cb132-2" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> <span class="fu">length</span>(agricultores)</span>
+<span id="cb132-3"><a href="Análisis_estadístico.html#cb132-3" tabindex="-1"></a>n3 <span class="ot">&lt;-</span> <span class="fu">length</span>(no_expuestos)</span>
+<span id="cb132-4"><a href="Análisis_estadístico.html#cb132-4" tabindex="-1"></a>N <span class="ot">&lt;-</span> n1<span class="sc">+</span>n2<span class="sc">+</span>n3</span>
+<span id="cb132-5"><a href="Análisis_estadístico.html#cb132-5" tabindex="-1"></a>k <span class="ot">=</span> <span class="fu">ncol</span>(df)</span></code></pre></div>
+<p>N = 26 y k = 3, con grados de libertad k−1 = 2 y N−k = 23.</p>
 <p>Hallemos el promedio de cada tratamiento y el promedio global</p>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="Análisis_estadístico.html#cb116-1" tabindex="-1"></a>xbar_1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(empleados)</span>
-<span id="cb116-2"><a href="Análisis_estadístico.html#cb116-2" tabindex="-1"></a>xbar_2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(agricultores)</span>
-<span id="cb116-3"><a href="Análisis_estadístico.html#cb116-3" tabindex="-1"></a>xbar_3 <span class="ot">&lt;-</span> <span class="fu">mean</span>(no_expuestos)</span>
-<span id="cb116-4"><a href="Análisis_estadístico.html#cb116-4" tabindex="-1"></a>xbar_total <span class="ot">&lt;-</span> (<span class="fu">sum</span>(empleados)<span class="sc">+</span><span class="fu">sum</span>(agricultores)<span class="sc">+</span><span class="fu">sum</span>(no_expuestos))<span class="sc">/</span>N</span></code></pre></div>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="Análisis_estadístico.html#cb133-1" tabindex="-1"></a>xbar_1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(empleados)</span>
+<span id="cb133-2"><a href="Análisis_estadístico.html#cb133-2" tabindex="-1"></a>xbar_2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(agricultores)</span>
+<span id="cb133-3"><a href="Análisis_estadístico.html#cb133-3" tabindex="-1"></a>xbar_3 <span class="ot">&lt;-</span> <span class="fu">mean</span>(no_expuestos)</span>
+<span id="cb133-4"><a href="Análisis_estadístico.html#cb133-4" tabindex="-1"></a>xbar_total <span class="ot">&lt;-</span> (<span class="fu">sum</span>(empleados)<span class="sc">+</span><span class="fu">sum</span>(agricultores)<span class="sc">+</span><span class="fu">sum</span>(no_expuestos))<span class="sc">/</span>N</span></code></pre></div>
+<p>Medias por tratamiento: 0.578 (empleados), 0.693 (agricultores) y 0.851 (no expuestos); la separación más marcada es entre no expuestos y empleados.</p>
 <p>Hallamos SST, SSA y SSE</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="Análisis_estadístico.html#cb117-1" tabindex="-1"></a>SST <span class="ot">=</span> <span class="fu">sum</span>((empleados<span class="sc">-</span>xbar_total)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">+</span><span class="fu">sum</span>((agricultores<span class="sc">-</span>xbar_total)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">+</span><span class="fu">sum</span>((no_expuestos<span class="sc">-</span>xbar_total)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb117-2"><a href="Análisis_estadístico.html#cb117-2" tabindex="-1"></a></span>
-<span id="cb117-3"><a href="Análisis_estadístico.html#cb117-3" tabindex="-1"></a>SSA <span class="ot">=</span> n1 <span class="sc">*</span> (xbar_1<span class="sc">-</span>xbar_total)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> n2 <span class="sc">*</span> (xbar_2<span class="sc">-</span>xbar_total)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> n3 <span class="sc">*</span> (xbar_3<span class="sc">-</span>xbar_total)<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb117-4"><a href="Análisis_estadístico.html#cb117-4" tabindex="-1"></a></span>
-<span id="cb117-5"><a href="Análisis_estadístico.html#cb117-5" tabindex="-1"></a>SSE <span class="ot">=</span> SST<span class="sc">-</span>SSA</span></code></pre></div>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="Análisis_estadístico.html#cb134-1" tabindex="-1"></a>SST <span class="ot">=</span> <span class="fu">sum</span>((empleados<span class="sc">-</span>xbar_total)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">+</span><span class="fu">sum</span>((agricultores<span class="sc">-</span>xbar_total)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">+</span><span class="fu">sum</span>((no_expuestos<span class="sc">-</span>xbar_total)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb134-2"><a href="Análisis_estadístico.html#cb134-2" tabindex="-1"></a></span>
+<span id="cb134-3"><a href="Análisis_estadístico.html#cb134-3" tabindex="-1"></a>SSA <span class="ot">=</span> n1 <span class="sc">*</span> (xbar_1<span class="sc">-</span>xbar_total)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> n2 <span class="sc">*</span> (xbar_2<span class="sc">-</span>xbar_total)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> n3 <span class="sc">*</span> (xbar_3<span class="sc">-</span>xbar_total)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb134-4"><a href="Análisis_estadístico.html#cb134-4" tabindex="-1"></a></span>
+<span id="cb134-5"><a href="Análisis_estadístico.html#cb134-5" tabindex="-1"></a>SSE <span class="ot">=</span> SST<span class="sc">-</span>SSA</span></code></pre></div>
+<p>SST ≈ 0.679 = SSA ≈ 0.354 (entre tratamientos) + SSE ≈ 0.324 (error); la variación entre grupos absorbe más de la mitad de la variación total.</p>
 <p>Hallamos MSE y MSA</p>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="Análisis_estadístico.html#cb118-1" tabindex="-1"></a>MSE <span class="ot">=</span> SSE<span class="sc">/</span>(k<span class="dv">-1</span>)</span>
-<span id="cb118-2"><a href="Análisis_estadístico.html#cb118-2" tabindex="-1"></a>MSA <span class="ot">=</span> SSA<span class="sc">/</span>(N<span class="dv">-1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="Análisis_estadístico.html#cb135-1" tabindex="-1"></a>MSE <span class="ot">=</span> SSE<span class="sc">/</span>(N<span class="sc">-</span>k)</span>
+<span id="cb135-2"><a href="Análisis_estadístico.html#cb135-2" tabindex="-1"></a>MSA <span class="ot">=</span> SSA<span class="sc">/</span>(k<span class="dv">-1</span>)</span></code></pre></div>
+<p>MSA ≈ 0.177 y MSE ≈ 0.014; su razón define el estadístico F.</p>
 <p>Hallamos el estadístico F de Fischer y el valor crítico con un 95% de confianza</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="Análisis_estadístico.html#cb119-1" tabindex="-1"></a>F <span class="ot">=</span> MSA<span class="sc">/</span>MSE</span>
-<span id="cb119-2"><a href="Análisis_estadístico.html#cb119-2" tabindex="-1"></a>alpha <span class="ot">=</span> <span class="fl">0.05</span></span>
-<span id="cb119-3"><a href="Análisis_estadístico.html#cb119-3" tabindex="-1"></a>v1 <span class="ot">=</span> k<span class="dv">-1</span></span>
-<span id="cb119-4"><a href="Análisis_estadístico.html#cb119-4" tabindex="-1"></a>v2 <span class="ot">=</span> N<span class="sc">-</span>k</span>
-<span id="cb119-5"><a href="Análisis_estadístico.html#cb119-5" tabindex="-1"></a>F_critico <span class="ot">=</span> <span class="fu">qf</span>(<span class="dv">1</span><span class="sc">-</span>alpha,<span class="at">df1 =</span> v1, <span class="at">df2=</span>v2)</span>
-<span id="cb119-6"><a href="Análisis_estadístico.html#cb119-6" tabindex="-1"></a>F<span class="sc">&gt;</span>F_critico</span></code></pre></div>
-<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="Análisis_estadístico.html#cb136-1" tabindex="-1"></a>F <span class="ot">=</span> MSA<span class="sc">/</span>MSE</span>
+<span id="cb136-2"><a href="Análisis_estadístico.html#cb136-2" tabindex="-1"></a>alpha <span class="ot">=</span> <span class="fl">0.05</span></span>
+<span id="cb136-3"><a href="Análisis_estadístico.html#cb136-3" tabindex="-1"></a>v1 <span class="ot">=</span> k<span class="dv">-1</span></span>
+<span id="cb136-4"><a href="Análisis_estadístico.html#cb136-4" tabindex="-1"></a>v2 <span class="ot">=</span> N<span class="sc">-</span>k</span>
+<span id="cb136-5"><a href="Análisis_estadístico.html#cb136-5" tabindex="-1"></a>F_critico <span class="ot">=</span> <span class="fu">qf</span>(<span class="dv">1</span><span class="sc">-</span>alpha,<span class="at">df1 =</span> v1, <span class="at">df2=</span>v2)</span>
+<span id="cb136-6"><a href="Análisis_estadístico.html#cb136-6" tabindex="-1"></a>F<span class="sc">&gt;</span>F_critico</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>F ≈ 12.6 &gt; F_crit(2,23) = 3.42: al menos una media difiere de las demás.</p>
 <p>Hallamos el p_valor</p>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="Análisis_estadístico.html#cb121-1" tabindex="-1"></a>pvalor <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span><span class="fu">pf</span>(F,v1,v2)</span>
-<span id="cb121-2"><a href="Análisis_estadístico.html#cb121-2" tabindex="-1"></a>pvalor</span></code></pre></div>
-<pre><code>## [1] 0.9165646</code></pre>
-<p>Finalmente, se evidencia que F&lt;F_critico y también el p valor es 0.91&gt;0.05, por lo tanto no se rechaza Ho, es decir, no existen diferencias significativas entre las medias de los tres tratamientos</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="Análisis_estadístico.html#cb138-1" tabindex="-1"></a>pvalor <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span><span class="fu">pf</span>(F,v1,v2)</span>
+<span id="cb138-2"><a href="Análisis_estadístico.html#cb138-2" tabindex="-1"></a>pvalor</span></code></pre></div>
+<pre><code>## [1] 0.0002045258</code></pre>
+<p>Finalmente, se evidencia que F &gt; F_critico y el p-valor (≈ 0.0002) es menor a 0.05, por lo tanto se rechaza Ho, es decir, sí existen diferencias significativas entre las medias de los tres tratamientos; la diferencia está motivada principalmente por la población de no expuestos (media 0.851), notablemente mayor que la de empleados (0.578). Para identificar qué pares de medias difieren se requeriría un análisis post-hoc (p. ej., Tukey HSD).</p>
 
 </div>
 </div>

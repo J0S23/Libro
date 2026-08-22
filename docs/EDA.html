@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 1 EDA | Proyecto de Métodos Estadísticos</title>
   <meta name="description" content="Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos" />
-  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 1 EDA | Proyecto de Métodos Estadísticos" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Sebastian Ariza y Joseph Arias" />
 
 
-<meta name="date" content="2026-08-19" />
+<meta name="date" content="2026-08-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -55,8 +55,9 @@
 
 
 <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -66,7 +67,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -168,17 +169,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.16" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#homogeneidad-de-varianzas-births"><i class="fa fa-check"></i><b>2.16</b> Homogeneidad de varianzas (births)</a></li>
 <li class="chapter" data-level="2.17" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#estad%C3%ADstica-no-param%C3%A9trica-pareada-percepci%C3%B3n-q1"><i class="fa fa-check"></i><b>2.17</b> Estadística no paramétrica pareada (percepción Q1)</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>3</b> Methods</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="methods.html"><a href="methods.html#math-example"><i class="fa fa-check"></i><b>3.1</b> math example</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>4</b> Applications</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>4.1</b> Example one</a></li>
-<li class="chapter" data-level="4.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>4.2</b> Example two</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>5</b> Final Words</a></li>
-<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -208,31 +198,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-4"><a href="EDA.html#cb1-4" tabindex="-1"></a><span class="fu">library</span>(moments)</span>
 <span id="cb1-5"><a href="EDA.html#cb1-5" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-6"><a href="EDA.html#cb1-6" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb1-7"><a href="EDA.html#cb1-7" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
-<span id="cb1-8"><a href="EDA.html#cb1-8" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb1-9"><a href="EDA.html#cb1-9" tabindex="-1"></a><span class="fu">library</span>(effsize)</span>
-<span id="cb1-10"><a href="EDA.html#cb1-10" tabindex="-1"></a><span class="fu">library</span>(openintro)</span>
-<span id="cb1-11"><a href="EDA.html#cb1-11" tabindex="-1"></a><span class="fu">library</span>(nortest)</span>
-<span id="cb1-12"><a href="EDA.html#cb1-12" tabindex="-1"></a><span class="fu">library</span>(car)</span>
-<span id="cb1-13"><a href="EDA.html#cb1-13" tabindex="-1"></a><span class="fu">library</span>(coin)</span>
-<span id="cb1-14"><a href="EDA.html#cb1-14" tabindex="-1"></a><span class="fu">library</span>(BSDA)</span>
-<span id="cb1-15"><a href="EDA.html#cb1-15" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span></code></pre></div>
+<span id="cb1-7"><a href="EDA.html#cb1-7" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-8"><a href="EDA.html#cb1-8" tabindex="-1"></a><span class="fu">library</span>(effsize)</span>
+<span id="cb1-9"><a href="EDA.html#cb1-9" tabindex="-1"></a><span class="fu">library</span>(openintro)</span>
+<span id="cb1-10"><a href="EDA.html#cb1-10" tabindex="-1"></a><span class="fu">library</span>(nortest)</span>
+<span id="cb1-11"><a href="EDA.html#cb1-11" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb1-12"><a href="EDA.html#cb1-12" tabindex="-1"></a><span class="fu">library</span>(coin)</span>
+<span id="cb1-13"><a href="EDA.html#cb1-13" tabindex="-1"></a><span class="fu">library</span>(BSDA)</span>
+<span id="cb1-14"><a href="EDA.html#cb1-14" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span></code></pre></div>
 <p>Conjunto de datos</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="EDA.html#cb2-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/housing.csv&quot;</span>)</span></code></pre></div>
 <p>Muestrame las 5 primeras filas</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="EDA.html#cb3-1" tabindex="-1"></a><span class="fu">head</span>(data, <span class="at">n=</span> <span class="dv">5</span>)</span></code></pre></div>
-<pre><code>##   longitude latitude housing_median_age total_rooms total_bedrooms population households median_income
-## 1   -122.23    37.88                 41         880            129        322        126        8.3252
-## 2   -122.22    37.86                 21        7099           1106       2401       1138        8.3014
-## 3   -122.24    37.85                 52        1467            190        496        177        7.2574
-## 4   -122.25    37.85                 52        1274            235        558        219        5.6431
-## 5   -122.25    37.85                 52        1627            280        565        259        3.8462
-##   median_house_value ocean_proximity
-## 1             452600        NEAR BAY
-## 2             358500        NEAR BAY
-## 3             352100        NEAR BAY
-## 4             341300        NEAR BAY
-## 5             342200        NEAR BAY</code></pre>
+<pre><code>##   longitude latitude housing_median_age total_rooms total_bedrooms population
+## 1   -122.23    37.88                 41         880            129        322
+## 2   -122.22    37.86                 21        7099           1106       2401
+## 3   -122.24    37.85                 52        1467            190        496
+## 4   -122.25    37.85                 52        1274            235        558
+## 5   -122.25    37.85                 52        1627            280        565
+##   households median_income median_house_value ocean_proximity
+## 1        126        8.3252             452600        NEAR BAY
+## 2       1138        8.3014             358500        NEAR BAY
+## 3        177        7.2574             352100        NEAR BAY
+## 4        219        5.6431             341300        NEAR BAY
+## 5        259        3.8462             342200        NEAR BAY</code></pre>
 <p>La estructura de los datos</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="EDA.html#cb5-1" tabindex="-1"></a><span class="fu">str</span>(data)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    20640 obs. of  10 variables:
@@ -249,13 +238,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Veamos si hay datos faltantes</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="EDA.html#cb7-1" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
 <span id="cb7-2"><a href="EDA.html#cb7-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
-<pre><code>##   NA_longitude NA_latitude NA_housing_median_age NA_total_rooms NA_total_bedrooms NA_population
-## 1            0           0                     0              0               207             0
-##   NA_households NA_median_income NA_median_house_value NA_ocean_proximity
-## 1             0                0                     0                  0</code></pre>
+<pre><code>##   NA_longitude NA_latitude NA_housing_median_age NA_total_rooms
+## 1            0           0                     0              0
+##   NA_total_bedrooms NA_population NA_households NA_median_income
+## 1               207             0             0                0
+##   NA_median_house_value NA_ocean_proximity
+## 1                     0                  0</code></pre>
 <p>Otra forma de detectar valores faltantes</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="EDA.html#cb9-1" tabindex="-1"></a><span class="fu">missmap</span>(data)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/otraforma-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/otraforma-1.png" alt="" width="672" /></p>
 <p>Ahora hagamos la imputacion de datos faltantes</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="EDA.html#cb10-1" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
 <span id="cb10-2"><a href="EDA.html#cb10-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(</span>
@@ -265,10 +256,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Verificar si tiene datos faltantes nuevamente</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="EDA.html#cb11-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb11-2"><a href="EDA.html#cb11-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
-<pre><code>##   NA_longitude NA_latitude NA_housing_median_age NA_total_rooms NA_total_bedrooms NA_population
-## 1            0           0                     0              0                 0             0
-##   NA_households NA_median_income NA_median_house_value NA_ocean_proximity
-## 1             0                0                     0                  0</code></pre>
+<pre><code>##   NA_longitude NA_latitude NA_housing_median_age NA_total_rooms
+## 1            0           0                     0              0
+##   NA_total_bedrooms NA_population NA_households NA_median_income
+## 1                 0             0             0                0
+##   NA_median_house_value NA_ocean_proximity
+## 1                     0                  0</code></pre>
 <p>Vamos a convertir la variable ‘ocean_proximity’ en un factor</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="EDA.html#cb13-1" tabindex="-1"></a>df<span class="sc">$</span>ocean_proximity <span class="ot">&lt;-</span> <span class="fu">factor</span>(df<span class="sc">$</span>ocean_proximity)</span></code></pre></div>
 <div id="análisis-exploratorio-de-median_house_value-target" class="section level2 hasAnchor" number="1.1">
@@ -285,8 +278,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb14-9"><a href="EDA.html#cb14-9" tabindex="-1"></a>                 <span class="at">maximo =</span> <span class="fu">max</span>(median_house_value), </span>
 <span id="cb14-10"><a href="EDA.html#cb14-10" tabindex="-1"></a>                 <span class="at">curtosis =</span> <span class="fu">kurtosis</span>(median_house_value), </span>
 <span id="cb14-11"><a href="EDA.html#cb14-11" tabindex="-1"></a>                 <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(median_house_value))</span></code></pre></div>
-<pre><code>##       n    media       sd mediana    RIC     Q1     Q3 minimo maximo curtosis Coef_asim
-## 1 20640 206855.8 115395.6  179700 145125 119600 264725  14999 500001   3.3275 0.9776922</code></pre>
+<pre><code>##       n    media       sd mediana    RIC     Q1     Q3 minimo maximo curtosis
+## 1 20640 206855.8 115395.6  179700 145125 119600 264725  14999 500001   3.3275
+##   Coef_asim
+## 1 0.9776922</code></pre>
 <p>Se registraron un total de 20.640 casas. En promedio las casas cuestan aproximadamente $206.855 (con una desviación estándar de $115.395). Por otro lado, el 50% de las casas cuestan a lo sumo $180.000, mientras que, en caso de estar buscando casas más baratas, el 25% de las casas tienen un valor de $120.000 o menos (teniendo la más barata un costo de $14999). Asimismo, en caso de buscar una vivienda mejor valuada, el 75% de las casas cuestan por mucho $264.725 y el resto cuestan más que ese valor (siendo la más cara una con un valor de $500.001). Si visualizamos los datos también podemos observar que su forma es platicúrtica, es decir, se evidencia una forma de mesa. Además, por una asimetría o sesgo a la derecha se observa que existen valores de casas excesivamente altos con respecto a la mayoría.</p>
 <p>Veamos un histograma</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="EDA.html#cb16-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
@@ -301,7 +296,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb16-10"><a href="EDA.html#cb16-10" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&#39;Valor medio de la casa (USD)&#39;</span>, </span>
 <span id="cb16-11"><a href="EDA.html#cb16-11" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&#39;Densidad&#39;</span>)<span class="sc">+</span></span>
 <span id="cb16-12"><a href="EDA.html#cb16-12" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/histhousevalue-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/histhousevalue-1.png" alt="" width="672" /></p>
 <p>Asimismo, se evidencia la existencia de un sesgo hacia la derecha al considerar que la acumulación de los costos de las casas se encuentran hacia la izquierda, no obstante, algunas casas de gran valor desplazan la media a la derecha.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="EDA.html#cb17-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb17-2"><a href="EDA.html#cb17-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> median_house_value))<span class="sc">+</span></span>
@@ -309,7 +304,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb17-4"><a href="EDA.html#cb17-4" tabindex="-1"></a>               <span class="at">outlier.color =</span> <span class="st">&quot;darkred&quot;</span>)<span class="sc">+</span></span>
 <span id="cb17-5"><a href="EDA.html#cb17-5" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&#39;point&#39;</span>, <span class="at">shape =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&#39;black&#39;</span>)<span class="sc">+</span></span>
 <span id="cb17-6"><a href="EDA.html#cb17-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/boxplotvaluehouse-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/boxplotvaluehouse-1.png" alt="" width="672" /></p>
+<p>El diagrama de cajas y bigotes del valor medio de la vivienda complementa la información del histograma: el 50% central de las observaciones se ubica aproximadamente entre 120.000 y 264.725 USD, y el punto de la media se encuentra por encima de la mediana, confirmando el sesgo positivo descrito. Los valores atípicos superiores son escasos en número pero muy lejanos al bigote, concentrados cerca del techo de 500.000 USD, lo cual refuerza la acumulación en el límite superior detectada en el histograma. En síntesis, la variable respuesta presenta una distribución asimétrica, condición que deberá considerarse en la selección de transformaciones y supuestos del modelo de regresión.</p>
 </div>
 <div id="análisis-exploratorio-univariado-de-cada-variable-independiente" class="section level2 hasAnchor" number="1.2">
 <h2><span class="header-section-number">1.2</span> Análisis exploratorio univariado de cada variable independiente<a href="EDA.html#an%C3%A1lisis-exploratorio-univariado-de-cada-variable-independiente" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -333,16 +329,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb18-18"><a href="EDA.html#cb18-18" tabindex="-1"></a>                 <span class="at">curtosis =</span> <span class="fu">kurtosis</span>(valor), </span>
 <span id="cb18-19"><a href="EDA.html#cb18-19" tabindex="-1"></a>                 <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(valor))</span></code></pre></div>
 <pre><code>## # A tibble: 8 × 12
-##   variable             n   media     sd mediana    RIC      Q1      Q3   minimo  maximo curtosis Coef_asim
-##   &lt;chr&gt;            &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1 households       20640  500.   3.82e2  409    3.25e2  280     605       1      6082      25.1     3.41  
-## 2 housing_median_… 20640   28.6  1.26e1   29    1.9 e1   18      37       1        52       2.20    0.0603
-## 3 latitude         20640   35.6  2.14e0   34.3  3.78e0   33.9    37.7    32.5      42.0     1.88    0.466 
-## 4 longitude        20640 -120.   2.00e0 -118.   3.79e0 -122.   -118.   -124.     -114.      1.67   -0.298 
-## 5 median_income    20640    3.87 1.90e0    3.53 2.18e0    2.56    4.74    0.500    15.0     7.95    1.65  
-## 6 population       20640 1425.   1.13e3 1166    9.38e2  787    1725       3     35682      76.5     4.94  
-## 7 total_bedrooms   20640  538.   4.19e2  438    3.46e2  297     643.      1      6445      25.2     3.48  
-## 8 total_rooms      20640 2636.   2.18e3 2127    1.70e3 1448.   3148       2     39320      35.6     4.15</code></pre>
+##   variable      n   media     sd mediana    RIC      Q1      Q3   minimo  maximo
+##   &lt;chr&gt;     &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+## 1 househol… 20640  500.   3.82e2  409    3.25e2  280     605       1      6082  
+## 2 housing_… 20640   28.6  1.26e1   29    1.9 e1   18      37       1        52  
+## 3 latitude  20640   35.6  2.14e0   34.3  3.78e0   33.9    37.7    32.5      42.0
+## 4 longitude 20640 -120.   2.00e0 -118.   3.79e0 -122.   -118.   -124.     -114. 
+## 5 median_i… 20640    3.87 1.90e0    3.53 2.18e0    2.56    4.74    0.500    15.0
+## 6 populati… 20640 1425.   1.13e3 1166    9.38e2  787    1725       3     35682  
+## 7 total_be… 20640  538.   4.19e2  438    3.46e2  297     643.      1      6445  
+## 8 total_ro… 20640 2636.   2.18e3 2127    1.70e3 1448.   3148       2     39320  
+## # ℹ 2 more variables: curtosis &lt;dbl&gt;, Coef_asim &lt;dbl&gt;</code></pre>
 <p>La variable <code>households</code> fue analizada a partir de 20.640 observaciones correspondientes a diferentes sectores del estado de California. Se obtuvo un promedio de 500 hogares por sector (DS = 382,32), donde el 50% de los sectores registran menos de 409 hogares. El valor mínimo registrado fue de 1 hogar, mientras que el máximo alcanzó los 6.082 hogares, evidenciando una alta variabilidad entre sectores. El rango intercuartílico indica que el 50% central de los valores se encuentra entre 280 y 605 hogares, con una amplitud de 325. La diferencia entre la media y la mediana sugiere una posible asimetría positiva en la distribución, asociada a la presencia de algunos sectores con un número de hogares considerablemente elevado.</p>
 <p>La variable <code>housing_median_age</code> fue analizada a partir de 20.640 observaciones. Se obtuvo una edad promedio de las viviendas de 28,6 años (DS = 12,61 años), donde el 50% de los sectores registran una edad mediana de las viviendas por debajo de 29 años. El valor mínimo registrado fue de 1 año, mientras que el máximo alcanzó los 52 años. El rango intercuartílico indica que el 50% central de los valores se encuentra entre 18 y 37 años, con una amplitud de 19 años. La cercanía entre la media y la mediana sugiere una distribución relativamente simétrica para esta variable.</p>
 <p>La variable <code>latitude</code> fue analizada a partir de 20.640 observaciones. Se obtuvo un valor promedio de 35,6 grados (DS = 2,14 grados), donde el 50% de los sectores registran una latitud mediana de 34,3 grados. El valor mínimo registrado fue de 32,5 grados, mientras que el máximo alcanzó los 42,0 grados. El rango intercuartílico indica que el 50% central de los valores se encuentra entre 33,9 y 37,7 grados, con una amplitud de 3,78 grados. La diferencia entre la media y la mediana sugiere una leve asimetría en la distribución de esta variable geográfica.</p>
@@ -386,29 +383,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [1] &quot;population&quot;
 ## [1] &quot;households&quot;
 ## [1] &quot;median_income&quot;</code></pre>
+<p>Se define la función plot_univariado, que genera de forma conjunta el histograma de polígonos y el diagrama de cajas y bigotes de una variable dada.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="EDA.html#cb22-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;longitude&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/longitude-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/longitude-1.png" alt="" width="672" />
 La distribución de <code>longitude</code> presenta una asimetría negativa, evidenciada dado que la media (-120°) es menor que la mediana (-118°), sugiriendo que existen algunas observaciones con longitudes considerablemente más bajas que desplazan la media hacia abajo. Además, la variable cuenta con un carácter bimodal, con una mayor concentración de observaciones en dos zonas específicas —una alrededor de -122° y otra más pronunciada cerca de -118°—, mientras que una menor proporción de datos corresponde a los valores intermedios y a los extremos del rango. Esta característica bimodal sugiere que la relación de esta variable con la respuesta podría no ser lineal, por lo que sería importante considerarla durante las etapas posteriores del análisis y modelamiento. Por su parte, el diagrama de cajas y bigotes muestra que el 50% central de los datos (rango intercuartílico) se ubica entre -122° y -118°, coincidiendo sus extremos justamente con las dos zonas de mayor concentración observadas en el histograma de polígonos. Además, se evidencia ausencia de valores atípicos en los extremos de la distribución.</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="EDA.html#cb23-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;latitude&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/latitude-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/latitude-1.png" alt="" width="672" />
 La distribución de <code>latitude</code> presenta una asimetría positiva, evidenciada porque la latitud media (36°) se encuentra por encima de la mediana (34°) en la caja, sugiriendo que, aunque la mayoría de los datos se concentra en valores más bajos, existen algunas observaciones con latitudes considerablemente más altas que desplazan la media hacia arriba. Además, la variable muestra un carácter bimodal, con una mayor concentración de observaciones en dos zonas específicas (una notablemente pronunciada alrededor de 34° y otra menos pronunciada alrededor de 38°), mientras que una menor proporción de datos corresponde a los valores intermedios y a los extremos del rango. Por su parte, el diagrama de cajas y bigotes muestra que el 50% central de los datos (rango intercuartílico) se ubica aproximadamente entre 34° y 38°, coincidiendo sus extremos justamente con las dos zonas de mayor concentración observadas en el histograma de polígonos. Adicionalmente, se evidencia ausencia de valores atípicos en los extremos de la distribución. Esta característica bimodal muestra que la relación de esta variable con la respuesta podría no ser lineal.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="EDA.html#cb24-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;housing_median_age&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/housing_median_age-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/housing_median_age-1.png" alt="" width="672" /></p>
 <p>La distribución de <code>housing_median_age</code> presenta una media y mediana muy cercanas (29 años), lo que en principio sugeriría una distribución simétrica. Sin embargo, el histograma no tiene una forma de campana regular, sino varios picos irregulares a lo largo del rango, y particularmente una acumulación notoria de observaciones en el valor máximo (52 años). Esto sugiere un posible efecto de censura o tope en la variable, similar al observado en <code>median_house_value</code>, donde las viviendas con una edad igual o mayor a 52 años parecen haber sido agrupadas en ese límite superior. Por su parte, el diagrama de cajas y bigotes muestra que el 50% central de los datos (rango intercuartílico) se ubica aproximadamente entre 18 y 37 años, y no se evidencian valores atípicos en los extremos de la distribución.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="EDA.html#cb25-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;total_rooms&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/total_rooms-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/total_rooms-1.png" alt="" width="672" />
 La distribución de <code>total_rooms</code> presenta una fuerte asimetría positiva, evidenciada porque la media (2.636) se encuentra considerablemente por encima de la mediana (2.127), sugiriendo que existen zonas con un número de habitaciones notablemente elevado que desplazan la media hacia arriba. El histograma muestra un pico marcado en valores bajos, seguido de una larga cola hacia la derecha que se extiende hasta cerca de 40.000. El diagrama de cajas y bigotes confirma esta asimetría, con el 50% central de los datos (rango intercuartílico) ubicado entre 1.448 y 3.148, y evidencia además una gran cantidad de valores atípicos por encima del bigote superior, lo cual refuerza la presencia de zonas con un número de habitaciones muy por fuera del comportamiento típico del resto de las observaciones.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="EDA.html#cb26-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;total_bedrooms&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/total_bedrooms-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/total_bedrooms-1.png" alt="" width="672" /></p>
 <p>La distribución de <code>total_bedrooms</code> presenta una fuerte asimetría positiva, evidenciada porque la media (538) se encuentra por encima de la mediana (438), sugiriendo que existen zonas con un número de dormitorios notablemente elevado que desplazan la media hacia arriba. El histograma muestra un pico marcado en valores bajos, seguido de una larga cola hacia la derecha que se extiende hasta cerca de 6.500. El diagrama de cajas y bigotes confirma esta asimetría, con el 50% central de los datos (rango intercuartílico) ubicado entre 297 y 643, y evidencia además una considerable cantidad de valores atípicos por encima del bigote superior, lo cual refuerza la presencia de zonas con un número de dormitorios muy por fuera del comportamiento típico del resto de las observaciones.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="EDA.html#cb27-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;population&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/population-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/population-1.png" alt="" width="672" />
 La distribución de <code>population</code> presenta una fuerte asimetría positiva, evidenciada porque la media (1.425) se encuentra por encima de la mediana (1.166), sugiriendo que existen zonas con una población notablemente elevada que desplazan la media hacia arriba. El histograma muestra un pico muy pronunciado en valores bajos, seguido de una larga cola hacia la derecha que se extiende hasta cerca de 35.000. El diagrama de cajas y bigotes confirma esta asimetría, con el 50% central de los datos (rango intercuartílico) ubicado entre 787 y 1.725, y evidencia además una gran cantidad de valores atípicos por encima del bigote superior, incluyendo una observación extrema cercana a los 30.000, lo cual refuerza la presencia de zonas con una población muy por fuera del comportamiento típico del resto de las observaciones.</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="EDA.html#cb28-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/households-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/households-1.png" alt="" width="672" /></p>
 <p>La distribución de <code>households</code> presenta una fuerte asimetría positiva, evidenciada porque la media (500) se encuentra por encima de la mediana (409), sugiriendo que existen zonas con un número de hogares notablemente elevado que desplazan la media hacia arriba. El histograma muestra un pico marcado en valores bajos, seguido de una larga cola hacia la derecha que se extiende hasta cerca de 6.000. El diagrama de cajas y bigotes confirma esta asimetría, con el 50% central de los datos (rango intercuartílico) ubicado entre 280 y 605, y evidencia además una considerable cantidad de valores atípicos por encima del bigote superior, lo cual refuerza la presencia de zonas con un número de hogares muy por fuera del comportamiento típico del resto de las observaciones.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="EDA.html#cb29-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/median_income-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/median_income-1.png" alt="" width="672" />
 La distribución de <code>median_income</code> presenta una asimetría positiva, evidenciada porque la media (3,87) se encuentra por encima de la mediana (3,53), sugiriendo que existen zonas con un ingreso notablemente elevado que desplazan la media hacia arriba. El histograma muestra un pico pronunciado en valores medios-bajos, seguido de una cola hacia la derecha que se extiende hasta cerca de 15. El diagrama de cajas y bigotes confirma esta asimetría, con el 50% central de los datos (rango intercuartílico) ubicado entre 2,56 y 4,74, y evidencia además una considerable cantidad de valores atípicos por encima del bigote superior, lo cual refuerza la presencia de zonas con ingresos notablemente más altos que el resto de las observaciones.</p>
 </div>
 <div id="análisis-exploratorio-bivariado" class="section level2 hasAnchor" number="1.3">
@@ -426,36 +424,36 @@ La distribución de <code>median_income</code> presenta una asimetría positiva,
 <span id="cb30-11"><a href="EDA.html#cb30-11" tabindex="-1"></a>    <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="fu">paste</span>(<span class="st">&quot;Dispersión entre&quot;</span>, var_label, <span class="st">&quot;y el valor medio de las viviendas&quot;</span>))</span>
 <span id="cb30-12"><a href="EDA.html#cb30-12" tabindex="-1"></a>}</span></code></pre></div>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="EDA.html#cb31-1" tabindex="-1"></a>plot_dispersión<span class="fu">_respuesta</span>(df, <span class="st">&quot;median_income&quot;</span>, <span class="st">&quot;ingreso medio&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/valorvsingreso-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/valorvsingreso-1.png" alt="" width="672" />
 Los puntos muestran una tendencia ascendente clara: a mayor ingreso medio, mayor valor medio de la vivienda. La mayoría de las observaciones se concentra entre ingresos de 2 a 6, con valores por debajo de 400.000 USD.</p>
 <p>La dispersión aumenta con el ingreso, es decir, en zonas de mayores ingresos hay más variabilidad en los precios. También se nota una acumulación de puntos en 500,000 USD, el límite superior del dataset, lo que sugiere censura en la variable objetivo.</p>
 <p>En general, la relación es positiva, aproximadamente lineal, y una de las más fuertes del dataset, lo que evidencia la importancia de <code>median_income</code> para el desarrollo del futuro modelo.</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="EDA.html#cb32-1" tabindex="-1"></a>plot_dispersión<span class="fu">_respuesta</span>(df, <span class="st">&quot;housing_median_age&quot;</span>, <span class="st">&quot;edad media de las viviendas&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/valorvsedad-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/valorvsedad-1.png" alt="" width="672" />
 Los puntos no muestran mucha información, puesto que se evidencia una gran cantidad de ruido, con lo cual resulta complejo encontrar una tendencia lineal entre las variables <code>housing_median_age</code> y <code>median_house_value</code>. La línea de regresión sugiere una pendiente positiva muy leve, indicando que a mayor edad de la vivienda hay un ligero incremento en su valor medio, aunque esta relación es débil.</p>
 <p>Se observa una dispersión vertical muy amplia y similar en casi todos los valores de edad, lo que indica que <code>housing_median_age</code> por sí sola no explica bien las variaciones en <code>median_house_value</code>. Por tanto, esta variable probablemente tendrá un poder predictivo bajo en los modelos de regresión.</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="EDA.html#cb33-1" tabindex="-1"></a>plot_dispersión<span class="fu">_respuesta</span>(df, <span class="st">&quot;total_rooms&quot;</span>, <span class="st">&quot;total de habitaciones&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/valorvshabitacion-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/valorvshabitacion-1.png" alt="" width="672" />
 <code>total_rooms</code> muestra una relación positiva débil con <code>median_house_value.</code> La mayoría de los datos se concentra en valores bajos (menos de 5000), con bastante ruido vertical.</p>
 <p>Se observan outliers con valores muy altos de <code>total_rooms</code> (hasta cerca de 40,000) que parecen seguir la tendencia ascendente de la línea de regresión. Aun así, la enorme dispersión en el grueso de los datos sugiere que esta variable tiene una capacidad para predecir la variable respuesta de forma individual. Además, estos valores extremos podrían estar asociados a zonas censales de mayor tamaño geográfico, lo que amerita revisión antes de incluirla directamente en el modelo.</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="EDA.html#cb34-1" tabindex="-1"></a>plot_dispersión<span class="fu">_respuesta</span>(df, <span class="st">&quot;total_bedrooms&quot;</span>, <span class="st">&quot;total de dormitorios&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/valorvsdormitorio-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/valorvsdormitorio-1.png" alt="" width="672" />
 Se evidencia una relación positiva débil entre <code>total_bedrooms</code> y <code>median_house_value</code>. La mayoría de las observaciones se concentra en valores bajos de dormitorios (menos de 1000), con alta dispersión vertical en ese rango, lo que dificulta ver una tendencia clara.</p>
 <p>Existen algunos puntos atípicos con valores muy altos de <code>total_bedrooms</code> (por encima de 4000), pero son pocos y no parecen seguir el patrón general. La pendiente positiva leve indica que esta variable, por sí sola, no sería capaz de predecir la variabilidad de la variable respuesta. Asimismo, su comportamiento sugiere que podría estar altamente correlacionada con otras variables del conjunto de datos, como <code>total_rooms</code> o <code>households</code>.</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="EDA.html#cb35-1" tabindex="-1"></a>plot_dispersión<span class="fu">_respuesta</span>(df, <span class="st">&quot;population&quot;</span>, <span class="st">&quot;población&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/valorvspoblacion-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/valorvspoblacion-1.png" alt="" width="672" />
 population presenta una relación negativa muy leve con median_house_value, casi plana. La gran mayoría de las observaciones se concentra en valores bajos de población (menos de 5000), con una dispersión vertical muy amplia que impide identificar un patrón claro.</p>
 <p>Hay pocos puntos con población alta (por encima de 10,000) y estos tienden a tener valores de vivienda más bajos, lo que podría reflejar zonas densamente pobladas con menor valor promedio por unidad. En general, esta variable parece tener un poder predictivo bajo por sí sola. Adicionalmente, este comportamiento podría estar relacionado con dinámicas urbanas particulares, donde una mayor densidad poblacional no necesariamente implica viviendas de mayor valor.</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="EDA.html#cb36-1" tabindex="-1"></a>plot_dispersión<span class="fu">_respuesta</span>(df, <span class="st">&quot;households&quot;</span>, <span class="st">&quot;número de hogares&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/valorvsnhogares-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/valorvsnhogares-1.png" alt="" width="672" />
 households muestra un comportamiento similar al de total_rooms y total_bedrooms: una relación positiva débil, con la mayoría de los puntos concentrados en valores bajos (menos de 2000) y alta dispersión vertical.</p>
 <p>Los pocos valores atípicos con número de hogares alto (por encima de 4000) tienden a acompañar valores de vivienda más altos, en línea con la tendencia de la recta. Sin embargo, el ruido generalizado sugiere que, individualmente, esta variable aporta poca información predictiva. Además, esta similitud con <code>total_rooms</code> y <code>total_bedrooms</code> sugiere una posible multicolinealidad entre estas tres variables, aspecto que deberá evaluarse más adelante.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="EDA.html#cb37-1" tabindex="-1"></a>plot_dispersión<span class="fu">_respuesta</span>(df, <span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;latitud&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/valorvslatitud-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/valorvslatitud-1.png" alt="" width="672" />
 Se observa una relación negativa débil entre <code>latitude</code> y <code>median_house_value</code>: a medida que aumenta la latitud, el valor medio de las viviendas tiende a disminuir levemente. Los puntos muestran una distribución muy concentrada en ciertas franjas (alrededor de 34° y 37°-38°), correspondientes a zonas densamente pobladas como Los Ángeles y el área de la Bahía de San Francisco, con valores más altos ahí.</p>
 <p>La dispersión vertical es amplia en casi todos los niveles de latitud, y se mantiene la acumulación de puntos en 500,000 USD (límite superior censurado). En general, <code>latitude</code> por sí sola tiene un poder explicativo moderado, pero su valor real probablemente esté en combinación con <code>longitude</code> para capturar efectos geográficos/regionales.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="EDA.html#cb38-1" tabindex="-1"></a>plot_dispersión<span class="fu">_respuesta</span>(df, <span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;longitud&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/valorvslongitud-1.png" width="672" />
+<p><img src="bookdown-demo_files/figure-html/valorvslongitud-1.png" alt="" width="672" />
 La relación entre <code>longitude</code> y <code>median_house_value</code> también es negativa y débil, similar a la de latitud. Los puntos se concentran en dos franjas verticales marcadas (cerca de -122° y -118°), que corresponden a las mismas zonas urbanas de alta densidad.</p>
 <p>Al igual que con latitud, hay una fuerte dispersión vertical y acumulación en el límite superior de 500,000 USD. Esto sugiere que <code>longitude</code> aporta información geográfica relevante, pero de forma aislada tiene poca capacidad predictiva lineal; su combinación con <code>latitude</code> podría ser más útil para el modelo de regresión.</p>
 <p>Ahora veamos la variable ocean_proximity</p>
@@ -473,6 +471,7 @@ La relación entre <code>longitude</code> y <code>median_house_value</code> tamb
 ## 3 ocean_proximity     ISLAND    5       0.02
 ## 4 ocean_proximity   NEAR BAY 2290      11.09
 ## 5 ocean_proximity NEAR OCEAN 2658      12.88</code></pre>
+<p>La distribución de ocean_proximity muestra cinco categorías de tamaño muy desigual: la mayor parte de los bloques censales se concentra en INLAND y &lt;1H OCEAN, que conjuntamente superan el 80% de las observaciones, mientras que ISLAND y NEAR BAY son marcadamente minoritarias. Este desbalance implica que los promedios calculados para los grupos pequeños tienen mayor incertidumbre, y que un modelo que incluya esta variable estimará con precisión las categorías dominantes y con menor precisión las minoritarias.</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="EDA.html#cb41-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb41-2"><a href="EDA.html#cb41-2" tabindex="-1"></a>  <span class="fu">count</span>(ocean_proximity, <span class="at">name =</span> <span class="st">&quot;n&quot;</span>)<span class="sc">%&gt;%</span> </span>
 <span id="cb41-3"><a href="EDA.html#cb41-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Porcentaje =</span> <span class="fu">round</span>(n<span class="sc">/</span><span class="fu">sum</span>(n)<span class="sc">*</span><span class="dv">100</span>, <span class="dv">2</span>), </span>
@@ -485,7 +484,8 @@ La relación entre <code>longitude</code> y <code>median_house_value</code> tamb
 <span id="cb41-10"><a href="EDA.html#cb41-10" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span><span class="st">&#39;Distribución de la variable ocean proximity&#39;</span>)<span class="sc">+</span></span>
 <span id="cb41-11"><a href="EDA.html#cb41-11" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>)))<span class="sc">+</span></span>
 <span id="cb41-12"><a href="EDA.html#cb41-12" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/histoceano-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/histoceano-1.png" alt="" width="672" /></p>
+<p>El gráfico de barras confirma el desbalance descrito: las categorías INLAND y &lt;1H OCEAN dominan claramente, mientras que ISLAND y NEAR BAY apenas alcanzan una proporción visible. Este patrón es geográficamente esperable: California es una región mayoritariamente de costa e interior con muy pocas islas, de modo que ISLAND corresponde a zonas muy específicas. En síntesis, la variable es informativa pero altamente desbalanceada, lo cual condiciona su uso en modelos lineales y obliga a vigilar las estimaciones de los niveles pequeños.</p>
 <p>Ahora comparemos el valor medio de la vivienda según la aproximidad al oceano.</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="EDA.html#cb42-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb42-2"><a href="EDA.html#cb42-2" tabindex="-1"></a>  <span class="fu">group_by</span>(ocean_proximity) <span class="sc">%&gt;%</span> </span>
@@ -501,303 +501,193 @@ La relación entre <code>longitude</code> y <code>median_house_value</code> tamb
 <span id="cb42-12"><a href="EDA.html#cb42-12" tabindex="-1"></a>                 <span class="at">curtosis =</span> <span class="fu">kurtosis</span>(median_house_value), </span>
 <span id="cb42-13"><a href="EDA.html#cb42-13" tabindex="-1"></a>                 <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(median_house_value))</span></code></pre></div>
 <pre><code>## # A tibble: 5 × 12
-##   ocean_proximity     n   media      sd mediana    RIC     Q1     Q3 minimo maximo curtosis Coef_asim
-##   &lt;fct&gt;           &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1 &lt;1H OCEAN        9136 240084. 106124.  214850 125000 164100 289100  17500 500001     3.32     0.986
-## 2 INLAND           6551 124805.  70008.  108500  71450  77500 148950  14999 500001     9.32     2.11 
-## 3 ISLAND              5 380440   80560.  414700 150000 300000 450000 287500 450000     1.22    -0.326
-## 4 NEAR BAY         2290 259212. 122819.  233800 183200 162500 345700  22500 500001     2.29     0.544
-## 5 NEAR OCEAN       2658 249434. 122477.  229450 172750 150000 322750  22500 500001     2.46     0.623</code></pre>
+##   ocean_proximity     n  media     sd mediana    RIC     Q1     Q3 minimo maximo
+##   &lt;fct&gt;           &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 &lt;1H OCEAN        9136 2.40e5 1.06e5  214850 125000 164100 289100  17500 500001
+## 2 INLAND           6551 1.25e5 7.00e4  108500  71450  77500 148950  14999 500001
+## 3 ISLAND              5 3.80e5 8.06e4  414700 150000 300000 450000 287500 450000
+## 4 NEAR BAY         2290 2.59e5 1.23e5  233800 183200 162500 345700  22500 500001
+## 5 NEAR OCEAN       2658 2.49e5 1.22e5  229450 172750 150000 322750  22500 500001
+## # ℹ 2 more variables: curtosis &lt;dbl&gt;, Coef_asim &lt;dbl&gt;</code></pre>
+<p>El resumen por categoría revela diferencias claras en el valor medio de la vivienda según la proximidad al océano: NEAR BAY y &lt;1H OCEAN presentan los valores medios más altos, INLAND se ubica en el extremo inferior, y NEAR OCEAN e ISLAND ocupan posiciones intermedias. Además, la desviación estándar es considerable en todas las categorías, lo cual indica que la proximidad al océano explica parte de la variabilidad pero no la determina por completo. En síntesis, existe una relación entre proximidad al océano y valor de la vivienda, es decir, las zonas cercanas a la bahía y a la costa tienden a ser más costosas, aunque la gran dispersión interna de cada grupo sugiere que otras variables, como el ingreso, explican la mayor parte de la variación.</p>
 <p>Veamos un gráfico de cajas y bigotes</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="EDA.html#cb44-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb44-2"><a href="EDA.html#cb44-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> ocean_proximity, <span class="at">y =</span> median_house_value))<span class="sc">+</span> </span>
 <span id="cb44-3"><a href="EDA.html#cb44-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/biboxplot-1.png" width="672" /></p>
-<p>##Paquete GGally</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="EDA.html#cb45-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
-<span id="cb45-2"><a href="EDA.html#cb45-2" tabindex="-1"></a>  <span class="fu">ggpairs</span>()</span></code></pre></div>
-<pre><code>## plot: [1, 1] [&gt;--------------------------------------------------------------------------] 1% est: 0s
-## plot: [1, 2] [=&gt;-------------------------------------------------------------------------] 2% est: 7s
-## plot: [1, 3] [=&gt;-------------------------------------------------------------------------] 3% est: 9s
-## plot: [1, 4] [==&gt;------------------------------------------------------------------------] 4% est: 9s
-## plot: [1, 5] [===&gt;-----------------------------------------------------------------------] 5% est:10s
-## plot: [1, 6] [===&gt;-----------------------------------------------------------------------] 6% est:11s
-## plot: [1, 7] [====&gt;----------------------------------------------------------------------] 7% est:11s
-## plot: [1, 8] [=====&gt;---------------------------------------------------------------------] 8% est:11s
-## plot: [1, 9] [======&gt;--------------------------------------------------------------------] 9% est:11s
-## plot: [1, 10] [======&gt;-------------------------------------------------------------------] 10% est:11s
-## plot: [2, 1] [=======&gt;-------------------------------------------------------------------] 11% est:11s
-## plot: [2, 2] [========&gt;------------------------------------------------------------------] 12% est:11s
-## plot: [2, 3] [=========&gt;-----------------------------------------------------------------] 13% est:11s
-## plot: [2, 4] [==========&gt;----------------------------------------------------------------] 14% est:11s
-## plot: [2, 5] [==========&gt;----------------------------------------------------------------] 15% est:11s
-## plot: [2, 6] [===========&gt;---------------------------------------------------------------] 16% est:11s
-## plot: [2, 7] [============&gt;--------------------------------------------------------------] 17% est:11s
-## plot: [2, 8] [=============&gt;-------------------------------------------------------------] 18% est:11s
-## plot: [2, 9] [=============&gt;-------------------------------------------------------------] 19% est:11s
-## plot: [2, 10] [==============&gt;-----------------------------------------------------------] 20% est:11s
-## plot: [3, 1] [===============&gt;-----------------------------------------------------------] 21% est:11s
-## plot: [3, 2] [===============&gt;-----------------------------------------------------------] 22% est:11s
-## plot: [3, 3] [================&gt;----------------------------------------------------------] 23% est:11s
-## plot: [3, 4] [=================&gt;---------------------------------------------------------] 24% est:10s
-## plot: [3, 5] [==================&gt;--------------------------------------------------------] 25% est:10s
-## plot: [3, 6] [===================&gt;-------------------------------------------------------] 26% est:10s
-## plot: [3, 7] [===================&gt;-------------------------------------------------------] 27% est:10s
-## plot: [3, 8] [====================&gt;------------------------------------------------------] 28% est:10s
-## plot: [3, 9] [=====================&gt;-----------------------------------------------------] 29% est:10s
-## plot: [3, 10] [=====================&gt;----------------------------------------------------] 30% est:10s
-## plot: [4, 1] [======================&gt;----------------------------------------------------] 31% est:10s
-## plot: [4, 2] [=======================&gt;---------------------------------------------------] 32% est: 9s
-## plot: [4, 3] [========================&gt;--------------------------------------------------] 33% est: 9s
-## plot: [4, 4] [=========================&gt;-------------------------------------------------] 34% est: 9s
-## plot: [4, 5] [=========================&gt;-------------------------------------------------] 35% est: 9s
-## plot: [4, 6] [==========================&gt;------------------------------------------------] 36% est: 9s
-## plot: [4, 7] [===========================&gt;-----------------------------------------------] 37% est: 9s
-## plot: [4, 8] [===========================&gt;-----------------------------------------------] 38% est: 9s
-## plot: [4, 9] [============================&gt;----------------------------------------------] 39% est: 9s
-## plot: [4, 10] [=============================&gt;--------------------------------------------] 40% est: 8s
-## plot: [5, 1] [==============================&gt;--------------------------------------------] 41% est: 8s
-## plot: [5, 2] [===============================&gt;-------------------------------------------] 42% est: 8s
-## plot: [5, 3] [===============================&gt;-------------------------------------------] 43% est: 8s
-## plot: [5, 4] [================================&gt;------------------------------------------] 44% est: 8s
-## plot: [5, 5] [=================================&gt;-----------------------------------------] 45% est: 8s
-## plot: [5, 6] [=================================&gt;-----------------------------------------] 46% est: 8s
-## plot: [5, 7] [==================================&gt;----------------------------------------] 47% est: 8s
-## plot: [5, 8] [===================================&gt;---------------------------------------] 48% est: 7s
-## plot: [5, 9] [====================================&gt;--------------------------------------] 49% est: 7s
-## plot: [5, 10] [====================================&gt;-------------------------------------] 50% est: 8s
-## plot: [6, 1] [=====================================&gt;-------------------------------------] 51% est: 7s
-## plot: [6, 2] [======================================&gt;------------------------------------] 52% est: 7s
-## plot: [6, 3] [=======================================&gt;-----------------------------------] 53% est: 7s
-## plot: [6, 4] [=======================================&gt;-----------------------------------] 54% est: 7s
-## plot: [6, 5] [========================================&gt;----------------------------------] 55% est: 7s
-## plot: [6, 6] [=========================================&gt;---------------------------------] 56% est: 7s
-## plot: [6, 7] [==========================================&gt;--------------------------------] 57% est: 6s
-## plot: [6, 8] [===========================================&gt;-------------------------------] 58% est: 6s
-## plot: [6, 9] [===========================================&gt;-------------------------------] 59% est: 6s
-## plot: [6, 10] [===========================================&gt;------------------------------] 60% est: 6s
-## plot: [7, 1] [=============================================&gt;-----------------------------] 61% est: 6s
-## plot: [7, 2] [=============================================&gt;-----------------------------] 62% est: 6s
-## plot: [7, 3] [==============================================&gt;----------------------------] 63% est: 5s
-## plot: [7, 4] [===============================================&gt;---------------------------] 64% est: 5s
-## plot: [7, 5] [================================================&gt;--------------------------] 65% est: 5s
-## plot: [7, 6] [=================================================&gt;-------------------------] 66% est: 5s
-## plot: [7, 7] [=================================================&gt;-------------------------] 67% est: 5s
-## plot: [7, 8] [==================================================&gt;------------------------] 68% est: 5s
-## plot: [7, 9] [===================================================&gt;-----------------------] 69% est: 5s
-## plot: [7, 10] [===================================================&gt;----------------------] 70% est: 4s
-## plot: [8, 1] [====================================================&gt;----------------------] 71% est: 4s
-## plot: [8, 2] [=====================================================&gt;---------------------] 72% est: 4s
-## plot: [8, 3] [======================================================&gt;--------------------] 73% est: 4s
-## plot: [8, 4] [=======================================================&gt;-------------------] 74% est: 4s
-## plot: [8, 5] [=======================================================&gt;-------------------] 75% est: 4s
-## plot: [8, 6] [========================================================&gt;------------------] 76% est: 3s
-## plot: [8, 7] [=========================================================&gt;-----------------] 77% est: 3s
-## plot: [8, 8] [=========================================================&gt;-----------------] 78% est: 3s
-## plot: [8, 9] [==========================================================&gt;----------------] 79% est: 3s
-## plot: [8, 10] [==========================================================&gt;---------------] 80% est: 3s
-## plot: [9, 1] [============================================================&gt;--------------] 81% est: 3s
-## plot: [9, 2] [============================================================&gt;--------------] 82% est: 3s
-## plot: [9, 3] [=============================================================&gt;-------------] 83% est: 2s
-## plot: [9, 4] [==============================================================&gt;------------] 84% est: 2s
-## plot: [9, 5] [===============================================================&gt;-----------] 85% est: 2s
-## plot: [9, 6] [===============================================================&gt;-----------] 86% est: 2s
-## plot: [9, 7] [================================================================&gt;----------] 87% est: 2s
-## plot: [9, 8] [=================================================================&gt;---------] 88% est: 2s
-## plot: [9, 9] [==================================================================&gt;--------] 89% est: 2s
-## plot: [9, 10] [==================================================================&gt;-------] 90% est: 1s
-## plot: [10, 1] [==================================================================&gt;-------] 91% est: 1s
-## `stat_bin()` using `bins = 30`. Pick better value `binwidth`. plot: [10, 2]
-## [===================================================================&gt;------] 92% est: 1s `stat_bin()`
-## using `bins = 30`. Pick better value `binwidth`. plot: [10, 3]
-## [====================================================================&gt;-----] 93% est: 1s `stat_bin()`
-## using `bins = 30`. Pick better value `binwidth`. plot: [10, 4]
-## [=====================================================================&gt;----] 94% est: 1s `stat_bin()`
-## using `bins = 30`. Pick better value `binwidth`. plot: [10, 5]
-## [=====================================================================&gt;----] 95% est: 1s `stat_bin()`
-## using `bins = 30`. Pick better value `binwidth`. plot: [10, 6]
-## [======================================================================&gt;---] 96% est: 1s `stat_bin()`
-## using `bins = 30`. Pick better value `binwidth`. plot: [10, 7]
-## [=======================================================================&gt;--] 97% est: 0s `stat_bin()`
-## using `bins = 30`. Pick better value `binwidth`. plot: [10, 8]
-## [========================================================================&gt;-] 98% est: 0s `stat_bin()`
-## using `bins = 30`. Pick better value `binwidth`. plot: [10, 9]
-## [========================================================================&gt;-] 99% est: 0s `stat_bin()`
-## using `bins = 30`. Pick better value `binwidth`. plot: [10, 10]
-## [=========================================================================]100% est: 0s</code></pre>
-<p><img src="bookdown-demo_files/figure-html/ggally-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/biboxplot-1.png" alt="" width="672" />
+El diagrama de cajas por categoría corrobora el patrón anterior: los boxplots de NEAR BAY y &lt;1H OCEAN se ubican en niveles superiores, mientras que INLAND presenta el nivel más bajo, con medianas que separan de manera clara los grupos. Aun así, los bigotes se solapan ampliamente entre categorías y todas exhiben numerosos valores atípicos superiores, lo cual refuerza que la proximidad al océano es un factor asociado al valor de la vivienda pero no un determinante único. En síntesis, la variable aporta información de agrupación útil, particularmente para distinguir las zonas más costosas del interior.</p>
 <p>Seguidamente, crearemos una función para analizar cada pareja de variables características numéricas</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="EDA.html#cb47-1" tabindex="-1"></a>graf_dispersion <span class="ot">&lt;-</span> <span class="cf">function</span>(var_x, var_y) {</span>
-<span id="cb47-2"><a href="EDA.html#cb47-2" tabindex="-1"></a>  df <span class="sc">%&gt;%</span> </span>
-<span id="cb47-3"><a href="EDA.html#cb47-3" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .data[[var_x]], <span class="at">y =</span> .data[[var_y]])) <span class="sc">+</span></span>
-<span id="cb47-4"><a href="EDA.html#cb47-4" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&#39;darkblue&#39;</span>) <span class="sc">+</span></span>
-<span id="cb47-5"><a href="EDA.html#cb47-5" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb47-6"><a href="EDA.html#cb47-6" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span>
-<span id="cb47-7"><a href="EDA.html#cb47-7" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="EDA.html#cb45-1" tabindex="-1"></a>graf_dispersion <span class="ot">&lt;-</span> <span class="cf">function</span>(var_x, var_y) {</span>
+<span id="cb45-2"><a href="EDA.html#cb45-2" tabindex="-1"></a>  df <span class="sc">%&gt;%</span> </span>
+<span id="cb45-3"><a href="EDA.html#cb45-3" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .data[[var_x]], <span class="at">y =</span> .data[[var_y]])) <span class="sc">+</span></span>
+<span id="cb45-4"><a href="EDA.html#cb45-4" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&#39;darkblue&#39;</span>) <span class="sc">+</span></span>
+<span id="cb45-5"><a href="EDA.html#cb45-5" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb45-6"><a href="EDA.html#cb45-6" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span>
+<span id="cb45-7"><a href="EDA.html#cb45-7" tabindex="-1"></a>}</span></code></pre></div>
 <p><span style="font-size:1.2em;"><strong>Gráficos de dispersión: independientes numéricas vs independientes numéricas</strong></span>.</p>
 <p><strong>Longitud vs Latitud:</strong></p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="EDA.html#cb48-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/longitude%20vs%20latitude-1.png" width="672" />
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="EDA.html#cb46-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/longitude%20vs%20latitude-1.png" alt="" width="672" />
 Podemos observar una marcada tendencia negativa en el gráfico de dispersión, esto señala que conforme aumenta el valor de la <em>Longitud</em>, el valor de la <em>Latitud</em> se ve disminuido. Seguidamente, podemos notar que no tiene una concentración clara de los datos más allá de cuando está entre los 34° en Latitud y -118° en Longitud ó cuando está entre 37°-38° Latitud y -122° en Longitud.</p>
 <p>Está claro que, aunque en menor medida que otros gráficos de dispersión, la variabilidad de los datos de latitud aumenta conforme disminuye la longitud, lo cual sugiere que en California la zona Sur es donde es más apto o más rentable la construcción de viviendas.</p>
 <p>En síntesis, la relación entre <em>Latitud</em> y <em>Longitud</em> es negativa, con tendencia negativa y aproximandamente lineal aunque con una ligera curva. Lo cual sugiere la independencia de estas dos variables.</p>
 <p><strong>Longitud vs Edad media de las casas:</strong></p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="EDA.html#cb49-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;housing_median_age&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/longitude%20vs%20housing_median_age-1.png" width="672" /></p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="EDA.html#cb47-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;housing_median_age&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/longitude%20vs%20housing_median_age-1.png" alt="" width="672" /></p>
 <p>En este gráfico no se observa una tendencia clara ni marcada, la nube de puntos se distribuye en bandas verticales a lo largo de casi todo el rango de edad (entre 1 y 52 años). Seguidamente, podemos notar que sí hay una concentración clara de los datos cuando la longitud está entre -122 y -118, coincidiendo con las zonas urbanas más antiguas y densamente construidas.</p>
 <p>Está claro que la variabilidad de la edad de las casas no cambia de forma sistemática con la longitud, lo cual sugiere que a la hora de invertir en una zona por su antigüedad de construcción, la posición este-oeste por sí sola no es un criterio útil; conviene mirar la ciudad o el municipio específico.</p>
 <p>En síntesis, la relación entre Longitud y Edad media de las casas es prácticamente nula, lo cual sugiere independencia entre estas dos variables.</p>
 <p><strong>Longitud vs Total de habitaciones:</strong></p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="EDA.html#cb50-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;total_rooms&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/longitude%20vs%20total_rooms-1.png" width="672" />
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="EDA.html#cb48-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;total_rooms&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/longitude%20vs%20total_rooms-1.png" alt="" width="672" />
 No se observa una tendencia definida en el gráfico de dispersión. Seguidamente, podemos notar que sí hay una concentración clara de los datos entre 0 y 8.000 habitaciones, independientemente del valor de longitud, con valores atípicos que llegan hasta cerca de 40.000 en longitudes puntuales como -122 y -116.</p>
 <p>Está claro que la variabilidad del total de habitaciones aumenta considerablemente en esas zonas urbanas específicas, lo cual sugiere que los desarrollos de gran tamaño (edificios, complejos residenciales) se concentran en las metrópolis costeras y no se distribuyen de forma pareja por todo el estado.</p>
 <p>En síntesis, la relación entre Longitud y Total de habitaciones es prácticamente nula, lo cual sugiere independencia entre estas dos variables.</p>
 <p><strong>Longitud vs Total de dormitorios:</strong></p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="EDA.html#cb51-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;total_bedrooms&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/longitude%20vs%20total_bedrooms-1.png" width="672" /></p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="EDA.html#cb49-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;total_bedrooms&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/longitude%20vs%20total_bedrooms-1.png" alt="" width="672" /></p>
 <p>No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 1.000 dormitorios, sin importar la longitud, con valores atípicos dispersos en las mismas zonas urbanas de siempre (-122° y -116°).</p>
 <p>Está claro que este comportamiento replica exactamente el observado con el total de habitaciones, lo cual sugiere que ambas variables aportan la misma señal de negocio, la oferta de vivienda de mayor tamaño está atada a las zonas metropolitanas, no a la longitud en sí.</p>
 <p>En síntesis, la relación entre Longitud y Total de dormitorios es prácticamente nula.</p>
 <p><strong>Longitud vs Población:</strong></p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="EDA.html#cb52-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;population&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/longitude-population-1.png" width="672" /></p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="EDA.html#cb50-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;population&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/longitude-population-1.png" alt="" width="672" /></p>
 <p>No se evidencia una tendencia clara. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 950 habitantes por bloque censal, con pocos valores atípicos que superan los 20.000 en longitudes puntuales.</p>
 <p>Está claro que la variabilidad de la población no depende de la posición este-oeste, sino de si el bloque censal cae en zona urbana o rural, lo cual sugiere que para estimar demanda de vivienda por densidad poblacional, es más útil clasificar por tipo de zona que por coordenada de longitud.</p>
 <p>En síntesis, la relación entre Longitud y Población es prácticamente nula, lo cual sugiere independencia entre estas dos variables.</p>
 <p><strong>Longitud vs Hogares:</strong></p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="EDA.html#cb53-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/longitude-households-1.png" width="672" />
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="EDA.html#cb51-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/longitude-households-1.png" alt="" width="672" />
 No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 1.200 hogares, comportamiento muy similar al de longitud vs población.</p>
 <p>Está claro que esta ausencia de relación es coherente con lo visto en las demás variables de tamaño poblacional frente a la longitud, lo cual sugiere que la cantidad de hogares por bloque no es un indicador que varíe según el desplazamiento este-oeste del estado.</p>
 <p>En síntesis, la relación entre Longitud y Hogares es prácticamente nula.</p>
 <p><strong>Longitud vs Ingreso medio:</strong></p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="EDA.html#cb54-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/longitude-median_income-1.png" width="672" /></p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="EDA.html#cb52-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/longitude-median_income-1.png" alt="" width="672" /></p>
 <p>No se observa una tendencia clara ni marcada. Seguidamente, podemos notar que hay una concentración clara de los datos entre 2.5 y 4.8 en ingreso medio, con un límite superior visible cercano a 15, más denso en las longitudes -122.5° y -116°.</p>
 <p>Está claro que el nivel de ingreso no varía de forma sistemática según la posición este-oeste, lo cual sugiere que la longitud por sí sola no sirve para segmentar zonas de mayor o menor poder adquisitivo; es la ubicación específica (ciudad, distrito) la que realmente marca la diferencia.</p>
 <p>En síntesis, la relación entre Longitud e Ingreso medio es prácticamente nula, lo cual sugiere independencia entre estas dos variables.</p>
 <p><strong>Latitud vs Edad media de las casas:</strong></p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="EDA.html#cb55-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;housing_median_age&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/latitude-housing_median_age-1.png" width="672" />
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="EDA.html#cb53-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;housing_median_age&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/latitude-housing_median_age-1.png" alt="" width="672" />
 No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos cuando la latitud está entre 33° y 35° y también entre 37.3° y 39°.</p>
 <p>En síntesis, la relación entre Latitud y Edad media de las casas es prácticamente nula, lo cual sugiere que la antigüedad de las viviendas no depende de la posición norte-sur del estado.</p>
 <p><strong>Latitud vs Total de habitaciones:</strong></p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="EDA.html#cb56-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;total_rooms&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/latitude-total_rooms-1.png" width="672" />
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="EDA.html#cb54-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;total_rooms&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/latitude-total_rooms-1.png" alt="" width="672" />
 No se observa una tendencia clara. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 5.00 habitaciones, con valores atípicos notorios en las latitudes 34° y 38°.</p>
 <p>Está claro que la variabilidad aumenta en esas franjas específicas, lo cual sugiere que la oferta de viviendas grandes se concentra en las mismas latitudes.</p>
 <p>En síntesis, la relación entre Latitud y Total de habitaciones es prácticamente nula.</p>
 <p><strong>Latitud vs Total de dormitorios:</strong></p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="EDA.html#cb57-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;total_bedrooms&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/latitude-total_bedrooms-1.png" width="672" />
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="EDA.html#cb55-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;total_bedrooms&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/latitude-total_bedrooms-1.png" alt="" width="672" />
 No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 500 dormitorios, replicando el mismo patrón que la latitud vs total de habitaciones.</p>
 <p>Está claro que ambas variables se comportan de forma prácticamente idéntica frente a la latitud, lo cual sugiere que, de nuevo, la variable relevante no es la posición geográfica en sí, sino si el bloque pertenece a una zona metropolitana o rural.</p>
 <p>En síntesis, la relación entre Latitud y Total de dormitorios es prácticamente nula.</p>
 <p><strong>Latitud vs Población:</strong></p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="EDA.html#cb58-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;population&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/latitude-population-1.png" width="672" />
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="EDA.html#cb56-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;population&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/latitude-population-1.png" alt="" width="672" />
 No se observa una tendencia clara. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 1.200 habitantes, con algunos valores atípicos elevados en las latitudes 33 y 38.</p>
 <p>Está claro que la densidad poblacional no varía de forma sistemática con la latitud, lo cual sugiere que para fines de planeación urbana o comercial, es más útil identificar directamente las zonas metropolitanas que usar la latitud.</p>
 <p>En síntesis, la relación entre Latitud y Población es prácticamente nula.</p>
 <p><strong>Latitud vs Hogares:</strong></p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="EDA.html#cb59-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/latitude-households-1.png" width="672" />
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="EDA.html#cb57-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/latitude-households-1.png" alt="" width="672" />
 No se observa una tendencia definida. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 500 hogares, comportamiento equivalente al de latitud vs población.</p>
 <p>Está claro que la ausencia de relación es consistente con las demás variables de tamaño poblacional, lo cual sugiere que la latitud no aporta valor predictivo sobre la cantidad de hogares de una zona.</p>
 <p>En síntesis, la relación entre Latitud y Hogares es prácticamente nula.</p>
 <p><strong>Latitud vs Ingreso medio:</strong></p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="EDA.html#cb60-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/latitude-median_income-1.png" width="672" />
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="EDA.html#cb58-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/latitude-median_income-1.png" alt="" width="672" />
 No se observa una tendencia clara. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 5 en ingreso medio, más denso en las latitudes 33°-34° y 37°-38°.</p>
 <p>Está claro que el nivel de ingreso no depende de la posición norte-sur por sí sola, lo cual sugiere que tanto el norte como el sur del estado tienen zonas de ingresos altos y bajos.</p>
 <p>En síntesis, la relación entre Latitud e Ingreso medio es prácticamente nula.</p>
 <p><strong>Edad media de las casas vs Total de habitaciones:</strong></p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="EDA.html#cb61-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;housing_median_age&quot;</span>, <span class="st">&quot;total_rooms&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/housing_median_age-total_rooms-1.png" width="672" />
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="EDA.html#cb59-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;housing_median_age&quot;</span>, <span class="st">&quot;total_rooms&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/housing_median_age-total_rooms-1.png" alt="" width="672" />
 Podemos observar una leve tendencia negativa en el gráfico de dispersión, esto señala que conforme aumenta el valor de la Edad media de las casas, el valor del Total de habitaciones se ve ligeramente disminuido. Seguidamente, podemos notar que no tiene una concentración clara de los datos más allá de cuando está entre 3 y 52 años de edad y entre 0 y 5.000 habitaciones.</p>
 <p>Está claro que, aunque en menor medida que otros gráficos de dispersión, la variabilidad del total de habitaciones disminuye conforme aumenta la edad de la vivienda, lo cual sugiere que las construcciones más recientes tienden a levantarse en bloques de mayor tamaño poblacional, siendo estas zonas potencialmente más atractivas.</p>
 <p>En síntesis, la relación entre Edad media de las casas y Total de habitaciones es negativa, con tendencia negativa y débilmente lineal.</p>
 <p><strong>Edad media de las casas vs Total de dormitorios:</strong></p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="EDA.html#cb62-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;housing_median_age&quot;</span>, <span class="st">&quot;total_bedrooms&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/housing_median_age-total_bedrooms-1.png" width="672" />
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="EDA.html#cb60-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;housing_median_age&quot;</span>, <span class="st">&quot;total_bedrooms&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/housing_median_age-total_bedrooms-1.png" alt="" width="672" />
 Podemos observar una leve tendencia negativa, esto señala que conforme aumenta la Edad media de las casas, el Total de dormitorios disminuye ligeramente. Seguidamente, podemos notar que hay concentración de datos entre 4 y 52 años y entre 0 y 1.000 dormitorios.</p>
 <p>Está claro que este comportamiento replica el visto con el total de habitaciones, lo cual sugiere nuevamente que las zonas de construcción más nueva son las que concentran mayor cantidad de habitaciones.</p>
 <p>En síntesis, la relación entre Edad media de las casas y Total de dormitorios es negativa, con tendencia negativa y débilmente lineal.</p>
 <p><strong>Edad media de las casas vs Población:</strong></p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="EDA.html#cb63-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;housing_median_age&quot;</span>, <span class="st">&quot;population&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/housing_median_age-population-1.png" width="672" />
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="EDA.html#cb61-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;housing_median_age&quot;</span>, <span class="st">&quot;population&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/housing_median_age-population-1.png" alt="" width="672" />
 Podemos observar una leve tendencia negativa, esto señala que conforme aumenta la Edad media de las casas, la Población del bloque poblacional disminuye ligeramente. Seguidamente, podemos notar concentración de datos entre 2 y 52 años y entre 0 y 5.000 habitantes.</p>
 <p>Está claro que las zonas con construcciones más antiguas tienden a estar levemente menos pobladas, lo cual sugiere que estas áreas podrían estar en proceso de despoblamiento o de menor renovación urbana frente a las zonas de construcción más reciente.</p>
 <p>En síntesis, la relación entre Edad media de las casas y Población es negativa, con tendencia negativa y débilmente lineal.</p>
 <p><strong>Edad media de las casas vs Hogares:</strong></p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="EDA.html#cb64-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;housing_median_age&quot;</span>, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/housing_median_age-households-1.png" width="672" />
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="EDA.html#cb62-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;housing_median_age&quot;</span>, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/housing_median_age-households-1.png" alt="" width="672" />
 Podemos observar una leve tendencia negativa, esto señala que conforme aumenta la Edad media de las casas, el número de Hogares disminuye ligeramente. Seguidamente, podemos notar concentración de datos entre 2 y 52 años y entre 0 y 900 hogares. Está claro que este patrón es consistente con el observado en población, lo cual sugiere que las zonas más antiguas del estado también concentran menos familias.</p>
 <p>En síntesis, la relación entre Edad media de las casas y Hogares es negativa, con tendencia negativa y débilmente lineal.</p>
 <p><strong>Edad media de las casas vs Ingreso medio:</strong></p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="EDA.html#cb65-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;housing_median_age&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/housing_median_age-median_income-1.png" width="672" />
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="EDA.html#cb63-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;housing_median_age&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/housing_median_age-median_income-1.png" alt="" width="672" />
 Podemos observar una tendencia negativa leve, apenas perceptible, esto señala que las zonas con viviendas más antiguas tienden a tener un ingreso medio ligeramente menor. Seguidamente, podemos notar que hay concentración de datos entre 10 y 52 años y entre 2.3 y 5 en ingreso medio.</p>
 <p>Está claro que, a diferencia de las otras variables de tamaño, aquí la variabilidad no cambia mucho con la edad, lo cual sugiere que la antigüedad de la construcción no es un buen predictor por sí solo del nivel socioeconómico de una zona.</p>
 <p>En síntesis, la relación entre Edad media de las casas e Ingreso medio es prácticamente nula, lo cual sugiere independencia entre estas dos variables.</p>
 <p><strong>Total de habitaciones vs Total de dormitorios:</strong></p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="EDA.html#cb66-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_rooms&quot;</span>, <span class="st">&quot;total_bedrooms&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/total_rooms-total_bedrooms-1.png" width="672" />
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="EDA.html#cb64-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_rooms&quot;</span>, <span class="st">&quot;total_bedrooms&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/total_rooms-total_bedrooms-1.png" alt="" width="672" />
 Podemos observar una marcada tendencia positiva en el gráfico de dispersión, esto señala que conforme aumenta el valor del Total de habitaciones, el valor del Total de dormitorios también se ve incrementado. Seguidamente, podemos notar que hay una concentración clara de los datos entre 0 y 7.000 habitaciones y entre 0 y 1.700 dormitorios.</p>
 <p>Está claro que, a diferencia de los gráficos anteriores, la variabilidad de ambas variables aumenta de forma conjunta y proporcional conforme crecen los valores, lo cual sugiere que basta con conocer el total de habitaciones de una zona para estimar de forma bastante confiable su total de dormitorios.</p>
 <p>En síntesis, la relación entre Total de habitaciones y Total de dormitorios es positiva, con tendencia positiva y fuertemente lineal, lo cual sugiere una alta dependencia entre estas dos variables.</p>
 <p><strong>Total de habitaciones vs Población:</strong></p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="EDA.html#cb67-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_rooms&quot;</span>, <span class="st">&quot;population&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/total_rooms-population-1.png" width="672" />
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="EDA.html#cb65-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_rooms&quot;</span>, <span class="st">&quot;population&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/total_rooms-population-1.png" alt="" width="672" />
 Podemos observar una marcada tendencia positiva, esto señala que conforme aumenta el Total de habitaciones, la Población también se ve incrementada. Seguidamente, podemos notar concentración de datos entre 0 y 11.000 habitaciones y entre 0 y 5.000 habitantes.</p>
 <p>Está claro que la dispersión se amplía considerablemente en los valores altos de ambas variables, lo cual sugiere que las zonas con mayor número de habitaciones efectivamente logran absorber más población, siendo un buen indicador de capacidad de acogida de un bloque poblacional.</p>
 <p>En síntesis, la relación entre Total de habitaciones y Población es positiva, con tendencia positiva y moderadamente lineal, contando con una dependencia moderada-alta.</p>
 <p><strong>Total de habitaciones vs Hogares:</strong></p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="EDA.html#cb68-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_rooms&quot;</span>, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/total_rooms-households-1.png" width="672" />
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="EDA.html#cb66-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_rooms&quot;</span>, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/total_rooms-households-1.png" alt="" width="672" />
 Podemos observar una marcada tendencia positiva, esto señala que conforme aumenta el Total de habitaciones, el número de Hogares también se ve incrementado. Seguidamente, podemos notar concentración de datos entre 0 y 9.000 habitaciones y entre 0 y 1.800 hogares.</p>
 <p>Está claro que esta es una de las relaciones más fuertes de todo el conjunto de variables, lo cual sugiere que ambas variables aportan prácticamente la misma información sobre el tamaño poblacional, siendo buena candidata para combinarlas en un ratio como habitaciones por hogar en vez de mantenerlas por separado.</p>
 <p>En síntesis, la relación entre Total de habitaciones y Hogares es positiva, con tendencia positiva y fuertemente lineal, lo cual sugiere una alta dependencia entre estas dos variables.</p>
 <p><strong>Total de habitaciones vs Ingreso medio:</strong></p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="EDA.html#cb69-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_rooms&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/total_rooms-median_income-1.png" width="672" />
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="EDA.html#cb67-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_rooms&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/total_rooms-median_income-1.png" alt="" width="672" />
 Podemos observar una tendencia positiva leve en el gráfico de dispersión. Seguidamente, podemos notar que no tiene una concentración clara de los datos más allá de cuando está entre 0 y 5.000 habitaciones y entre 0 y 8 en ingreso medio.</p>
 <p>Está claro que, a diferencia de los gráficos entre variables de tamaño, aquí la variabilidad del ingreso no aumenta de forma proporcional con el total de habitaciones, lo cual sugiere que muchas habitaciones no necesariamente implica residentes de mayor poder adquisitivo, siendo el tamaño de la vivienda y el nivel de ingreso factores relativamente independientes.</p>
 <p>En síntesis, la relación entre Total de habitaciones e Ingreso medio es positiva pero débil, lo cual sugiere una dependencia mínima entre estas dos variables.</p>
 <p><strong>Total de dormitorios vs Población:</strong></p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="EDA.html#cb70-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_bedrooms&quot;</span>, <span class="st">&quot;population&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/total_bedrooms-population-1.png" width="672" />
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="EDA.html#cb68-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_bedrooms&quot;</span>, <span class="st">&quot;population&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/total_bedrooms-population-1.png" alt="" width="672" />
 Podemos observar una marcada tendencia positiva, esto señala que conforme aumenta el Total de dormitorios, la Población también se ve incrementada. Seguidamente, podemos notar concentración de datos entre 0 y 1.700 dormitorios y entre 0 y 4.600 habitantes.</p>
 <p>Está claro que este comportamiento replica el de total de habitaciones vs población, lo cual sugiere que el número de dormitorios disponibles es también un buen indicador de la capacidad para albergar población.</p>
 <p>En síntesis, la relación entre Total de dormitorios y Población es positiva, con tendencia positiva y moderadamente lineal.</p>
 <p><strong>Total de dormitorios vs Hogares:</strong></p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="EDA.html#cb71-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_bedrooms&quot;</span>, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/total_bedrooms-households-1.png" width="672" />
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="EDA.html#cb69-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_bedrooms&quot;</span>, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/total_bedrooms-households-1.png" alt="" width="672" />
 Podemos observar la tendencia positiva más marcada y lineal de todo el conjunto de gráficos, esto señala que conforme aumenta el Total de dormitorios, el número de Hogares aumenta casi en la misma proporción. Seguidamente, podemos notar concentración de datos entre 0 y 2.000 dormitorios y entre 0 y 1.500 hogares.</p>
 <p>Está claro que ambas variables prácticamente se determinan una a la otra, lo cual sugiere que mantener las dos en un modelo predictivo aportaría información redundante, siendo más eficiente resumirlas en una sola métrica como dormitorios por hogar.</p>
 <p>En síntesis, la relación entre Total de dormitorios y Hogares es positiva, con tendencia positiva y casi perfectamente lineal, lo cual sugiere una redundancia muy alta entre estas dos variables.</p>
 <p><strong>Total de dormitorios vs Ingreso medio:</strong></p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="EDA.html#cb72-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_bedrooms&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/total_bedrooms-median_income-1.png" width="672" />
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="EDA.html#cb70-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;total_bedrooms&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/total_bedrooms-median_income-1.png" alt="" width="672" />
 No se observa una tendencia clara en el gráfico de dispersión. Seguidamente, podemos notar que hay concentración de datos entre 0 y 1.600 dormitorios y entre 0 y 7.5 en ingreso medio.</p>
 <p>Está claro que el nivel de ingreso no depende de la cantidad de dormitorios disponibles en la zona, lo cual sugiere que el poder adquisitivo de los residentes no está condicionado por la cantidad de habitaciones del bloque censal donde viven.</p>
 <p>En síntesis, la relación entre Total de dormitorios e Ingreso medio es prácticamente nula, lo cual sugiere independencia entre estas dos variables.</p>
 <p><strong>Población vs Hogares:</strong></p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="EDA.html#cb73-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;population&quot;</span>, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/population-households-1.png" width="672" />
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="EDA.html#cb71-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;population&quot;</span>, <span class="st">&quot;households&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/population-households-1.png" alt="" width="672" />
 Podemos observar una marcada tendencia positiva y fuertemente lineal, esto señala que conforme aumenta la Población, el número de Hogares aumenta en la misma proporción. Seguidamente, podemos notar concentración de datos entre 0 y 5.000 habitantes y entre 0 y 1.700 hogares.</p>
 <p>Está claro que esta es una relación totalmente esperable, ya que la población está compuesta directamente por los integrantes de los hogares, lo cual sugiere que esta es, junto con total de dormitorios vs hogares, la pareja más redundante del dataset y una candidata clara para simplificar en la ingeniería de características.</p>
 <p>En síntesis, la relación entre Población y Hogares es positiva, con tendencia positiva y fuertemente lineal.</p>
 <p><strong>Población vs Ingreso medio:</strong></p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="EDA.html#cb74-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;population&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/population-median_income-1.png" width="672" />
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="EDA.html#cb72-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;population&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/population-median_income-1.png" alt="" width="672" />
 No se observa una tendencia clara en el gráfico de dispersión. Seguidamente, podemos notar que hay concentración de datos entre 0 y 4.000 habitantes y entre 0 y 7 en ingreso medio.</p>
 <p>Está claro que la densidad poblacional de una zona no está relacionada con su nivel de ingreso, lo cual sugiere que tanto zonas muy pobladas como poco pobladas pueden tener residentes de ingresos altos o bajos.</p>
 <p>En síntesis, la relación entre Población e Ingreso medio es prácticamente nula, lo cual sugiere independencia entre estas dos variables.</p>
 <p><strong>Hogares vs Ingreso medio:</strong></p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="EDA.html#cb75-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;households&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/households-median_income-1.png" width="672" />
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="EDA.html#cb73-1" tabindex="-1"></a><span class="fu">graf_dispersion</span>(<span class="st">&quot;households&quot;</span>, <span class="st">&quot;median_income&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/households-median_income-1.png" alt="" width="672" />
 No se observa una tendencia clara en el gráfico de dispersión. Seguidamente, podemos notar que hay concentración de datos entre 0 y 1.200 hogares y entre 0 y 6.5 en ingreso medio.</p>
 <p>Está claro que la cantidad de hogares de un bloque poblacional no está relacionada con el nivel de ingreso de sus habitantes, lo cual sugiere que el tamaño de la comunidad (en número de hogares) no debe usarse como indicador del nivel socioeconómico de la zona.</p>
 <p>En síntesis, la relación entre Hogares e Ingreso medio es prácticamente nula, lo cual sugiere independencia entre estas dos variables.</p>
@@ -805,18 +695,18 @@ No se observa una tendencia clara en el gráfico de dispersión. Seguidamente, p
 <div id="ingeniería-de-características" class="section level2 hasAnchor" number="1.4">
 <h2><span class="header-section-number">1.4</span> Ingeniería de características<a href="EDA.html#ingenier%C3%ADa-de-caracter%C3%ADsticas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Con base en la matriz de correlación, identificamos que total_rooms, total_bedrooms, population y households están altamente correlacionadas entre sí, ya que todas escalan según el tamaño del bloque censal. Para reducir esta redundancia, eliminamos estas 4 variables originales y las combinamos en 4 nuevas variables; habitaciones_por_hogar, dormitorios_por_habitacion, poblacion_por_hogar e ingreso_por_persona.</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="EDA.html#cb76-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
-<span id="cb76-2"><a href="EDA.html#cb76-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb76-3"><a href="EDA.html#cb76-3" tabindex="-1"></a>    <span class="at">rooms_per_household     =</span> total_rooms <span class="sc">/</span> households,</span>
-<span id="cb76-4"><a href="EDA.html#cb76-4" tabindex="-1"></a>    <span class="at">bedrooms_by_room =</span> total_bedrooms <span class="sc">/</span> total_rooms,</span>
-<span id="cb76-5"><a href="EDA.html#cb76-5" tabindex="-1"></a>    <span class="at">population_per_household        =</span> population <span class="sc">/</span> households,</span>
-<span id="cb76-6"><a href="EDA.html#cb76-6" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb76-7"><a href="EDA.html#cb76-7" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>total_rooms, <span class="sc">-</span>total_bedrooms, <span class="sc">-</span>population, <span class="sc">-</span>households)</span>
-<span id="cb76-8"><a href="EDA.html#cb76-8" tabindex="-1"></a></span>
-<span id="cb76-9"><a href="EDA.html#cb76-9" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
-<span id="cb76-10"><a href="EDA.html#cb76-10" tabindex="-1"></a>  <span class="fu">select</span>(rooms_per_household, bedrooms_by_room, </span>
-<span id="cb76-11"><a href="EDA.html#cb76-11" tabindex="-1"></a>         population_per_household)<span class="sc">%&gt;%</span> </span>
-<span id="cb76-12"><a href="EDA.html#cb76-12" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="EDA.html#cb74-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb74-2"><a href="EDA.html#cb74-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb74-3"><a href="EDA.html#cb74-3" tabindex="-1"></a>    <span class="at">rooms_per_household     =</span> total_rooms <span class="sc">/</span> households,</span>
+<span id="cb74-4"><a href="EDA.html#cb74-4" tabindex="-1"></a>    <span class="at">bedrooms_by_room =</span> total_bedrooms <span class="sc">/</span> total_rooms,</span>
+<span id="cb74-5"><a href="EDA.html#cb74-5" tabindex="-1"></a>    <span class="at">population_per_household        =</span> population <span class="sc">/</span> households,</span>
+<span id="cb74-6"><a href="EDA.html#cb74-6" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb74-7"><a href="EDA.html#cb74-7" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>total_rooms, <span class="sc">-</span>total_bedrooms, <span class="sc">-</span>population, <span class="sc">-</span>households)</span>
+<span id="cb74-8"><a href="EDA.html#cb74-8" tabindex="-1"></a></span>
+<span id="cb74-9"><a href="EDA.html#cb74-9" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb74-10"><a href="EDA.html#cb74-10" tabindex="-1"></a>  <span class="fu">select</span>(rooms_per_household, bedrooms_by_room, </span>
+<span id="cb74-11"><a href="EDA.html#cb74-11" tabindex="-1"></a>         population_per_household)<span class="sc">%&gt;%</span> </span>
+<span id="cb74-12"><a href="EDA.html#cb74-12" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
 <pre><code>##   rooms_per_household bedrooms_by_room population_per_household
 ## 1            6.984127        0.1465909                 2.555556
 ## 2            6.238137        0.1557966                 2.109842
@@ -825,16 +715,16 @@ No se observa una tendencia clara en el gráfico de dispersión. Seguidamente, p
 ## 5            6.281853        0.1720959                 2.181467
 ## 6            4.761658        0.2317737                 2.139896</code></pre>
 <p><strong>Histograma y diagrama de cajas: rooms_per_household</strong></p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="EDA.html#cb78-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;rooms_per_household&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/rooms_per_household-1.png" width="672" />
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="EDA.html#cb76-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;rooms_per_household&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/rooms_per_household-1.png" alt="" width="672" />
 Podemos observar una distribución fuertemente sesgada hacia la derecha, con una concentración extremadamente marcada de los datos entre 0 y 15 habitaciones por hogar aproximadamente (donde se ubica la barra que llega hasta casi 20.000 de frecuencia). Seguidamente, podemos notar en el diagrama de cajas que la caja misma es prácticamente invisible de lo comprimida que está cerca de 0, mientras que existen valores atípicos que se disparan hasta más de 140 habitaciones por hogar. Está claro que estos outliers corresponden a bloques censales con muy pocos hogares registrados (posiblemente 1 o 2) frente a un total de habitaciones desproporcionadamente alto, lo cual distorsiona la escala visual de todo el gráfico. En síntesis, la variable rooms_per_household tiene una distribución muy concentrada y de cola larga, lo cual sugiere que, salvo por unos pocos casos extremos, la mayoría de los hogares en California tienen un número de habitaciones bastante homogéneo y razonable.</p>
 <p><strong>Histograma y diagrama de cajas: bedrooms_by_room</strong></p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="EDA.html#cb79-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;bedrooms_by_room&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/bedrooms_by_room-1.png" width="672" />
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="EDA.html#cb77-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;bedrooms_by_room&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/bedrooms_by_room-1.png" alt="" width="672" />
 A diferencia de los dos gráficos anteriores, aquí la concentración de los datos es más moderada, ubicándose principalmente entre 0.1 y 0.3 (es decir, entre el 10% y el 30% de las habitaciones de un bloque censal corresponden a dormitorios), lo cual es un valor arquitectónicamente coherente. Seguidamente, podemos notar en el diagrama de cajas que, aunque también existen valores atípicos hacia arriba (hasta cerca de 3.5, lo cual significaría más dormitorios que habitaciones totales, algo lógicamente imposible), la dispersión general es bastante menor que en las otras dos variables. Está claro que un valor de bedrooms_by_room superior a 1 es matemáticamente inconsistente, ya que implicaría que total_bedrooms supera a total_rooms, lo cual sugiere un error de captura en esos registros específicos más que un caso extremo real. En síntesis, la variable bedrooms_by_room es la más estable de las tres, aunque los valores atípicos por encima de 1 deberían filtrarse o corregirse, ya que rompen la lógica misma de la variable (los dormitorios no pueden ser más que el total de habitaciones).</p>
 <p><strong>Histograma y diagrama de cajas: population_per_household</strong></p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="EDA.html#cb80-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;population_per_household&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/population_per_household-1.png" width="672" />
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="EDA.html#cb78-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, <span class="st">&quot;population_per_household&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/population_per_household-1.png" alt="" width="672" />
 Podemos observar el mismo patrón de sesgo extremo hacia la derecha, con una concentración muy marcada de los datos cerca de 0 (la inmensa mayoría de los bloques censales tiene entre 1 y 5 personas por hogar aproximadamente, lo cual es un valor demográficamente esperable). Seguidamente, podemos notar en el diagrama de cajas un valor atípico particularmente extremo, cercano a 1.200 personas por hogar, además de otros valores más moderados alrededor de 250-600. Está claro que ese valor de 1.200 es prácticamente imposible en la realidad para un solo hogar, lo cual sugiere que se trata de un bloque censal con un número de hogares registrado erróneamente bajo (posiblemente 1), más que de una situación demográfica real. En síntesis, la variable population_per_household está fuertemente concentrada en valores bajos y razonables, pero contiene al menos un caso que amerita revisión antes de continuar con el modelado, ya que podría tratarse de un error de captura de datos.</p>
 
 </div>
@@ -899,20 +789,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

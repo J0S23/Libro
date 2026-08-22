@@ -24,6 +24,8 @@ df <- read_excel("Data/datos_medicos.xlsx")
 summary(df)
 ```
 
+Sin valores faltantes, con 100 mediciones por tipo de presión.
+
 Se transforma la variable `Presion` a factor y se separan los valores de presión sistólica y diastólica en vectores independientes.
 
 ```{r transform-presion}
@@ -76,11 +78,15 @@ ks.test(dfs, "pnorm", mean = mean(dfs), sd = sd(dfs))
 ks.test(dfd, "pnorm", mean = mean(dfd), sd = sd(dfd))
 ```
 
+El test de KS no rechaza la normalidad en la sistólica (p > 0.05) y sí la rechaza en la diastólica (p < 0.05), coherente con su sesgo positivo y leptocurtosis.
+
 ## Homocedasticidad: razón de varianzas
 
 ```{r vartest-presion}
 var.test(dfs, dfd)
 ```
+
+F ≈ 0.93, p > 0.05: no se rechaza la igualdad de varianzas, condición que habilita el t-test con varianza combinada.
 
 Verificación manual, paso a paso, del teorema de la razón de varianzas.
 
@@ -103,11 +109,15 @@ F_manual; df1; df2; p_valor_F
 c(IC_inf_F, IC_sup_F)
 ```
 
+Los valores coinciden con la salida de `var.test`.
+
 ## Diferencia de medias, varianzas iguales
 
 ```{r ttest-presion}
 t.test(x = dfs, y = dfd, var.equal = TRUE, paired = FALSE)
 ```
+
+t(198) ≈ 33, p < 0.001: la diferencia sistólica–diastólica (~42 mmHg) es estadísticamente significativa.
 
 Verificación manual, paso a paso, del teorema de la diferencia de medias con varianza combinada.
 
@@ -129,6 +139,8 @@ t_manual; df_t; p_valor_t
 c(IC_inf_t, IC_sup_t)
 ```
 
+Coincide con la salida de `t.test`.
+
 ## Diferencia de medias con distribución normal (z)
 
 ```{r ztest-presion}
@@ -136,6 +148,8 @@ z.test(x = dfs, y = dfd,
        sigma.x = sd(dfs), sigma.y = sd(dfd),
        alternative = "two.sided")
 ```
+
+El z-test replica el t-test (z ≈ 32, p < 0.001), resultado esperado con n = 100 por el teorema del límite central.
 
 Verificación manual aplicando el mismo teorema pero con distribución normal en vez de t. Dada la ley de los grandes números, con n1=n2=100 se obtienen resultados prácticamente iguales al t-test.
 
@@ -153,11 +167,15 @@ z_manual; p_valor_z
 c(IC_inf_z, IC_sup_z)
 ```
 
+Coincide con la salida de `z.test`.
+
 ## Tamaño del efecto (presión)
 
 ```{r cohend-presion}
 cohen.d(dfs, dfd, paired = FALSE)
 ```
+
+d ≈ 4.7: efecto enorme, la diferencia equivale a casi cinco desviaciones estándar.
 
 ## Objetivo 2: precio según tipo de cuenta (Inversión vs Ganancia)
 
@@ -168,6 +186,8 @@ df <- read_excel("Data/datos_economia.xlsx")
 df$`Tipo de cuenta` <- factor(df$`Tipo de cuenta`)
 summary(df)
 ```
+
+100 precios por tipo de cuenta, con la variable codificada como factor.
 
 Resumen estadístico.
 
@@ -203,6 +223,8 @@ dfi <- df %>% filter(`Tipo de cuenta` == "Inversion") %>% pull(Precio)
 dfg <- df %>% filter(`Tipo de cuenta` == "Ganancia") %>% pull(Precio)
 ```
 
+Se separan los precios en dos muestras independientes para las pruebas de dos grupos.
+
 ## Supuesto de normalidad (economía)
 
 Ho: X ~ N(μ, σ²) vs Ha: X !~ N(μ, σ²)
@@ -211,6 +233,8 @@ Ho: X ~ N(μ, σ²) vs Ha: X !~ N(μ, σ²)
 shapiro.test(dfi)
 shapiro.test(dfg)
 ```
+
+Shapiro-Wilk rechaza la normalidad en ambos grupos (p < 0.05), coherente con las colas pesadas observadas; orienta a usar las pruebas robustas y el t-test de Welch.
 
 ## Homocedasticidad (economía)
 
@@ -222,11 +246,15 @@ F de Fisher (dos grupos, asume normalidad):
 var.test(dfi, dfg)
 ```
 
+F ≈ 22, p < 0.001: se rechaza la igualdad de varianzas, esperable con la DS de inversión 5 veces mayor; se toma con cautela por la asunción de normalidad.
+
 Bartlett: usa el estadístico Chi-cuadrado, es muy sensible a la no normalidad.
 
 ```{r bartlett-economia}
 bartlett.test(list(dfi, dfg))
 ```
+
+Bartlett también rechaza (p < 0.001); al ser sensible a la no normalidad, se contrasta con Levene y Fligner-Killeen.
 
 Levene: usa el estadístico F, basado en desviaciones absolutas respecto a la media (más robusto que Bartlett ante no normalidad).
 
@@ -234,11 +262,15 @@ Levene: usa el estadístico F, basado en desviaciones absolutas respecto a la me
 leveneTest(Precio ~ `Tipo de cuenta`, data = df)
 ```
 
+Levene confirma la heterocedasticidad (p < 0.001) sin depender de la normalidad.
+
 Fligner-Killeen: no paramétrico, usa el estadístico Chi-cuadrado, el más robusto ante outliers y no normalidad.
 
 ```{r fligner-economia}
 fligner.test(list(dfi, dfg))
 ```
+
+Fligner-Killeen, la más robusta, también rechaza (p < 0.001). Las cuatro pruebas coinciden: varianzas diferentes → usar Welch.
 
 ## t-test de Welch (economía)
 
@@ -246,11 +278,15 @@ fligner.test(list(dfi, dfg))
 t.test(dfi, dfg, var.equal = FALSE, paired = FALSE)
 ```
 
+Welch rechaza Ho (t ≈ 46, p < 0.001): el precio promedio de la inversión es ~6 veces mayor, la diferencia es significativa.
+
 ## Tamaño del efecto (economía)
 
 ```{r cohend-economia}
 cohen.d(dfi, dfg, paired = FALSE)
 ```
+
+d ≈ 6.5: efecto enorme, de varias desviaciones estándar.
 
 ## 4.2 Intervención educativa: t-test pareado
 
@@ -264,6 +300,8 @@ datos <- data.frame(
 )
 ```
 
+10 estudiantes con mediciones pareadas antes y después, lo cual justifica el t-test pareado.
+
 Supuesto de normalidad.
 
 ```{r normalidad-intervencion}
@@ -271,11 +309,15 @@ shapiro.test(datos$antes)
 shapiro.test(datos$despues)
 ```
 
+Con n = 10, Shapiro-Wilk no rechaza la normalidad (p > 0.05).
+
 Diferencia entre las medias: Ho: μ(despues) = μ(antes) vs Ha: μ(despues) != μ(antes)
 
 ```{r ttest-pareado}
 t.test(x = datos$despues, y = datos$antes, paired = TRUE)
 ```
+
+t(9) ≈ -0.21, p ≈ 0.84: no hay diferencia significativa entre antes y después; la intervención no produjo un cambio medible en esta muestra.
 
 Verificación manual, paso a paso, del teorema de la diferencia de medias para datos pareados.
 
@@ -298,11 +340,15 @@ t_pareado_manual; df_pareado; p_valor_pareado
 c(IC_inf_pareado, IC_sup_pareado)
 ```
 
+Coincide con la salida de `t.test` (t ≈ -0.21, p ≈ 0.84).
+
 ## Tamaño del efecto (intervención)
 
 ```{r cohend-intervencion}
 cohen.d(datos$despues, datos$antes, paired = TRUE)
 ```
+
+d ≈ -0.07: efecto nulo, consistente con la no significancia.
 
 ## 4.3 Peso al nacer según hábito de fumar (t-test vs Mann-Whitney)
 
@@ -310,6 +356,8 @@ cohen.d(datos$despues, datos$antes, paired = TRUE)
 data('births')
 df <- births
 ```
+
+Datos `births` (openintro) de 1.236 madres; se compara el peso al nacer según el hábito de fumar.
 
 Supuesto de normalidad por grupo.
 
@@ -343,6 +391,8 @@ df %>%
             Coef_asim = skewness(weight))
 ```
 
+El peso promedio y la mediana son ligeramente mayores en el grupo de no fumadoras, con variabilidad similar entre grupos; la diferencia aparente es de magnitud pequeña.
+
 ## Homogeneidad de varianzas (births)
 
 Ho: σ²(smoker) = σ²(nonsmoker)
@@ -361,6 +411,8 @@ Prueba paramétrica: t-test de Welch. Ho: μ(smoker) = μ(nonsmoker) vs Ha: μ(s
 t.test(weight ~ smoke, data = df, var.equal = FALSE)
 ```
 
+Welch da p ≈ 0.13: no se rechaza Ho, no hay diferencia significativa en el peso al nacer entre los grupos.
+
 Prueba no paramétrica: Mann-Whitney (Wilcoxon). Ho: mediana(smoker) = mediana(nonsmoker) vs Ha: mediana(smoker) != mediana(nonsmoker)
 
 ```{r wilcox-births}
@@ -375,6 +427,8 @@ Tamaño del efecto (no paramétrico, coherente con Wilcoxon).
 cliff.delta(weight ~ smoke, data = df)
 ```
 
+El delta de Cliff es prácticamente nulo: la diferencia entre distribuciones es de magnitud despreciable, consistente con las pruebas previas.
+
 ## Estadística no paramétrica pareada (percepción Q1)
 
 ```{r carga-dataq}
@@ -383,6 +437,8 @@ head(df)
 df <- df %>%
   mutate(across(c(Experimento, Genero, `Nivel.educativo`), as.factor))
 ```
+
+Percepciones Q1 antes y después del experimento, pareadas por participante, con las variables de control codificadas como factores.
 
 Resumen estadístico.
 
@@ -398,6 +454,8 @@ df %>%
             max = max(Q1))
 ```
 
+Medias y medianas de Q1 muy similares entre pretest y post-test, con dispersión acotada al rango de la escala.
+
 Supuesto de normalidad.
 
 ```{r normalidad-dataq}
@@ -411,6 +469,8 @@ df %>%
             est_l = lillie.test(Q1)$statistic,
             p_l = lillie.test(Q1)$p.value)
 ```
+
+Al ser Q1 una variable ordinal, la normalidad es cuestionable de entrada; el resultado orienta al método no paramétrico pareado.
 
 Wilcox asume que los datos no son pareados por defecto, por lo que se separan explícitamente los grupos antes de indicar `paired = TRUE`.
 
@@ -444,6 +504,8 @@ df <- data.frame(Empleados = c(0.66, 0.63, 0.65, 0.69, 0.44, 0.63, 0.61, 0.42, 0
                  NoExpuestos = c(0.93, 0.99, 0.96, 0.74, 0.81, 0.93, 0.63, 0.68, 0.99, NA))
 ```
 
+Tres poblaciones con faltantes no balanceados (10, 7 y 9 observaciones válidas).
+
 Omitiendo los datos nulos
 
 ```{r omitir nulos}
@@ -451,6 +513,8 @@ empleados <- na.omit(df$Empleados)
 agricultores <- na.omit(df$Agricultores)
 no_expuestos <- na.omit(df$NoExpuestos)
 ```
+
+Quedan 10 empleados, 7 agricultores y 9 no expuestos (N = 26).
 
 Hallemos el tamaño  y la cantidad de tratamientos
 ```{r tamaño y cantidad de tratamientos}
@@ -462,6 +526,8 @@ k = ncol(df)
 
 ```
 
+N = 26 y k = 3, con grados de libertad k−1 = 2 y N−k = 23.
+
 Hallemos el promedio de cada tratamiento y el promedio global
 
 ```{r promedio de cada tratamiento y global}
@@ -470,6 +536,9 @@ xbar_2 <- mean(agricultores)
 xbar_3 <- mean(no_expuestos)
 xbar_total <- (sum(empleados)+sum(agricultores)+sum(no_expuestos))/N
 ```
+
+Medias por tratamiento: 0.578 (empleados), 0.693 (agricultores) y 0.851 (no expuestos); la separación más marcada es entre no expuestos y empleados.
+
 Hallamos SST, SSA y SSE
 ```{r SST, SSA y SSE}
 SST = sum((empleados-xbar_total)^2)+sum((agricultores-xbar_total)^2)+sum((no_expuestos-xbar_total)^2)
@@ -478,11 +547,16 @@ SSA = n1 * (xbar_1-xbar_total)^2 + n2 * (xbar_2-xbar_total)^2 + n3 * (xbar_3-xba
 
 SSE = SST-SSA
 ```
+
+SST ≈ 0.679 = SSA ≈ 0.354 (entre tratamientos) + SSE ≈ 0.324 (error); la variación entre grupos absorbe más de la mitad de la variación total.
+
 Hallamos MSE y MSA
 ```{r MSE y MSA}
-MSE = SSE/(k-1)
-MSA = SSA/(N-1)
+MSE = SSE/(N-k)
+MSA = SSA/(k-1)
 ```
+
+MSA ≈ 0.177 y MSE ≈ 0.014; su razón define el estadístico F.
 
 Hallamos el estadístico F de Fischer y el valor crítico con un 95% de confianza
 ```{r F F_crit}
@@ -493,11 +567,12 @@ v2 = N-k
 F_critico = qf(1-alpha,df1 = v1, df2=v2)
 F>F_critico
 ```
+
+F ≈ 12.6 > F_crit(2,23) = 3.42: al menos una media difiere de las demás.
+
 Hallamos el p_valor
 ```{r p_valor}
 pvalor = 1-pf(F,v1,v2)
 pvalor
 ```
-Finalmente, se evidencia que F<F_critico y también el p valor es 0.91>0.05, por lo tanto no se rechaza Ho, es decir, no existen diferencias significativas entre las medias de los tres tratamientos
-
-
+Finalmente, se evidencia que F > F_critico y el p-valor (≈ 0.0002) es menor a 0.05, por lo tanto se rechaza Ho, es decir, sí existen diferencias significativas entre las medias de los tres tratamientos; la diferencia está motivada principalmente por la población de no expuestos (media 0.851), notablemente mayor que la de empleados (0.578). Para identificar qué pares de medias difieren se requeriría un análisis post-hoc (p. ej., Tukey HSD).
