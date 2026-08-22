@@ -238,12 +238,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Veamos si hay datos faltantes</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="EDA.html#cb7-1" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
 <span id="cb7-2"><a href="EDA.html#cb7-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
-<pre><code>##   NA_longitude NA_latitude NA_housing_median_age NA_total_rooms
-## 1            0           0                     0              0
-##   NA_total_bedrooms NA_population NA_households NA_median_income
-## 1               207             0             0                0
-##   NA_median_house_value NA_ocean_proximity
-## 1                     0                  0</code></pre>
+<pre><code>##   NA_longitude NA_latitude NA_housing_median_age NA_total_rooms NA_total_bedrooms
+## 1            0           0                     0              0               207
+##   NA_population NA_households NA_median_income NA_median_house_value
+## 1             0             0                0                     0
+##   NA_ocean_proximity
+## 1                  0</code></pre>
 <p>Otra forma de detectar valores faltantes</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="EDA.html#cb9-1" tabindex="-1"></a><span class="fu">missmap</span>(data)</span></code></pre></div>
 <p><img src="bookdown-demo_files/figure-html/otraforma-1.png" alt="" width="672" /></p>
@@ -256,12 +256,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Verificar si tiene datos faltantes nuevamente</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="EDA.html#cb11-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb11-2"><a href="EDA.html#cb11-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
-<pre><code>##   NA_longitude NA_latitude NA_housing_median_age NA_total_rooms
-## 1            0           0                     0              0
-##   NA_total_bedrooms NA_population NA_households NA_median_income
-## 1                 0             0             0                0
-##   NA_median_house_value NA_ocean_proximity
-## 1                     0                  0</code></pre>
+<pre><code>##   NA_longitude NA_latitude NA_housing_median_age NA_total_rooms NA_total_bedrooms
+## 1            0           0                     0              0                 0
+##   NA_population NA_households NA_median_income NA_median_house_value
+## 1             0             0                0                     0
+##   NA_ocean_proximity
+## 1                  0</code></pre>
 <p>Vamos a convertir la variable ‘ocean_proximity’ en un factor</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="EDA.html#cb13-1" tabindex="-1"></a>df<span class="sc">$</span>ocean_proximity <span class="ot">&lt;-</span> <span class="fu">factor</span>(df<span class="sc">$</span>ocean_proximity)</span></code></pre></div>
 <div id="análisis-exploratorio-de-median_house_value-target" class="section level2 hasAnchor" number="1.1">
@@ -329,16 +329,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb18-18"><a href="EDA.html#cb18-18" tabindex="-1"></a>                 <span class="at">curtosis =</span> <span class="fu">kurtosis</span>(valor), </span>
 <span id="cb18-19"><a href="EDA.html#cb18-19" tabindex="-1"></a>                 <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(valor))</span></code></pre></div>
 <pre><code>## # A tibble: 8 × 12
-##   variable      n   media     sd mediana    RIC      Q1      Q3   minimo  maximo
-##   &lt;chr&gt;     &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
-## 1 househol… 20640  500.   3.82e2  409    3.25e2  280     605       1      6082  
-## 2 housing_… 20640   28.6  1.26e1   29    1.9 e1   18      37       1        52  
-## 3 latitude  20640   35.6  2.14e0   34.3  3.78e0   33.9    37.7    32.5      42.0
-## 4 longitude 20640 -120.   2.00e0 -118.   3.79e0 -122.   -118.   -124.     -114. 
-## 5 median_i… 20640    3.87 1.90e0    3.53 2.18e0    2.56    4.74    0.500    15.0
-## 6 populati… 20640 1425.   1.13e3 1166    9.38e2  787    1725       3     35682  
-## 7 total_be… 20640  538.   4.19e2  438    3.46e2  297     643.      1      6445  
-## 8 total_ro… 20640 2636.   2.18e3 2127    1.70e3 1448.   3148       2     39320  
+##   variable            n   media     sd mediana    RIC      Q1      Q3   minimo  maximo
+##   &lt;chr&gt;           &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+## 1 households      20640  500.   3.82e2  409    3.25e2  280     605       1      6082  
+## 2 housing_median… 20640   28.6  1.26e1   29    1.9 e1   18      37       1        52  
+## 3 latitude        20640   35.6  2.14e0   34.3  3.78e0   33.9    37.7    32.5      42.0
+## 4 longitude       20640 -120.   2.00e0 -118.   3.79e0 -122.   -118.   -124.     -114. 
+## 5 median_income   20640    3.87 1.90e0    3.53 2.18e0    2.56    4.74    0.500    15.0
+## 6 population      20640 1425.   1.13e3 1166    9.38e2  787    1725       3     35682  
+## 7 total_bedrooms  20640  538.   4.19e2  438    3.46e2  297     643.      1      6445  
+## 8 total_rooms     20640 2636.   2.18e3 2127    1.70e3 1448.   3148       2     39320  
 ## # ℹ 2 more variables: curtosis &lt;dbl&gt;, Coef_asim &lt;dbl&gt;</code></pre>
 <p>La variable <code>households</code> fue analizada a partir de 20.640 observaciones correspondientes a diferentes sectores del estado de California. Se obtuvo un promedio de 500 hogares por sector (DS = 382,32), donde el 50% de los sectores registran menos de 409 hogares. El valor mínimo registrado fue de 1 hogar, mientras que el máximo alcanzó los 6.082 hogares, evidenciando una alta variabilidad entre sectores. El rango intercuartílico indica que el 50% central de los valores se encuentra entre 280 y 605 hogares, con una amplitud de 325. La diferencia entre la media y la mediana sugiere una posible asimetría positiva en la distribución, asociada a la presencia de algunos sectores con un número de hogares considerablemente elevado.</p>
 <p>La variable <code>housing_median_age</code> fue analizada a partir de 20.640 observaciones. Se obtuvo una edad promedio de las viviendas de 28,6 años (DS = 12,61 años), donde el 50% de los sectores registran una edad mediana de las viviendas por debajo de 29 años. El valor mínimo registrado fue de 1 año, mientras que el máximo alcanzó los 52 años. El rango intercuartílico indica que el 50% central de los valores se encuentra entre 18 y 37 años, con una amplitud de 19 años. La cercanía entre la media y la mediana sugiere una distribución relativamente simétrica para esta variable.</p>
@@ -501,13 +501,13 @@ La relación entre <code>longitude</code> y <code>median_house_value</code> tamb
 <span id="cb42-12"><a href="EDA.html#cb42-12" tabindex="-1"></a>                 <span class="at">curtosis =</span> <span class="fu">kurtosis</span>(median_house_value), </span>
 <span id="cb42-13"><a href="EDA.html#cb42-13" tabindex="-1"></a>                 <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(median_house_value))</span></code></pre></div>
 <pre><code>## # A tibble: 5 × 12
-##   ocean_proximity     n  media     sd mediana    RIC     Q1     Q3 minimo maximo
-##   &lt;fct&gt;           &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 &lt;1H OCEAN        9136 2.40e5 1.06e5  214850 125000 164100 289100  17500 500001
-## 2 INLAND           6551 1.25e5 7.00e4  108500  71450  77500 148950  14999 500001
-## 3 ISLAND              5 3.80e5 8.06e4  414700 150000 300000 450000 287500 450000
-## 4 NEAR BAY         2290 2.59e5 1.23e5  233800 183200 162500 345700  22500 500001
-## 5 NEAR OCEAN       2658 2.49e5 1.22e5  229450 172750 150000 322750  22500 500001
+##   ocean_proximity     n   media      sd mediana    RIC     Q1     Q3 minimo maximo
+##   &lt;fct&gt;           &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 &lt;1H OCEAN        9136 240084. 106124.  214850 125000 164100 289100  17500 500001
+## 2 INLAND           6551 124805.  70008.  108500  71450  77500 148950  14999 500001
+## 3 ISLAND              5 380440   80560.  414700 150000 300000 450000 287500 450000
+## 4 NEAR BAY         2290 259212. 122819.  233800 183200 162500 345700  22500 500001
+## 5 NEAR OCEAN       2658 249434. 122477.  229450 172750 150000 322750  22500 500001
 ## # ℹ 2 more variables: curtosis &lt;dbl&gt;, Coef_asim &lt;dbl&gt;</code></pre>
 <p>El resumen por categoría revela diferencias claras en el valor medio de la vivienda según la proximidad al océano: NEAR BAY y &lt;1H OCEAN presentan los valores medios más altos, INLAND se ubica en el extremo inferior, y NEAR OCEAN e ISLAND ocupan posiciones intermedias. Además, la desviación estándar es considerable en todas las categorías, lo cual indica que la proximidad al océano explica parte de la variabilidad pero no la determina por completo. En síntesis, existe una relación entre proximidad al océano y valor de la vivienda, es decir, las zonas cercanas a la bahía y a la costa tienden a ser más costosas, aunque la gran dispersión interna de cada grupo sugiere que otras variables, como el ingreso, explican la mayor parte de la variación.</p>
 <p>Veamos un gráfico de cajas y bigotes</p>
