@@ -21,38 +21,41 @@ library(rstatix)
 
 Conjunto de datos
 ```{r data}
-data <- read.csv("Data/cancer_reg.csv")
+data_cancer <- read.csv("Data/cancer_reg.csv")
+
+data_household <- read.csv("Data/avg-household-size.csv")
+
 ```
 
 Muestrame las 5 primeras filas
 
 ```{r filas}
-head(data, n= 5)
+head(data_cancer, n= 5)
 ```
 
 La estructura de los datos
 
 ```{r estructura}
-str(data)
+str(data_cancer)
 ```
 
 
 Veamos si hay datos faltantes
 
 ```{r faltante}
-data %>% 
+data_cancer %>% 
   summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
 ```
 
 Otra forma de detectar valores faltantes
 ```{r otraforma}
-missmap(data)
+missmap(data_cancer)
 ```
 
 Ahora hagamos la imputacion de datos faltantes
 
 ```{r imp}
-data %>% 
+data_cancer %>% 
   mutate(across(
     where(is.numeric),
     ~ ifelse(is.na(.),mean(., na.rm= TRUE), .)
@@ -158,7 +161,7 @@ A continuación, se presentan los gráficos exploratorios de cada variable indep
 plot_univariado <- function(df, var) {
   #Boxplot
   p_box <- df %>% 
-    ggplot(aes(x = "", y = .data[[var]])) +
+    ggplot(aes(x = "", y = .data_cancer[[var]])) +
     geom_boxplot(fill = "#8ecae6", color = "#023047", 
                  outlier.color = "#e63946") +
     stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = '#023047') +
@@ -166,7 +169,7 @@ plot_univariado <- function(df, var) {
     theme_bw()
   #Histograma de polígonos
   p_hist <- df %>% 
-    ggplot(aes(x = .data[[var]]))+
+    ggplot(aes(x = .data_cancer[[var]]))+
     geom_histogram(aes(y = after_stat(count)), fill = "#8ecae6", color = "white", bins = 30) +
     geom_freqpoly(color = "#023047", linewidth = 1, alpha = 0.8, bins = 30) +
     labs(title = paste("Histograma de polígonos"), x = var, y = "Frecuencia") +
@@ -229,7 +232,7 @@ plot_univariado(df, "median_income")
 ```{r bivariado}
 plot_dispersión_respuesta <- function(df, var, var_label) {
   df %>%
-    ggplot(aes(x = .data[[var]], y = median_house_value)) +
+    ggplot(aes(x = .data_cancer[[var]], y = median_house_value)) +
     geom_point(alpha = 0.4, color = "#1E90FF") +
     geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
     labs(
@@ -342,7 +345,7 @@ Seguidamente, crearemos una función para analizar cada pareja de variables cara
 ```{r carac_vs_carac}
 graf_dispersion <- function(var_x, var_y) {
   df %>% 
-    ggplot(aes(x = .data[[var_x]], y = .data[[var_y]])) +
+    ggplot(aes(x = .data_cancer[[var_x]], y = .data_cancer[[var_y]])) +
     geom_point(alpha = 0.4, color = 'darkblue') +
     geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
     theme_bw()
