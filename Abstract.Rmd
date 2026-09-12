@@ -1,0 +1,45 @@
+--- 
+title: "Proyecto de Métodos Estadísticos"
+author: "Sebastian Ariza y Joseph Arias"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: j0s23/Libro
+description: "Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos"
+---
+
+# Abstract {-}
+
+El cáncer representa una de las principales causas de mortalidad a nivel 
+mundial, y su tasa de muerte varía significativamente entre regiones debido 
+a factores socioeconómicos, demográficos y de acceso a servicios de salud. 
+Este estudio utiliza un conjunto de datos con información sobre incidencia, 
+mortalidad, cobertura médica y variables socioeconómicas de distintas 
+regiones de Estados Unidos, con el objetivo de identificar qué factores 
+influyen de manera significativa sobre la tasa de mortalidad por cáncer 
+(`target_deathrate`). 
+
+Se aplican múltiples técnicas de inferencia estadística: un modelo de 
+regresión lineal múltiple para cuantificar el efecto conjunto de variables 
+como pobreza, ingreso medio, nivel educativo y cobertura de seguro médico; 
+pruebas t y z para comparar la mortalidad entre regiones de alta y baja 
+pobreza; una prueba F para evaluar la homogeneidad de varianzas entre estos 
+grupos; un análisis de correlación entre las principales variables 
+numéricas; y un análisis de varianza (ANOVA) para comparar la mortalidad 
+entre distintos niveles de ingreso. 
+
+Los resultados buscan aportar evidencia estadísticamente significativa sobre los factores socioeconómicos asociados a la mortalidad por cáncer, con el fin de identificar posibles focos de intervención en políticas públicas de salud.
+
+**Palabras clave:** mortalidad por cáncer, regresión lineal múltiple, 
+prueba t, prueba F, correlación, ANOVA, factores socioeconómicos.
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```

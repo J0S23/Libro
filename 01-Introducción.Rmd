@@ -1,0 +1,52 @@
+---
+title: "01-introduccion"
+output: html_document
+---
+
+# Introducción {-}
+
+El cáncer es una de las principales causas de muerte en el mundo, y sus 
+tasas de mortalidad no se distribuyen de manera uniforme entre poblaciones. 
+Diversos estudios epidemiológicos han señalado que factores como el nivel 
+socioeconómico, el acceso a seguros de salud, la educación y las 
+condiciones demográficas de una región pueden influir de forma considerable 
+en los desenlaces relacionados con esta enfermedad, incluyendo tanto la 
+incidencia como la mortalidad.
+
+En este proyecto se analiza un conjunto de datos que recopila información 
+demográfica, socioeconómica y de salud pública para distintas regiones de 
+Estados Unidos, con el propósito de identificar y cuantificar los factores 
+que más influyen sobre la tasa de mortalidad por cáncer (`target_deathrate`), 
+la cual se toma como variable respuesta a lo largo de todo el análisis.
+
+El estudio se estructura en torno a los siguientes objetivos:
+
+1. **Modelar la relación conjunta** entre `target_deathrate` y variables 
+   socioeconómicas clave (`povertypercent`, `medincome`, 
+   `pctbachdeg25_over`, `pctprivatecoverage`, `pctpubliccoverage`, 
+   `pctunemployed16_over`) mediante un modelo de regresión lineal múltiple.
+
+2. **Comparar la mortalidad** entre regiones con alta y baja pobreza 
+   (divididas según la mediana de `povertypercent`) utilizando pruebas t 
+   y z para dos muestras independientes.
+
+3. **Evaluar la homogeneidad de varianzas** de `target_deathrate` entre 
+   esos mismos grupos mediante una prueba F, con el fin de justificar el 
+   uso de la prueba t agrupada (pooled) o la corrección de Welch.
+
+4. **Explorar relaciones lineales** entre variables numéricas clave, en 
+   particular `medincome` frente a `target_deathrate`, y 
+   `pctbachdeg25_over` frente a `incidencerate`, mediante un mapa de 
+   correlaciones.
+
+5. **Comparar la mortalidad promedio** entre distintos niveles de ingreso 
+   (`binnedinc`) mediante un análisis de varianza (ANOVA).
+
+6. **Comparar la edad mediana** entre hombres y mujeres por región 
+   (`medianagemale` vs. `medianagefemale`) mediante una prueba t pareada, 
+   como análisis demográfico complementario.
+
+A través de estos objetivos, se busca aportar evidencia estadística que 
+permita comprender mejor los determinantes de la mortalidad por cáncer, 
+sentando una base cuantitativa que podría orientar decisiones en materia 
+de política pública y asignación de recursos en salud.
