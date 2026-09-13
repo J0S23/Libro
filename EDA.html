@@ -139,7 +139,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">A Minimal Book Example</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path=""><a href="#EDA"><i class="fa fa-check"></i><b>1</b> EDA</a></li>
+<li class="chapter" data-level="1" data-path=""><a href="#EDA"><i class="fa fa-check"></i><b>1</b> EDA</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path=""><a href="#an%C3%A1lisis-exploratorio-de-target_deathrate-variable-respuesta"><i class="fa fa-check"></i><b>1.1</b> Análisis exploratorio de ‘target_deathrate’ (Variable respuesta)</a></li>
+<li class="chapter" data-level="1.2" data-path=""><a href="#an%C3%A1lisis-exploratorio-univariado-de-cada-variable-explicativa"><i class="fa fa-check"></i><b>1.2</b> Análisis exploratorio univariado de cada variable explicativa</a></li>
+<li class="chapter" data-level="1.3" data-path=""><a href="#an%C3%A1lisis-exploratorio-univariado-de-otras-variables-pertinentes"><i class="fa fa-check"></i><b>1.3</b> Análisis exploratorio univariado de otras variables pertinentes</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -180,9 +185,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="fu">library</span>(BSDA)</span>
 <span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span></code></pre></div>
 <p>Conjunto de datos</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>data_cancer <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/cancer_reg.csv&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>data_household <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/avg-household-size.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>data_cancer <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/cancer_reg.csv&quot;</span>)</span></code></pre></div>
 <p>Muestrame las 5 primeras filas</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">head</span>(data_cancer, <span class="at">n=</span> <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>##   avganncount avgdeathsperyear target_deathrate incidencerate medincome
@@ -320,45 +323,115 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 1           0           0           0               0                       0
 ##   NA_birthrate
 ## 1            0</code></pre>
-<p>#1.1 Análisis exploratorio de ‘median_house_value’ (Target)
-Realicemos el resumen estadístico de la variable</p>
-<p>df %&gt;% summarise(n = length(median_house_value),
-media = mean(median_house_value),
-sd = sd(median_house_value),
-mediana = median(median_house_value),
-RIC = IQR(median_house_value),
-Q1 = quantile(median_house_value, 0.25),
-Q3 = quantile(median_house_value, 0.75),
-minimo = min(median_house_value),
-maximo = max(median_house_value),
-curtosis = kurtosis(median_house_value),
-Coef_asim = skewness(median_house_value))
-## n media sd mediana RIC Q1 Q3 minimo maximo curtosis
-## 1 20640 206855.8 115395.6 179700 145125 119600 264725 14999 500001 3.3275
-## Coef_asim
-## 1 0.9776922
-Se registraron un total de 20.640 casas. En promedio las casas cuestan aproximadamente $206.855 (con una desviación estándar de $115.395). Por otro lado, el 50% de las casas cuestan a lo sumo $180.000, mientras que, en caso de estar buscando casas más baratas, el 25% de las casas tienen un valor de $120.000 o menos (teniendo la más barata un costo de $14999). Asimismo, en caso de buscar una vivienda mejor valuada, el 75% de las casas cuestan por mucho $264.725 y el resto cuestan más que ese valor (siendo la más cara una con un valor de $500.001). Si visualizamos los datos también podemos observar que su forma es leptocúrtica (curtosis = 3.33, mayor a 3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, por una asimetría o sesgo a la derecha se observa que existen valores de casas excesivamente altos con respecto a la mayoría.</p>
-<p>Veamos un histograma</p>
-<p>df %&gt;%
-ggplot(aes(x = median_house_value))+
-geom_histogram(aes(y = after_stat(density)),
-binwidth = 25000,
-fill = “#797bb0”,
-color = “white”,
-alpha = 0.6)+
-geom_density(color = “darkblue”, linewidth = 1.2)+
-labs(title = ‘Distribucion del valor medio de las viviendas’,
-x = ‘Valor medio de la casa (USD)’,
-y = ‘Densidad’)+
-theme_bw()</p>
-<p>Asimismo, se evidencia la existencia de un sesgo hacia la derecha al considerar que la acumulación de los costos de las casas se encuentran hacia la izquierda, no obstante, algunas casas de gran valor desplazan la media a la derecha.</p>
-<p>df %&gt;%
-ggplot(aes(x = ““, y = median_house_value))+
-geom_boxplot(fill =”#797bb0”, color = “#b07989”,
-outlier.color = “darkred”)+
-stat_summary(fun = mean, geom = ‘point’, shape = 20, size = 3, color = ‘black’)+
-theme_bw()</p>
-<p>El diagrama de cajas y bigotes del valor medio de la vivienda complementa la información del histograma: el 50% central de las observaciones se ubica aproximadamente entre 120.000 y 264.725 USD, y el punto de la media se encuentra por encima de la mediana, confirmando el sesgo positivo descrito. Los valores atípicos superiores son escasos en número pero muy lejanos al bigote, concentrados cerca del techo de 500.000 USD, lo cual refuerza la acumulación en el límite superior detectada en el histograma. En síntesis, la variable respuesta presenta una distribución asimétrica, condición que deberá considerarse en la selección de transformaciones y supuestos del modelo de regresión.</p>
+<div id="análisis-exploratorio-de-target_deathrate-variable-respuesta" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Análisis exploratorio de ‘target_deathrate’ (Variable respuesta)<a href="#an%C3%A1lisis-exploratorio-de-target_deathrate-variable-respuesta" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A continuación, se presentan una función para generar la tabla exploratoria univariada de una variable numérica</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>summarise_numeric <span class="ot">&lt;-</span> <span class="cf">function</span>(df, var) {</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  df <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>      <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>      <span class="at">media =</span> <span class="fu">mean</span>({{ var }}), </span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>      <span class="at">desv_est =</span> <span class="fu">sd</span>({{ var }}),</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>      <span class="at">mediana =</span> <span class="fu">median</span>({{ var }}), </span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>      <span class="at">RIC =</span> <span class="fu">IQR</span>({{ var }}), </span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>      <span class="at">Q1 =</span> <span class="fu">quantile</span>({{ var }}, <span class="fl">0.25</span>), </span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>      <span class="at">Q3 =</span> <span class="fu">quantile</span>({{ var }}, <span class="fl">0.75</span>), </span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>      <span class="at">min =</span> <span class="fu">min</span>({{ var }}), </span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>      <span class="at">max =</span> <span class="fu">max</span>({{ var }}), </span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>      <span class="at">curtosis =</span> <span class="fu">kurtosis</span>({{ var }}), </span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>      <span class="at">Coef_asim =</span> <span class="fu">skewness</span>({{ var }})</span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>    )</span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>}</span></code></pre></div>
+<p>Realicemos el resumen estadístico de la variable <code>target_deathrate</code></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">summarise_numeric</span>(df, target_deathrate)</span></code></pre></div>
+<pre><code>##      n    media desv_est mediana RIC    Q1    Q3  min   max curtosis Coef_asim
+## 1 3047 178.6641 27.75151   178.1  34 161.2 195.2 59.7 362.8 4.350431 0.2745889</code></pre>
+<p>Se registraron un total de 3047 registros de tasas de muertes causadas por cáncer con una tasa media de 178.66 (DE = 27.75). Además, el 50% de las tasas de muerte son menores o iguales a 178.1 (RIC = 34), es decir, son muy cercanos a la media, lo que sugiere una distribución relativamente
+centrada. Por otro lado, el 25% son a lo sumo 161.2, y el 75% no supera 195.2. Además, el rango de los datos es de 303.1, siendo la tasa mínima 59.7 y la máxima 362.8. Por otro lado, se evidencia que las tasas de muerte poseen una forma leptocúrtica (curtosis = 4.35&gt;3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, los datos presentan una ligera asimetría positiva o sesgo hacia la derecha (Coef_asim = 0.27), con lo cual se observa que existen algunas tasas excesivamente más altas que la mayoría.</p>
+<p>A continuación, se presentan una función para generar los gráficos exploratorios univariados de una variable numérica</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>plot_univariado <span class="ot">&lt;-</span> <span class="cf">function</span>(df, var) {</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="co"># Boxplot</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  p_box <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> {{ var }})) <span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#8ecae6&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#023047&quot;</span>, </span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>                 <span class="at">outlier.color =</span> <span class="st">&quot;#e63946&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>    <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&#39;point&#39;</span>, <span class="at">shape =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&#39;#023047&#39;</span>) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Diagrama de cajas y bigotes&quot;</span>, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> rlang<span class="sc">::</span><span class="fu">as_label</span>(rlang<span class="sc">::</span><span class="fu">enquo</span>(var))) <span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>  <span class="co"># Histograma de polígonos</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>  p_hist <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> {{ var }})) <span class="sc">+</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(count)), <span class="at">fill =</span> <span class="st">&quot;#8ecae6&quot;</span>, <span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>    <span class="fu">geom_freqpoly</span>(<span class="at">color =</span> <span class="st">&quot;#023047&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Histograma de polígonos&quot;</span>, <span class="at">x =</span> rlang<span class="sc">::</span><span class="fu">as_label</span>(rlang<span class="sc">::</span><span class="fu">enquo</span>(var)), <span class="at">y =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>  <span class="co"># Combinar los dos plots</span></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>  p_hist <span class="sc">+</span> p_box</span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>}</span></code></pre></div>
+<p>Observemos la distribución de la variable objetivo <code>target_deathrate</code> a través de un diagrama de cajas y bigotes y un histograma de polígonos</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, target_deathrate)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/univTarget-1.png" alt="" width="672" /></p>
+<p>La distribución de <code>target_deathrate</code> presenta una ligera asimetría a la
+derecha, confirmando lo expuesto por el coeficiente de asimetría positivo.
+Además, la variable cuenta con un número considerable de valores atípicos
+tanto en la cola inferior como en la superior, es decir, existen regiones
+con tasas de muerte muy alejadas de la mayoría, particularmente
+por encima de 250 y por debajo de 110 aproximadamente.</p>
+<p>Por otro lado, la media (178.66) es prácticamente igual a la mediana (178.1), lo cual es consistente con una distribución casi simétrica en su núcleo central, a pesar de la ligera asimetría generada por los valores extremos en la cola derecha. La forma del histograma exhibe un pico marcado alrededor del valor central, lo que respalda la forma leptocúrtica previamente hallada (curtosis = 4.35), indicando una mayor concentración de datos cerca de la media y colas más pesadas que las de una distribución normal.</p>
+<p>La presencia simultánea de valores atípicos en ambos extremos sugiere una
+heterogeneidad importante entre regiones: mientras algunas zonas presentan
+tasas de mortalidad excepcionalmente bajas (posiblemente asociadas a mejor
+acceso a salud o detección temprana), otras muestran tasas alarmantemente
+altas, lo que podría estar vinculado a factores socioeconómicos adversos
+como pobreza elevada o baja cobertura médica, variables que se explorarán
+más adelante en el análisis.</p>
+</div>
+<div id="análisis-exploratorio-univariado-de-cada-variable-explicativa" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Análisis exploratorio univariado de cada variable explicativa<a href="#an%C3%A1lisis-exploratorio-univariado-de-cada-variable-explicativa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">summarise_numeric</span>(df, povertypercent)</span></code></pre></div>
+<pre><code>##      n    media desv_est mediana  RIC    Q1   Q3 min  max curtosis Coef_asim
+## 1 3047 16.87818 6.409087    15.9 8.25 12.15 20.4 3.2 47.4 4.272006 0.9302543</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, povertypercent)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/povertypercentUniv-1.png" alt="" width="672" /></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">summarise_numeric</span>(df, medincome)</span></code></pre></div>
+<pre><code>##      n    media desv_est mediana     RIC      Q1    Q3   min    max curtosis
+## 1 3047 47063.28 12040.09   45207 13609.5 38882.5 52492 22640 125635 6.705259
+##   Coef_asim
+## 1  1.407377</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, medincome)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/medincomeUniv-1.png" alt="" width="672" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">summarise_numeric</span>(df, pctbachdeg25_over)</span></code></pre></div>
+<pre><code>##      n    media desv_est mediana RIC  Q1   Q3 min  max curtosis Coef_asim
+## 1 3047 13.28202 5.394756    12.3 6.7 9.4 16.1 2.5 42.2  4.73255  1.094298</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, pctbachdeg25_over)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/pctbachdeg25_overUniv-1.png" alt="" width="672" /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">summarise_numeric</span>(df, pctprivatecoverage)</span></code></pre></div>
+<pre><code>##      n    media desv_est mediana  RIC   Q1   Q3  min  max curtosis  Coef_asim
+## 1 3047 64.35494 10.64706    65.1 14.9 57.2 72.1 22.3 92.3 2.994335 -0.3933435</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, pctprivatecoverage)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/pctprivatecoverageUniv-1.png" alt="" width="672" /></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="fu">summarise_numeric</span>(df, pctpubliccoverage)</span></code></pre></div>
+<pre><code>##      n    media desv_est mediana   RIC   Q1    Q3  min  max curtosis
+## 1 3047 36.25264 7.841741    36.3 10.65 30.9 41.55 11.2 65.1 2.908984
+##      Coef_asim
+## 1 -0.005432924</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, pctpubliccoverage)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/pctpubliccoverageUniv-1.png" alt="" width="672" /></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="fu">summarise_numeric</span>(df, pctunemployed16_over)</span></code></pre></div>
+<pre><code>##      n    media desv_est mediana RIC  Q1  Q3 min  max curtosis Coef_asim
+## 1 3047 7.852412 3.452371     7.6 4.2 5.5 9.7 0.4 29.4 5.291033 0.8906224</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, pctunemployed16_over)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/pctunemployed16_overUniv-1.png" alt="" width="672" /></p>
+</div>
+<div id="análisis-exploratorio-univariado-de-otras-variables-pertinentes" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Análisis exploratorio univariado de otras variables pertinentes<a href="#an%C3%A1lisis-exploratorio-univariado-de-otras-variables-pertinentes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">summarise_numeric</span>(df, incidencerate)</span></code></pre></div>
+<pre><code>##      n    media desv_est  mediana   RIC    Q1     Q3   min    max curtosis
+## 1 3047 448.2686 54.56073 453.5494 60.55 420.3 480.85 201.3 1206.9 19.76697
+##   Coef_asim
+## 1 0.7715547</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co">#summarise_char(df, binnedinc)</span></span></code></pre></div>
+</div>
 </div>
             </section>
 

@@ -22,9 +22,6 @@ library(rstatix)
 Conjunto de datos
 ```{r data}
 data_cancer <- read.csv("Data/cancer_reg.csv")
-
-data_household <- read.csv("Data/avg-household-size.csv")
-
 ```
 
 Muestrame las 5 primeras filas
@@ -70,50 +67,146 @@ df %>%
   summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
 ```
 
-#1.1 Análisis exploratorio de ‘median_house_value’ (Target)
-Realicemos el resumen estadístico de la variable
+## Análisis exploratorio de ‘target_deathrate’ (Variable respuesta)
 
-df %>% summarise(n = length(median_house_value),
-                 media = mean(median_house_value), 
-                 sd = sd(median_house_value),
-                 mediana = median(median_house_value), 
-                 RIC = IQR(median_house_value), 
-                 Q1 = quantile(median_house_value, 0.25),
-                 Q3 = quantile(median_house_value, 0.75), 
-                 minimo = min(median_house_value), 
-                 maximo = max(median_house_value), 
-                 curtosis = kurtosis(median_house_value), 
-                 Coef_asim = skewness(median_house_value))
-##       n    media       sd mediana    RIC     Q1     Q3 minimo maximo curtosis
-## 1 20640 206855.8 115395.6  179700 145125 119600 264725  14999 500001   3.3275
-##   Coef_asim
-## 1 0.9776922
-Se registraron un total de 20.640 casas. En promedio las casas cuestan aproximadamente $206.855 (con una desviación estándar de $115.395). Por otro lado, el 50% de las casas cuestan a lo sumo $180.000, mientras que, en caso de estar buscando casas más baratas, el 25% de las casas tienen un valor de $120.000 o menos (teniendo la más barata un costo de $14999). Asimismo, en caso de buscar una vivienda mejor valuada, el 75% de las casas cuestan por mucho $264.725 y el resto cuestan más que ese valor (siendo la más cara una con un valor de $500.001). Si visualizamos los datos también podemos observar que su forma es leptocúrtica (curtosis = 3.33, mayor a 3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, por una asimetría o sesgo a la derecha se observa que existen valores de casas excesivamente altos con respecto a la mayoría.
+A continuación, se presentan una función para generar la tabla exploratoria univariada de una variable numérica
+```{r numSummary}
+summarise_numeric <- function(df, var) {
+  df %>% 
+    summarise(
+      n = n(),
+      media = mean({{ var }}), 
+      desv_est = sd({{ var }}),
+      mediana = median({{ var }}), 
+      RIC = IQR({{ var }}), 
+      Q1 = quantile({{ var }}, 0.25), 
+      Q3 = quantile({{ var }}, 0.75), 
+      min = min({{ var }}), 
+      max = max({{ var }}), 
+      curtosis = kurtosis({{ var }}), 
+      Coef_asim = skewness({{ var }})
+    )
+}
+```
 
-Veamos un histograma
+Realicemos el resumen estadístico de la variable `target_deathrate`
+```{r targetSummary}
+summarise_numeric(df, target_deathrate)
+```
 
-df %>% 
-  ggplot(aes(x = median_house_value))+
-  geom_histogram(aes(y = after_stat(density)), 
-                 binwidth = 25000, 
-                 fill = "#797bb0", 
-                 color = "white", 
-                 alpha = 0.6)+
-  geom_density(color = "darkblue", linewidth = 1.2)+
-  labs(title = 'Distribucion del valor medio de las viviendas', 
-       x = 'Valor medio de la casa (USD)', 
-       y = 'Densidad')+
-  theme_bw()
+Se registraron un total de 3047 registros de tasas de muertes causadas por cáncer con una tasa media de 178.66 (DE = 27.75). Además, el 50% de las tasas de muerte son menores o iguales a 178.1 (RIC = 34), es decir, son muy cercanos a la media, lo que sugiere una distribución relativamente 
+centrada. Por otro lado, el 25% son a lo sumo 161.2, y el 75% no supera 195.2. Además, el rango de los datos es de 303.1, siendo la tasa mínima 59.7 y la máxima 362.8. Por otro lado, se evidencia que las tasas de muerte poseen una forma leptocúrtica (curtosis = 4.35>3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, los datos presentan una ligera asimetría positiva o sesgo hacia la derecha (Coef_asim = 0.27), con lo cual se observa que existen algunas tasas excesivamente más altas que la mayoría.
+
+A continuación, se presentan una función para generar los gráficos exploratorios univariados de una variable numérica
+
+```{r numUnivar}
+plot_univariado <- function(df, var) {
+  # Boxplot
+  p_box <- df %>% 
+    ggplot(aes(x = "", y = {{ var }})) +
+    geom_boxplot(fill = "#8ecae6", color = "#023047", 
+                 outlier.color = "#e63946") +
+    stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = '#023047') +
+    labs(title = "Diagrama de cajas y bigotes", x = NULL, y = rlang::as_label(rlang::enquo(var))) +
+    theme_bw()
+  # Histograma de polígonos
+  p_hist <- df %>% 
+    ggplot(aes(x = {{ var }})) +
+    geom_histogram(aes(y = after_stat(count)), fill = "#8ecae6", color = "white", bins = 30) +
+    geom_freqpoly(color = "#023047", linewidth = 1, alpha = 0.8, bins = 30) +
+    labs(title = "Histograma de polígonos", x = rlang::as_label(rlang::enquo(var)), y = "Frecuencia") +
+    theme_bw()
+  # Combinar los dos plots
+  p_hist + p_box
+}
+```
+
+Observemos la distribución de la variable objetivo `target_deathrate` a través de un diagrama de cajas y bigotes y un histograma de polígonos
+```{r univTarget}
+plot_univariado(df, target_deathrate)
+
+```
+
+La distribución de `target_deathrate` presenta una ligera asimetría a la 
+derecha, confirmando lo expuesto por el coeficiente de asimetría positivo. 
+Además, la variable cuenta con un número considerable de valores atípicos 
+tanto en la cola inferior como en la superior, es decir, existen regiones 
+con tasas de muerte muy alejadas de la mayoría, particularmente 
+por encima de 250 y por debajo de 110 aproximadamente.
+
+Por otro lado, la media (178.66) es prácticamente igual a la mediana (178.1), lo cual es consistente con una distribución casi simétrica en su núcleo central, a pesar de la ligera asimetría generada por los valores extremos en la cola derecha. La forma del histograma exhibe un pico marcado alrededor del valor central, lo que respalda la forma leptocúrtica previamente hallada (curtosis = 4.35), indicando una mayor concentración de datos cerca de la media y colas más pesadas que las de una distribución normal.
+
+La presencia simultánea de valores atípicos en ambos extremos sugiere una 
+heterogeneidad importante entre regiones: mientras algunas zonas presentan 
+tasas de mortalidad excepcionalmente bajas (posiblemente asociadas a mejor 
+acceso a salud o detección temprana), otras muestran tasas alarmantemente 
+altas, lo que podría estar vinculado a factores socioeconómicos adversos 
+como pobreza elevada o baja cobertura médica, variables que se explorarán 
+más adelante en el análisis.
+
+## Análisis exploratorio univariado de cada variable explicativa
 
 
-Asimismo, se evidencia la existencia de un sesgo hacia la derecha al considerar que la acumulación de los costos de las casas se encuentran hacia la izquierda, no obstante, algunas casas de gran valor desplazan la media a la derecha.
+```{r povertypercentSummary}
+summarise_numeric(df, povertypercent)
 
-df %>% 
-  ggplot(aes(x = "", y = median_house_value))+
-  geom_boxplot(fill = "#797bb0", color = "#b07989", 
-               outlier.color = "darkred")+
-  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black')+
-  theme_bw()
+```
+```{r povertypercentUniv}
+plot_univariado(df, povertypercent)
 
+```
 
-El diagrama de cajas y bigotes del valor medio de la vivienda complementa la información del histograma: el 50% central de las observaciones se ubica aproximadamente entre 120.000 y 264.725 USD, y el punto de la media se encuentra por encima de la mediana, confirmando el sesgo positivo descrito. Los valores atípicos superiores son escasos en número pero muy lejanos al bigote, concentrados cerca del techo de 500.000 USD, lo cual refuerza la acumulación en el límite superior detectada en el histograma. En síntesis, la variable respuesta presenta una distribución asimétrica, condición que deberá considerarse en la selección de transformaciones y supuestos del modelo de regresión.
+```{r medincomeSummary}
+summarise_numeric(df, medincome)
+
+```
+```{r medincomeUniv}
+plot_univariado(df, medincome)
+
+```
+
+```{r pctbachdeg25_overSummary}
+summarise_numeric(df, pctbachdeg25_over)
+
+```
+```{r pctbachdeg25_overUniv}
+plot_univariado(df, pctbachdeg25_over)
+
+```
+```{r pctprivatecoverageSummary}
+summarise_numeric(df, pctprivatecoverage)
+
+```
+```{r pctprivatecoverageUniv}
+plot_univariado(df, pctprivatecoverage)
+
+```
+
+```{r pctpubliccoverageSummary}
+summarise_numeric(df, pctpubliccoverage)
+
+```
+```{r pctpubliccoverageUniv}
+plot_univariado(df, pctpubliccoverage)
+
+```
+
+```{r pctunemployed16_overSummary}
+summarise_numeric(df, pctunemployed16_over)
+
+```
+```{r pctunemployed16_overUniv}
+plot_univariado(df, pctunemployed16_over)
+
+```
+
+## Análisis exploratorio univariado de otras variables pertinentes
+
+```{r incidencerateSummary}
+summarise_numeric(df, incidencerate)
+
+```
+```{r binnedincSummary}
+#summarise_char(df, binnedinc)
+
+```
