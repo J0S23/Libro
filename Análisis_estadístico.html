@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 1 Análisis paramétrico y no paramétrico | 04-Analisis_estadistico.knit</title>
+  <meta name="description" content="" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 1 Análisis paramétrico y no paramétrico | 04-Analisis_estadistico.knit" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 1 Análisis paramétrico y no paramétrico | 04-Analisis_estadistico.knit" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path=""><a href="#An%C3%A1lisis_estad%C3%ADstico"><i class="fa fa-check"></i><b>1</b> Análisis paramétrico y no paramétrico</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path=""><a href="#librer%C3%ADas"><i class="fa fa-check"></i><b>1.1</b> Librerías —</a></li>
+<li class="chapter" data-level="1.2" data-path=""><a href="#presi%C3%B3n-arterial-carga-y-eda"><i class="fa fa-check"></i><b>1.2</b> 4.1 Presión arterial: carga y EDA</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<!--bookdown:title:end-->
+<!--bookdown:title:start-->
+<div id="Análisis_estadístico" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Análisis paramétrico y no paramétrico<a href="#An%C3%A1lisis_estad%C3%ADstico" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="librerías" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Librerías —<a href="#librer%C3%ADas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(moments)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   4.0.3     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.4     ✔ tidyr     1.3.2
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">library</span>(effsize)</span></code></pre></div>
+<pre><code>## Warning: package &#39;effsize&#39; was built under R version 4.4.3</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">library</span>(openintro)</span></code></pre></div>
+<pre><code>## Cargando paquete requerido: airports</code></pre>
+<pre><code>## Warning: package &#39;airports&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Cargando paquete requerido: cherryblossom</code></pre>
+<pre><code>## Warning: package &#39;cherryblossom&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Cargando paquete requerido: usdata</code></pre>
+<pre><code>## Warning: package &#39;usdata&#39; was built under R version 4.4.3</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">library</span>(nortest)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">library</span>(car)</span></code></pre></div>
+<pre><code>## Warning: package &#39;car&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Cargando paquete requerido: carData</code></pre>
+<pre><code>## Warning: package &#39;carData&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## 
+## Adjuntando el paquete: &#39;car&#39;
+## 
+## The following object is masked from &#39;package:openintro&#39;:
+## 
+##     densityPlot
+## 
+## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     recode
+## 
+## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     some</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">library</span>(coin)</span></code></pre></div>
+<pre><code>## Warning: package &#39;coin&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Cargando paquete requerido: survival
+## 
+## Adjuntando el paquete: &#39;survival&#39;
+## 
+## The following object is masked from &#39;package:openintro&#39;:
+## 
+##     transplant</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">library</span>(BSDA)</span></code></pre></div>
+<pre><code>## Warning: package &#39;BSDA&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Cargando paquete requerido: lattice
+## 
+## Adjuntando el paquete: &#39;lattice&#39;
+## 
+## The following objects are masked from &#39;package:openintro&#39;:
+## 
+##     ethanol, lsegments
+## 
+## 
+## Adjuntando el paquete: &#39;BSDA&#39;
+## 
+## The following objects are masked from &#39;package:carData&#39;:
+## 
+##     Vocab, Wool
+## 
+## The following object is masked from &#39;package:datasets&#39;:
+## 
+##     Orange</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span></code></pre></div>
+<pre><code>## 
+## Adjuntando el paquete: &#39;rstatix&#39;
+## 
+## The following objects are masked from &#39;package:coin&#39;:
+## 
+##     chisq_test, conover_test, fligner_test, friedman_test,
+##     kruskal_test, sign_test, wilcox_test
+## 
+## The following object is masked from &#39;package:stats&#39;:
+## 
+##     filter</code></pre>
+</div>
+<div id="presión-arterial-carga-y-eda" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> 4.1 Presión arterial: carga y EDA<a href="#presi%C3%B3n-arterial-carga-y-eda" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Se cargan los datos de presión sistólica y diastólica.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>df_cancer <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/cancer_reg.csv&quot;</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="fu">summary</span>(df_cancer)</span></code></pre></div>
+<pre><code>##   avganncount      avgdeathsperyear target_deathrate incidencerate   
+##  Min.   :    6.0   Min.   :    3    Min.   : 59.7    Min.   : 201.3  
+##  1st Qu.:   76.0   1st Qu.:   28    1st Qu.:161.2    1st Qu.: 420.3  
+##  Median :  171.0   Median :   61    Median :178.1    Median : 453.5  
+##  Mean   :  606.3   Mean   :  186    Mean   :178.7    Mean   : 448.3  
+##  3rd Qu.:  518.0   3rd Qu.:  149    3rd Qu.:195.2    3rd Qu.: 480.9  
+##  Max.   :38150.0   Max.   :14010    Max.   :362.8    Max.   :1206.9  
+##                                                                      
+##    medincome        popest2015       povertypercent   studypercap     
+##  Min.   : 22640   Min.   :     827   Min.   : 3.20   Min.   :   0.00  
+##  1st Qu.: 38883   1st Qu.:   11684   1st Qu.:12.15   1st Qu.:   0.00  
+##  Median : 45207   Median :   26643   Median :15.90   Median :   0.00  
+##  Mean   : 47063   Mean   :  102637   Mean   :16.88   Mean   : 155.40  
+##  3rd Qu.: 52492   3rd Qu.:   68671   3rd Qu.:20.40   3rd Qu.:  83.65  
+##  Max.   :125635   Max.   :10170292   Max.   :47.40   Max.   :9762.31  
+##                                                                       
+##   binnedinc           medianage      medianagemale   medianagefemale
+##  Length:3047        Min.   : 22.30   Min.   :22.40   Min.   :22.30  
+##  Class :character   1st Qu.: 37.70   1st Qu.:36.35   1st Qu.:39.10  
+##  Mode  :character   Median : 41.00   Median :39.60   Median :42.40  
+##                     Mean   : 45.27   Mean   :39.57   Mean   :42.15  
+##                     3rd Qu.: 44.00   3rd Qu.:42.50   3rd Qu.:45.30  
+##                     Max.   :624.00   Max.   :64.70   Max.   :65.70  
+##                                                                     
+##   geography         percentmarried   pctnohs18_24     pcths18_24  
+##  Length:3047        Min.   :23.10   Min.   : 0.00   Min.   : 0.0  
+##  Class :character   1st Qu.:47.75   1st Qu.:12.80   1st Qu.:29.2  
+##  Mode  :character   Median :52.40   Median :17.10   Median :34.7  
+##                     Mean   :51.77   Mean   :18.22   Mean   :35.0  
+##                     3rd Qu.:56.40   3rd Qu.:22.70   3rd Qu.:40.7  
+##                     Max.   :72.50   Max.   :64.10   Max.   :72.5  
+##                                                                   
+##  pctsomecol18_24 pctbachdeg18_24   pcths25_over   pctbachdeg25_over
+##  Min.   : 7.10   Min.   : 0.000   Min.   : 7.50   Min.   : 2.50    
+##  1st Qu.:34.00   1st Qu.: 3.100   1st Qu.:30.40   1st Qu.: 9.40    
+##  Median :40.40   Median : 5.400   Median :35.30   Median :12.30    
+##  Mean   :40.98   Mean   : 6.158   Mean   :34.80   Mean   :13.28    
+##  3rd Qu.:46.40   3rd Qu.: 8.200   3rd Qu.:39.65   3rd Qu.:16.10    
+##  Max.   :79.00   Max.   :51.800   Max.   :54.80   Max.   :42.20    
+##  NA&#39;s   :2285                                                      
+##  pctemployed16_over pctunemployed16_over pctprivatecoverage
+##  Min.   :17.60      Min.   : 0.400       Min.   :22.30     
+##  1st Qu.:48.60      1st Qu.: 5.500       1st Qu.:57.20     
+##  Median :54.50      Median : 7.600       Median :65.10     
+##  Mean   :54.15      Mean   : 7.852       Mean   :64.35     
+##  3rd Qu.:60.30      3rd Qu.: 9.700       3rd Qu.:72.10     
+##  Max.   :80.10      Max.   :29.400       Max.   :92.30     
+##  NA&#39;s   :152                                               
+##  pctprivatecoveragealone pctempprivcoverage pctpubliccoverage
+##  Min.   :15.70           Min.   :13.5       Min.   :11.20    
+##  1st Qu.:41.00           1st Qu.:34.5       1st Qu.:30.90    
+##  Median :48.70           Median :41.1       Median :36.30    
+##  Mean   :48.45           Mean   :41.2       Mean   :36.25    
+##  3rd Qu.:55.60           3rd Qu.:47.7       3rd Qu.:41.55    
+##  Max.   :78.90           Max.   :70.7       Max.   :65.10    
+##  NA&#39;s   :609                                                 
+##  pctpubliccoveragealone    pctwhite         pctblack          pctasian      
+##  Min.   : 2.60          Min.   : 10.20   Min.   : 0.0000   Min.   : 0.0000  
+##  1st Qu.:14.85          1st Qu.: 77.30   1st Qu.: 0.6207   1st Qu.: 0.2542  
+##  Median :18.80          Median : 90.06   Median : 2.2476   Median : 0.5498  
+##  Mean   :19.24          Mean   : 83.65   Mean   : 9.1080   Mean   : 1.2540  
+##  3rd Qu.:23.10          3rd Qu.: 95.45   3rd Qu.:10.5097   3rd Qu.: 1.2210  
+##  Max.   :46.60          Max.   :100.00   Max.   :85.9478   Max.   :42.6194  
+##                                                                             
+##   pctotherrace     pctmarriedhouseholds   birthrate     
+##  Min.   : 0.0000   Min.   :22.99        Min.   : 0.000  
+##  1st Qu.: 0.2952   1st Qu.:47.76        1st Qu.: 4.521  
+##  Median : 0.8262   Median :51.67        Median : 5.381  
+##  Mean   : 1.9835   Mean   :51.24        Mean   : 5.640  
+##  3rd Qu.: 2.1780   3rd Qu.:55.40        3rd Qu.: 6.494  
+##  Max.   :41.9303   Max.   :78.08        Max.   :21.326  
+## </code></pre>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/%s",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": false,
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -22,6 +22,5 @@ Se cargan los datos de presión sistólica y diastólica.
 ```{r data-presion}
 df_cancer <- read.csv("Data/cancer_reg.csv")
 
-df_household <- read.csv("Data/avg-household-size.csv")
-summary(df)
+summary(df_cancer)
 ```

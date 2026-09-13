@@ -64,7 +64,56 @@ data_cancer %>%
 
 
 Verificar si tiene datos faltantes nuevamente
-```{r faltante 2}
-data_cancer %>% 
+
+```{r faltante2}
+df %>% 
   summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
 ```
+
+#1.1 Análisis exploratorio de ‘median_house_value’ (Target)
+Realicemos el resumen estadístico de la variable
+
+df %>% summarise(n = length(median_house_value),
+                 media = mean(median_house_value), 
+                 sd = sd(median_house_value),
+                 mediana = median(median_house_value), 
+                 RIC = IQR(median_house_value), 
+                 Q1 = quantile(median_house_value, 0.25),
+                 Q3 = quantile(median_house_value, 0.75), 
+                 minimo = min(median_house_value), 
+                 maximo = max(median_house_value), 
+                 curtosis = kurtosis(median_house_value), 
+                 Coef_asim = skewness(median_house_value))
+##       n    media       sd mediana    RIC     Q1     Q3 minimo maximo curtosis
+## 1 20640 206855.8 115395.6  179700 145125 119600 264725  14999 500001   3.3275
+##   Coef_asim
+## 1 0.9776922
+Se registraron un total de 20.640 casas. En promedio las casas cuestan aproximadamente $206.855 (con una desviación estándar de $115.395). Por otro lado, el 50% de las casas cuestan a lo sumo $180.000, mientras que, en caso de estar buscando casas más baratas, el 25% de las casas tienen un valor de $120.000 o menos (teniendo la más barata un costo de $14999). Asimismo, en caso de buscar una vivienda mejor valuada, el 75% de las casas cuestan por mucho $264.725 y el resto cuestan más que ese valor (siendo la más cara una con un valor de $500.001). Si visualizamos los datos también podemos observar que su forma es leptocúrtica (curtosis = 3.33, mayor a 3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, por una asimetría o sesgo a la derecha se observa que existen valores de casas excesivamente altos con respecto a la mayoría.
+
+Veamos un histograma
+
+df %>% 
+  ggplot(aes(x = median_house_value))+
+  geom_histogram(aes(y = after_stat(density)), 
+                 binwidth = 25000, 
+                 fill = "#797bb0", 
+                 color = "white", 
+                 alpha = 0.6)+
+  geom_density(color = "darkblue", linewidth = 1.2)+
+  labs(title = 'Distribucion del valor medio de las viviendas', 
+       x = 'Valor medio de la casa (USD)', 
+       y = 'Densidad')+
+  theme_bw()
+
+
+Asimismo, se evidencia la existencia de un sesgo hacia la derecha al considerar que la acumulación de los costos de las casas se encuentran hacia la izquierda, no obstante, algunas casas de gran valor desplazan la media a la derecha.
+
+df %>% 
+  ggplot(aes(x = "", y = median_house_value))+
+  geom_boxplot(fill = "#797bb0", color = "#b07989", 
+               outlier.color = "darkred")+
+  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = 'black')+
+  theme_bw()
+
+
+El diagrama de cajas y bigotes del valor medio de la vivienda complementa la información del histograma: el 50% central de las observaciones se ubica aproximadamente entre 120.000 y 264.725 USD, y el punto de la media se encuentra por encima de la mediana, confirmando el sesgo positivo descrito. Los valores atípicos superiores son escasos en número pero muy lejanos al bigote, concentrados cerca del techo de 500.000 USD, lo cual refuerza la acumulación en el límite superior detectada en el histograma. En síntesis, la variable respuesta presenta una distribución asimétrica, condición que deberá considerarse en la selección de transformaciones y supuestos del modelo de regresión.
