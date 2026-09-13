@@ -2,4 +2,12 @@
 title: "07-Referencias"
 output: html_document
 ---
+# Referencias {-}
 
+Raskar, V. (n.d.). *Cancer Regression* [Data set]. Kaggle. 
+https://www.kaggle.com/datasets/varunraskar/cancer-regression
+
+Centers for Disease Control and Prevention, National Center for Health 
+Statistics. (2024). *Cancer death rates per 100,000 population* 
+[Data set]. CDC WONDER Online Database. 
+https://wonder.cdc.gov/ucd-icd10-expanded.html

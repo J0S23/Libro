@@ -66,6 +66,27 @@ Verificar si tiene datos faltantes nuevamente
 df %>% 
   summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
 ```
+Convritiendo la variable `binnedinc` a categórica
+```{r binnedinc a factor}
+orden_binnedinc <- c(
+  "[22640, 34218.1]",
+  "(34218.1, 37413.8]",
+  "(37413.8, 40362.7]",
+  "(40362.7, 42724.4]",
+  "(42724.4, 45201]",
+  "(45201, 48021.6]",
+  "(48021.6, 51046.4]",
+  "(51046.4, 54545.6]",
+  "(54545.6, 61494.5]",
+  "(61494.5, 125635]"
+)
+
+df <- df %>% 
+  mutate(binnedinc = factor(binnedinc, levels = orden_binnedinc))
+
+levels(df$binnedinc)
+
+```
 
 ## Análisis exploratorio de ‘target_deathrate’ (Variable respuesta)
 
@@ -74,9 +95,9 @@ A continuación, se presentan una función para generar la tabla exploratoria un
 summarise_numeric <- function(df, var) {
   df %>% 
     summarise(
-      n = n(),
+      n = length({{ var }}),
       media = mean({{ var }}), 
-      desv_est = sd({{ var }}),
+      d_est = sd({{ var }}),
       mediana = median({{ var }}), 
       RIC = IQR({{ var }}), 
       Q1 = quantile({{ var }}, 0.25), 
@@ -94,7 +115,7 @@ Realicemos el resumen estadístico de la variable `target_deathrate`
 summarise_numeric(df, target_deathrate)
 ```
 
-Se registraron un total de 3047 registros de tasas de muertes causadas por cáncer con una tasa media de 178.66 (DE = 27.75). Además, el 50% de las tasas de muerte son menores o iguales a 178.1 (RIC = 34), es decir, son muy cercanos a la media, lo que sugiere una distribución relativamente 
+Se registraron un total de 3047 registros de tasas de mortalidad causadas por cáncer (medida en muertes por cada 100,000 habitantes) con una tasa media de 178.66 (DE = 27.75). Además, el 50% de las tasas de muerte son menores o iguales a 178.1 (RIC = 34), es decir, son muy cercanos a la media, lo que sugiere una distribución relativamente 
 centrada. Por otro lado, el 25% son a lo sumo 161.2, y el 75% no supera 195.2. Además, el rango de los datos es de 303.1, siendo la tasa mínima 59.7 y la máxima 362.8. Por otro lado, se evidencia que las tasas de muerte poseen una forma leptocúrtica (curtosis = 4.35>3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, los datos presentan una ligera asimetría positiva o sesgo hacia la derecha (Coef_asim = 0.27), con lo cual se observa que existen algunas tasas excesivamente más altas que la mayoría.
 
 A continuación, se presentan una función para generar los gráficos exploratorios univariados de una variable numérica
@@ -124,81 +145,103 @@ plot_univariado <- function(df, var) {
 Observemos la distribución de la variable objetivo `target_deathrate` a través de un diagrama de cajas y bigotes y un histograma de polígonos
 ```{r univTarget}
 plot_univariado(df, target_deathrate)
-
 ```
 
-La distribución de `target_deathrate` presenta una ligera asimetría a la 
-derecha, confirmando lo expuesto por el coeficiente de asimetría positivo. 
-Además, la variable cuenta con un número considerable de valores atípicos 
-tanto en la cola inferior como en la superior, es decir, existen regiones 
-con tasas de muerte muy alejadas de la mayoría, particularmente 
-por encima de 250 y por debajo de 110 aproximadamente.
+La distribución de `target_deathrate` presenta una ligera asimetría a la derecha, confirmando lo expuesto por el coeficiente de asimetría positivo. Además, la variable cuenta con un número considerable de valores atípicos tanto en la cola inferior como en la superior, es decir, existen regiones con tasas de muerte muy alejadas de la mayoría, particularmente por encima de 250 y por debajo de 110 aproximadamente.
 
 Por otro lado, la media (178.66) es prácticamente igual a la mediana (178.1), lo cual es consistente con una distribución casi simétrica en su núcleo central, a pesar de la ligera asimetría generada por los valores extremos en la cola derecha. La forma del histograma exhibe un pico marcado alrededor del valor central, lo que respalda la forma leptocúrtica previamente hallada (curtosis = 4.35), indicando una mayor concentración de datos cerca de la media y colas más pesadas que las de una distribución normal.
 
-La presencia simultánea de valores atípicos en ambos extremos sugiere una 
-heterogeneidad importante entre regiones: mientras algunas zonas presentan 
-tasas de mortalidad excepcionalmente bajas (posiblemente asociadas a mejor 
-acceso a salud o detección temprana), otras muestran tasas alarmantemente 
-altas, lo que podría estar vinculado a factores socioeconómicos adversos 
-como pobreza elevada o baja cobertura médica, variables que se explorarán 
+La presencia simultánea de valores atípicos en ambos extremos sugiere una heterogeneidad importante entre regiones: mientras algunas zonas presentan tasas de mortalidad excepcionalmente bajas (posiblemente asociadas a mejor acceso a salud o detección temprana), otras muestran tasas alarmantemente altas, lo que podría estar vinculado a factores socioeconómicos adversos como pobreza elevada o baja cobertura médica, variables que se explorarán 
 más adelante en el análisis.
 
 ## Análisis exploratorio univariado de cada variable explicativa
 
+A continuación, observaremos los resúmenes y gráficos descriptivos de cada una de las variables independientes
 
+**1. povertypercent:**
 ```{r povertypercentSummary}
 summarise_numeric(df, povertypercent)
-
 ```
+Se registraron un total de 3047 registros del porcentaje de pobreza por región (`povertypercent`), con una tasa media de 16.88% (DE = 6.41). Además, el 50% de los porcentajes de pobreza son menores o iguales a 15.9% (RIC = 8.25), es decir, son muy cercanos a la media, lo que sugiere una distribución relativamente centrada. Por otro lado, el 25% son a lo sumo 12.15%, y el 75% no supera 20.4%. Además, el rango de los datos es de 44.2, siendo el porcentaje mínimo 3.2% y el máximo 47.4%. Por otro lado, se evidencia que los porcentajes de pobreza poseen una forma leptocúrtica (curtosis = 4.27 > 3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, los datos presentan una asimetría positiva o sesgo hacia la derecha (Coef_asim = 0.93), con lo cual se observa que existen algunas regiones con niveles de pobreza excesivamente más altos que la mayoría.
 ```{r povertypercentUniv}
 plot_univariado(df, povertypercent)
-
 ```
+
+La distribución de `povertypercent` presenta una asimetría marcada hacia la derecha, confirmando lo expuesto por el coeficiente de asimetría positivo (Coef_asim = 0.93), el cual, al ser considerablemente mayor que 0, indica un sesgo importante en la cola derecha de la distribución. Además, la variable cuenta con un número considerable de valores atípicos, aunque estos se concentran exclusivamente en la cola superior, es decir, existen regiones con porcentajes de pobreza muy alejados de la mayoría, particularmente por encima del 33%, sin presencia de outliers en el extremo inferior.
+
+Por otro lado, la media (16.88%) es cercana a la mediana (15.9%), aunque con una diferencia algo más notoria que en distribuciones simétricas, lo cual es consistente con el sesgo hacia la derecha generado por los valores extremos en la cola superior. La forma del histograma exhibe un pico marcado en valores bajos-moderados de pobreza, lo que respalda la forma leptocúrtica previamente hallada (curtosis = 4.27 > 3), indicando una mayor concentración de datos en niveles moderados de pobreza y una cola derecha más pesada que la de una distribución normal.
+
+La presencia de valores atípicos exclusivamente en la cola superior sugiere que, si bien la mayoría de las regiones presenta niveles de pobreza moderados, existe un subconjunto de regiones con condiciones de pobreza considerablemente más severas que el resto, lo cual podría estar asociado a menor acceso a educación, empleo o cobertura médica, variables que se explorarán más adelante en el análisis.
+
+**2. medincome:**
 
 ```{r medincomeSummary}
 summarise_numeric(df, medincome)
-
 ```
+Se registraron un total de 3047 registros del ingreso medio por región (`medincome`), con una tasa media de 46.67 mil (asumiendo unidad en miles; ajustar si es en dólares) (DE = 12040.09). Además, el 50% de los ingresos son menores o iguales a 45207 (RIC = 13609.5), es decir, relativamente cercanos a la media, lo que sugiere una distribución moderadamente centrada. Por otro lado, el 25% son a lo sumo 38882.5, y el 75% no supera 52492. Además, el rango de los datos es de 102995, siendo el ingreso mínimo 22640 y el máximo 125635. Por otro lado, se evidencia que los ingresos poseen una forma marcadamente leptocúrtica (curtosis = 6.71 > 3), es decir, con un pico bastante más marcado y colas mucho más pesadas que la normal. Además, los datos presentan una asimetría positiva pronunciada o sesgo hacia la derecha (Coef_asim = 1.41), con lo cual se observa que existen algunas regiones con ingresos excesivamente más altos que la mayoría.
+
+
 ```{r medincomeUniv}
 plot_univariado(df, medincome)
 
 ```
 
+El histograma de `medincome` muestra una distribución claramente unimodal con un sesgo pronunciado hacia la derecha, concentrando la mayoría de las observaciones entre 35000 y 55000 aproximadamente. El diagrama de cajas y bigotes confirma esta asimetría, evidenciando un número considerable de valores atípicos por encima del bigote superior (regiones con ingresos superiores a 75000, llegando hasta cerca de 125000), sin presencia de outliers en la cola inferior. Esta concentración de valores extremos únicamente en la parte superior es consistente con el elevado coeficiente de asimetría (1.41) y la fuerte curtosis (6.71), sugiriendo que, si bien la mayoría de las regiones presenta ingresos moderados, existe un subconjunto reducido de regiones con niveles de ingreso considerablemente más altos que el resto.
+
+**3. pctbachdeg25_over:**
+
 ```{r pctbachdeg25_overSummary}
 summarise_numeric(df, pctbachdeg25_over)
 
 ```
+Se registraron un total de 3047 registros del porcentaje de personas con título universitario entre 25 y más años (`pctbachdeg25_over`), con una tasa media de 13.28% (DE = 5.39). Además, el 50% de los porcentajes son menores o iguales a 12.3% (RIC = 6.7), es decir, son cercanos a la media, lo que sugiere una distribución relativamente centrada. Por otro lado, el 25% son a lo sumo 9.4%, y el 75% no supera 16.1%. Además, el rango de los datos es de 39.7, siendo el porcentaje mínimo 2.5% y el máximo 42.2%. Por otro lado, se evidencia que los porcentajes de personas con título universitario poseen una forma leptocúrtica (curtosis = 4.73 > 3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, los datos presentan una asimetría positiva o sesgo hacia la derecha bastante marcado (Coef_asim = 1.09), con lo cual se observa que existen algunas regiones con porcentajes de personas con título universitario excesivamente más altos que la mayoría.
 ```{r pctbachdeg25_overUniv}
 plot_univariado(df, pctbachdeg25_over)
 
 ```
+
+El histograma de `pctbachdeg25_over` muestra una distribución unimodal con un sesgo pronunciado hacia la derecha, concentrando la mayoría de las observaciones entre 8% y 18% aproximadamente. El diagrama de cajas y bigotes confirma esta asimetría, evidenciando un número considerable de valores atípicos por encima del bigote superior (regiones con porcentajes de título universitario superiores a 26%, llegando hasta cerca de 42%), sin presencia de outliers en la cola inferior. Esta concentración de valores extremos únicamente en la parte superior es consistente con el elevado coeficiente de asimetría (1.09) y la marcada curtosis (4.73), sugiriendo que, si bien la mayoría de las regiones presenta niveles moderados de formación universitaria, existe un subconjunto de regiones con porcentajes considerablemente más altos que el resto.
+
+**4. pctprivatecoverage:**
+
 ```{r pctprivatecoverageSummary}
 summarise_numeric(df, pctprivatecoverage)
 
 ```
+Se registraron un total de 3047 registros del porcentaje de cobertura de seguro privado (`pctprivatecoverage`), con una tasa media de 64.35% (DE = 10.65). Además, el 50% de los porcentajes son menores o iguales a 65.1% (RIC = 14.9), es decir, muy cercanos a la media, lo que sugiere una distribución relativamente centrada. Por otro lado, el 25% son a lo sumo 57.2%, y el 75% no supera 72.1%. Además, el rango de los datos es de 70, siendo el porcentaje mínimo 22.3% y el máximo 92.3%. Por otro lado, se evidencia que los porcentajes de cobertura privada poseen una forma prácticamente mesocúrtica (curtosis = 2.99 ≈ 3), es decir, con un pico y colas similares a los de una distribución normal. Además, los datos presentan una ligera asimetría negativa o sesgo hacia la izquierda (Coef_asim = -0.39), con lo cual se observa que existen algunas regiones con porcentajes de cobertura privada notablemente más bajos que la mayoría.
 ```{r pctprivatecoverageUniv}
 plot_univariado(df, pctprivatecoverage)
 
 ```
 
+El histograma de `pctprivatecoverage` muestra una distribución razonablemente simétrica, con un ligero sesgo hacia la izquierda, concentrando la mayoría de las observaciones entre 55% y 75%. El diagrama de cajas y bigotes confirma este comportamiento, evidenciando la presencia de valores atípicos únicamente en la cola inferior (regiones con coberturas privadas por debajo de 35%, llegando hasta cerca de 22%), sin outliers en el extremo superior. Esta asimetría leve hacia la izquierda, junto con una curtosis cercana a 3, es consistente con una distribución cercana a la normalidad, salvo por la presencia de algunas regiones con niveles de cobertura privada considerablemente más bajos que el resto.
+
+**5. pctpubliccoverage:**
+
 ```{r pctpubliccoverageSummary}
 summarise_numeric(df, pctpubliccoverage)
 
 ```
+Se registraron un total de 3047 registros del porcentaje de cobertura de seguro público (`pctpubliccoverage`), con una tasa media de 36.25% (DE = 7.84). Además, el 50% de los porcentajes son menores o iguales a 36.3% (RIC = 10.65), lo cual es prácticamente idéntico a la media, sugiriendo una distribución muy simétrica y centrada. Por otro lado, el 25% son a lo sumo 30.9%, y el 75% no supera 41.55%. Además, el rango de los datos es de 53.9, siendo el porcentaje mínimo 11.2% y el máximo 65.1%. Por otro lado, se evidencia que los porcentajes de cobertura pública poseen una forma prácticamente mesocúrtica (curtosis = 2.91 ≈ 3), es decir, con un pico y colas muy similares a los de una distribución normal. Además, los datos presentan una asimetría prácticamente nula (Coef_asim = -0.005), con lo cual se observa que la distribución es esencialmente simétrica.
 ```{r pctpubliccoverageUniv}
 plot_univariado(df, pctpubliccoverage)
 
 ```
 
+El histograma de `pctpubliccoverage` muestra una distribución bastante simétrica y cercana a la forma normal, concentrando la mayoría de las observaciones entre 30% y 42%. El diagrama de cajas y bigotes confirma esta simetría, evidenciando valores atípicos tanto en la cola inferior como en la superior, aunque en cantidad reducida (regiones con coberturas públicas por debajo de 15% o por encima de 57%). La coincidencia entre media y mediana, junto con un coeficiente de asimetría prácticamente nulo y una curtosis cercana a 3, respalda que esta variable se ajusta razonablemente bien a una distribución normal, con solo algunas regiones que se alejan del comportamiento típico en ambos extremos.
+
+**6. pctunemployed16_over:**
+
 ```{r pctunemployed16_overSummary}
 summarise_numeric(df, pctunemployed16_over)
-
 ```
+Se registraron un total de 3047 registros del porcentaje de desempleo en personas mayores de 16 años (`pctunemployed16_over`), con una tasa media de 7.85% (DE = 3.45). Además, el 50% de los porcentajes son menores o iguales a 7.6% (RIC = 4.2), es decir, cercanos a la media, lo que sugiere una distribución relativamente centrada. Por otro lado, el 25% son a lo sumo 5.5%, y el 75% no supera 9.7%. Además, el rango de los datos es de 29, siendo el porcentaje mínimo 0.4% y el máximo 29.4%. Por otro lado, se evidencia que los porcentajes de desempleo poseen una forma leptocúrtica (curtosis = 5.29 > 3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, los datos presentan una asimetría positiva o sesgo hacia la derecha (Coef_asim = 0.89), con lo cual se observa que existen algunas regiones con tasas de desempleo excesivamente más altas que la mayoría.
 ```{r pctunemployed16_overUniv}
 plot_univariado(df, pctunemployed16_over)
 
 ```
+
+El histograma de `pctunemployed16_over` muestra una distribución unimodal con un sesgo notorio hacia la derecha, concentrando la mayoría de las observaciones entre 4% y 12%. El diagrama de cajas y bigotes confirma esta asimetría, evidenciando un número considerable de valores atípicos por encima del bigote superior (regiones con tasas de desempleo superiores a 16%, llegando hasta cerca de 29%), sin presencia de outliers en la cola inferior. Esta concentración de valores extremos únicamente en la parte superior es consistente con el coeficiente de asimetría positivo (0.89) y la marcada curtosis (5.29), sugiriendo que, si bien la mayoría de las regiones presenta tasas de desempleo moderadas, existe un subconjunto de regiones con niveles de desempleo considerablemente más altos que el resto.
 
 ## Análisis exploratorio univariado de otras variables pertinentes
 
@@ -210,3 +253,70 @@ summarise_numeric(df, incidencerate)
 #summarise_char(df, binnedinc)
 
 ```
+
+## Análisis exploratorio bivariado entre la variable dependiente y las variables independientes
+
+Función para visualizar el gráfico de dispersión de un par de variables numéricas
+```{r bivariado}
+plot_dispersion_respuesta <- function(df, var, var_label) {
+  df %>%
+    ggplot(aes(x = {{ var }}, y = target_deathrate)) +
+    geom_point(alpha = 0.4, color = "#1E90FF") +
+    labs(
+      x = var_label,
+      y = "Tasa de mortalidad por cáncer (por cada 100.000 hab.)"
+    ) +
+    theme_bw() +
+    facet_grid(. ~ paste("Dispersión entre", var_label, "y la tasa de mortalidad"))
+}
+```
+
+Seguidamente, se observará cada uno de los gráficos de dispersión entre la variable dependiente `target_deathrate` y cada una de las variables numéricas independientes
+
+**povertypercent vs target_deathrate:**
+```{r deathrateVspovertypercent}
+plot_dispersion_respuesta(df, povertypercent, "povertypercent")
+```
+El diagrama de dispersión entre `povertypercent` y `target_deathrate` muestra una relación positiva pero moderada: a mayor porcentaje de pobreza, se observa una ligera tendencia al aumento en la tasa de mortalidad por cáncer. La mayoría de las observaciones se concentra entre 10% y 20% de pobreza, con tasas de mortalidad principalmente entre 150 y 220 muertes por cada 100,000 habitantes. Además, la dispersión vertical aumenta notablemente en niveles altos de pobreza (superiores a 30%), donde las tasas de mortalidad llegan a superar las 250 muertes por cada 100,000 habitantes en varios casos, sugiriendo que otros factores como el acceso a cobertura médica podrían estar influyendo con mayor peso en esas regiones. También se identifica un valor atípico notable alrededor del 25% de pobreza con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, la relación positiva entre ambas variables no parece lo suficientemente fuerte como para explicar por sí sola la variabilidad de `target_deathrate`, lo que anticipa la necesidad de un modelo de regresión múltiple que incorpore variables adicionales para capturar de forma más completa los determinantes de la mortalidad por cáncer.
+
+**medincome vs target_deathrate:**
+
+```{r deathrateVsmedincome}
+plot_dispersion_respuesta(df, medincome, "medincome")
+```
+
+El diagrama de dispersión entre `medincome` y `target_deathrate` muestra una relación negativa moderada: a mayor ingreso medio, se observa una tendencia a la disminución en la tasa de mortalidad por cáncer, siendo esta la relación más clara identificada hasta el momento. La mayoría de las observaciones se concentra entre 25000 y 75000 de ingreso, con tasas de mortalidad principalmente entre 150 y 220 muertes por cada 100,000 habitantes. Además, la dispersión vertical es notablemente mayor en niveles bajos de ingreso (por debajo de 40000), donde las tasas llegan a superar las 280 muertes por cada 100,000 habitantes en varios casos, mientras que en niveles altos de ingreso (superiores a 75000) la nube se estrecha considerablemente y las tasas rara vez superan las 180 muertes, sugiriendo un efecto protector más consistente del ingreso a medida que este aumenta. También se identifica el mismo valor atípico notable alrededor de los 35000 de ingreso con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, esta relación negativa parece ser una de las más fuertes entre las variables exploradas hasta ahora, aunque persiste una dispersión considerable que anticipa la necesidad de un modelo de regresión múltiple para capturar de forma más completa los determinantes de la mortalidad por cáncer.
+
+**pctbachdeg25_over vs target_deathrate:**
+
+```{r deathrateVspctbachdeg25_over}
+plot_dispersion_respuesta(df, pctbachdeg25_over, "pctbachdeg25_over")
+```
+
+El diagrama de dispersión entre `pctbachdeg25_over` y `target_deathrate` muestra una relación negativa moderada: a mayor porcentaje de personas con título universitario, se observa una tendencia a la disminución en la tasa de mortalidad por cáncer. La mayoría de las observaciones se concentra entre 8% y 20% de formación universitaria, con tasas de mortalidad principalmente entre 150 y 220 muertes por cada 100,000 habitantes. Además, la dispersión vertical es mayor en niveles bajos de formación universitaria (por debajo de 10%), donde las tasas llegan a superar las 270 muertes por cada 100,000 habitantes en varios casos, mientras que en niveles altos (superiores a 30%) la nube se estrecha y las tasas tienden a ubicarse por debajo de 150, sugiriendo que un mayor nivel educativo podría asociarse con mejores desenlaces frente al cáncer. También se identifica el mismo valor atípico notable alrededor del 6% con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, la relación negativa entre ambas variables refuerza la idea de que los factores socioeconómicos, en este caso la educación, están relacionados con la mortalidad por cáncer, aunque nuevamente la dispersión presente anticipa la necesidad de un modelo de regresión múltiple que incorpore variables adicionales.
+
+**pctprivatecoverage vs target_deathrate:**
+
+```{r deathrateVsprivatecoverage}
+plot_dispersion_respuesta(df, pctprivatecoverage, "pctprivatecoverage")
+```
+
+El diagrama de dispersión entre `pctprivatecoverage` y `target_deathrate` muestra una relación negativa moderada: a mayor porcentaje de cobertura de seguro privado, se observa una tendencia clara a la disminución en la tasa de mortalidad por cáncer. La mayoría de las observaciones se concentra entre 50% y 80% de cobertura privada, con tasas de mortalidad principalmente entre 150 y 210 muertes por cada 100,000 habitantes, formando una nube densa y relativamente estrecha en ese rango. Además, la dispersión vertical es notablemente mayor en niveles bajos de cobertura privada (por debajo de 45%), donde las tasas alcanzan valores entre 200 y 280 muertes por cada 100,000 habitantes con mayor frecuencia, mientras que en niveles altos (superiores a 75%) la nube se desplaza y se comprime hacia tasas más bajas, rara vez superando las 200 muertes, lo que sugiere que una mayor cobertura privada está asociada de forma consistente con menores tasas de mortalidad. También se identifica el mismo valor atípico notable alrededor del 60% de cobertura con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, esta relación negativa moderada es coherente con el patrón inverso observado en pctpubliccoverage, reforzando la hipótesis de que el tipo de cobertura médica está vinculado al nivel socioeconómico y, por extensión, a la mortalidad por cáncer, aunque la dispersión remanente anticipa la necesidad de un modelo de regresión múltiple para capturar el efecto conjunto de todas las variables.
+
+**pctpubliccoverage vs target_deathrate:**
+
+```{r deathrateVspctpubliccoverage}
+plot_dispersion_respuesta(df, pctpubliccoverage, "pctpubliccoverage")
+```
+
+
+El diagrama de dispersión entre `pctpubliccoverage` y `target_deathrate` muestra una relación positiva moderada: a mayor porcentaje de cobertura de seguro público, se observa una tendencia al aumento en la tasa de mortalidad por cáncer, comportamiento opuesto al identificado con la cobertura privada. La mayoría de las observaciones se concentra entre 25% y 50% de cobertura pública, con tasas de mortalidad principalmente entre 150 y 220 muertes por cada 100,000 habitantes. Además, la dispersión vertical aumenta en niveles altos de cobertura pública (superiores a 45%), donde varias regiones alcanzan tasas por encima de 250 muertes por cada 100,000 habitantes, lo que podría estar asociado a que una mayor dependencia de la cobertura pública refleja, de forma indirecta, condiciones socioeconómicas más desfavorables. También se identifica el mismo valor atípico notable alrededor del 30% de cobertura con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, esta relación positiva es consistente con lo hallado en povertypercent y pctunemployed16_over, reforzando la hipótesis de que la desventaja socioeconómica está asociada a una mayor mortalidad por cáncer, aunque la relación no es lo suficientemente fuerte como para prescindir de un modelo de regresión múltiple.
+
+**pctunemployed16_over vs target_deathrate:**
+
+```{r deathrateVspctunemployed16_over}
+plot_dispersion_respuesta(df, pctunemployed16_over, "pctunemployed16_over")
+```
+
+El diagrama de dispersión entre `pctunemployed16_over` y `target_deathrate` muestra una relación positiva moderada: a mayor tasa de desempleo, se observa una tendencia al aumento en la tasa de mortalidad por cáncer. La mayoría de las observaciones se concentra entre 4% y 12% de desempleo, con tasas de mortalidad principalmente entre 150 y 220 muertes por cada 100,000 habitantes. Además, la dispersión vertical aumenta en niveles altos de desempleo (superiores a 15%), donde varias regiones presentan tasas cercanas o superiores a 250 muertes por cada 100,000 habitantes, aunque también se observan algunos casos con tasas bajas en niveles altos de desempleo (como el valor cercano a 110 muertes con desempleo superior a 25%), lo que introduce cierta inconsistencia en la tendencia general. También se identifica el mismo valor atípico notable alrededor del 12% de desempleo con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, la relación positiva entre ambas variables es consistente con el patrón observado en povertypercent y pctpubliccoverage, sugiriendo que las condiciones adversas del mercado laboral podrían estar vinculadas a una mayor mortalidad por cáncer, aunque, al igual que en los casos anteriores, esta relación por sí sola no es suficiente para explicar la variabilidad completa de target_deathrate, lo que anticipa la necesidad de un modelo de regresión múltiple.
+
