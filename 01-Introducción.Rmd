@@ -15,38 +15,43 @@ incidencia como la mortalidad.
 
 En este proyecto se analiza un conjunto de datos que recopila información 
 demográfica, socioeconómica y de salud pública para distintas regiones de 
-Estados Unidos, con el propósito de identificar y cuantificar los factores 
-que más influyen sobre la tasa de mortalidad por cáncer (`target_deathrate`), 
-la cual se toma como variable respuesta a lo largo de todo el análisis.
+Estados Unidos, con el propósito de identificar si existen diferencias 
+estadísticamente significativas en la tasa de mortalidad por cáncer 
+(`target_deathrate`) entre regiones con distintos niveles socioeconómicos, 
+así como cuantificar la fuerza de la asociación lineal entre estos factores 
+y la mortalidad.
 
-El estudio se estructura en torno a los siguientes objetivos:
+Así, la pregunta que guía este estudio es la siguiente: **¿Existen 
+diferencias estadísticamente significativas en la tasa de mortalidad por 
+cáncer entre regiones con distintos niveles socioeconómicos (pobreza, 
+ingreso, cobertura médica), y qué tan fuerte es la asociación lineal entre 
+estos factores y la mortalidad?**
 
-1. **Modelar la relación conjunta** entre `target_deathrate` y variables 
-   socioeconómicas clave (`povertypercent`, `medincome`, 
-   `pctbachdeg25_over`, `pctprivatecoverage`, `pctpubliccoverage`, 
-   `pctunemployed16_over`) mediante un modelo de regresión lineal múltiple.
+Para dar respuesta a esta pregunta, el estudio se estructura en torno a los 
+siguientes objetivos:
 
-2. **Comparar la mortalidad** entre regiones con alta y baja pobreza 
+1. **Comparar la mortalidad** entre regiones con alta y baja pobreza 
    (divididas según la mediana de `povertypercent`) utilizando pruebas t 
    y z para dos muestras independientes.
 
-3. **Evaluar la homogeneidad de varianzas** de `target_deathrate` entre 
+2. **Evaluar la homogeneidad de varianzas** de `target_deathrate` entre 
    esos mismos grupos mediante una prueba F, con el fin de justificar el 
    uso de la prueba t agrupada (pooled) o la corrección de Welch.
 
-4. **Explorar relaciones lineales** entre variables numéricas clave, en 
-   particular `medincome` frente a `target_deathrate`, y 
-   `pctbachdeg25_over` frente a `incidencerate`, mediante un mapa de 
-   correlaciones.
-
-5. **Comparar la mortalidad promedio** entre distintos niveles de ingreso 
-   (`binnedinc`) mediante un análisis de varianza (ANOVA).
-
-6. **Comparar la edad mediana** entre hombres y mujeres por región 
-   (`medianagemale` vs. `medianagefemale`) mediante una prueba t pareada, 
-   como análisis demográfico complementario.
-
+3. **Cuantificar la asociación lineal** entre `target_deathrate` y las 
+   variables socioeconómicas clave (`medincome`, `pctbachdeg25_over`, 
+   `pctprivatecoverage`, `pctpubliccoverage`, `pctunemployed16_over`) 
+   mediante coeficientes de correlación de Pearson y sus respectivas 
+   pruebas de hipótesis, con apoyo de un mapa de correlaciones general.
+4. **Contrastar el efecto de la cobertura médica** sobre la mortalidad 
+   mediante un segundo análisis de varianza (ANOVA), agrupando la 
+   variable `pctprivatecoverage` en categorías, con el fin de verificar 
+   si el patrón hallado con el nivel de ingreso se sostiene al usar un 
+   indicador socioeconómico distinto.
 A través de estos objetivos, se busca aportar evidencia estadística que 
 permita comprender mejor los determinantes de la mortalidad por cáncer, 
 sentando una base cuantitativa que podría orientar decisiones en materia 
-de política pública y asignación de recursos en salud.
+de política pública y asignación de recursos en salud. El desarrollo de un 
+modelo de regresión lineal múltiple que integre el efecto conjunto de 
+estas variables se plantea como una etapa posterior del análisis, una vez 
+establecida la evidencia bivariada aquí presentada.
