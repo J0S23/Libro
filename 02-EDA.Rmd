@@ -322,7 +322,7 @@ El diagrama de dispersión entre `pctunemployed16_over` y `target_deathrate` mue
 
 
 
-## Análisis bivariado
+## Análisis exploratorio bivariado
 
 ```{r variables-bivariado}
 variables_bivariado <- c(
@@ -332,7 +332,6 @@ variables_bivariado <- c(
   "pctprivatecoverage",
   "pctpubliccoverage",
   "pctunemployed16_over",
-  "target_deathrate"
 )
 
 df_bivariado <- df %>%
@@ -480,16 +479,19 @@ La relación es positiva y de fuerza moderada.
 ```{r ingeniería características}
 df <- df %>% 
   mutate(
-    coverage_ratio = pctprivatecoverage / pctpubliccoverage,
-    education_poverty_ratio = pctbachdeg25_over / povertypercent,
-    income_poverty_ratio = medincome / povertypercent,
+    coverage_balance = pctprivatecoverage - pctpubliccoverage,
   ) %>% 
-  select(-pctprivatecoverage, -pctpubliccoverage, -pctbachdeg25_over, -povertypercent,
-         -medincome)
+  select(-pctprivatecoverage, -pctpubliccoverage)
 
 df %>% 
-  select(coverage_ratio, education_poverty_ratio, 
-         income_poverty_ratio)%>% 
+  select(coverage_balance)%>% 
   head()
-
+  
 ```
+
+**Histograma y diagrama de cajas: coverage_balance**
+
+```{r coverage_balance}
+plot_univariado(df, coverage_balance)
+```
+El histograma de `coverage_balance` muestra una distribución unimodal y aproximadamente simétrica, con una leve inclinación hacia la izquierda, concentrando la mayoría de las observaciones entre 15 y 50 aproximadamente. El diagrama de cajas y bigotes confirma esta simetría relativa, evidenciando muy pocos valores atípicos en ambos extremos (solo 6 condados por debajo, con valores negativos que indican una leve inclinación hacia la cobertura pública, y 1 condado por encima, cercano a 78.8). Esta escasa presencia de outliers y su distribución equilibrada en ambas colas es consistente con el coeficiente de asimetría cercano a cero (-0.17) y la curtosis moderada (2.75), sugiriendo que, la mayoría de los condados presentan un balance de cobertura relativamente predecible y sin concentraciones extremas, con una inclinación general hacia la cobertura privada por sobre la pública (mediana de 28.6).
