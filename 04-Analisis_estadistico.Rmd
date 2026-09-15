@@ -24,3 +24,127 @@ df_cancer <- read.csv("Data/cancer_reg.csv")
 
 summary(df_cancer)
 ```
+
+## Objetivo 1: supuestos de normalidad y homogeneidad
+
+```{r preparar-objetivo-1}
+stopifnot(all(c("target_deathrate", "grupo_pobreza") %in% names(df)))
+
+df_objetivo_2 <- df %>%
+	filter(!is.na(target_deathrate), !is.na(grupo_pobreza)) %>%
+	mutate(grupo_pobreza = factor(
+		grupo_pobreza,
+		levels = c("Pobreza alta", "Pobreza baja")
+	))
+
+y_alta <- df_objetivo_2 %>%
+	filter(grupo_pobreza == "Pobreza alta") %>%
+	pull(target_deathrate)
+
+y_baja <- df_objetivo_2 %>%
+	filter(grupo_pobreza == "Pobreza baja") %>%
+	pull(target_deathrate)
+```
+
+```{r normalidad-objetivo-1}
+shapiro.test(y_alta)
+shapiro.test(y_baja)
+```
+
+```{r fisher-manual-objetivo-1}
+n_alta <- length(y_alta)
+n_baja <- length(y_baja)
+var_alta <- var(y_alta)
+var_baja <- var(y_baja)
+
+F_manual <- var_alta / var_baja
+gl1_manual_F <- n_alta - 1
+gl2_manual_F <- n_baja - 1
+p_valor_manual_F <- 2 * min(
+	pf(F_manual, gl1_manual_F, gl2_manual_F),
+	1 - pf(F_manual, gl1_manual_F, gl2_manual_F)
+)
+
+c(
+	F_manual = F_manual,
+	gl1_manual_F = gl1_manual_F,
+	gl2_manual_F = gl2_manual_F,
+	p_valor_manual_F = p_valor_manual_F
+)
+```
+
+```{r homogeneidad-objetivo-1}
+var.test(y_alta, y_baja)
+car::leveneTest(target_deathrate ~ grupo_pobreza, data = df_objetivo_2)
+```
+
+```{r decision-objetivo-1}
+# Se usa Welch: no se supone igualdad de varianzas; Wilcoxon queda como respaldo no paramétrico.
+metodo_objetivo_2 <- "Welch"
+metodo_objetivo_2
+```
+
+## Objetivo 2: comparación de medias entre grupos de pobreza
+
+```{r welch-manual-objetivo-2}
+n_alta <- length(y_alta)
+n_baja <- length(y_baja)
+
+media_alta <- mean(y_alta)
+media_baja <- mean(y_baja)
+var_alta <- var(y_alta)
+var_baja <- var(y_baja)
+
+diferencia_medias <- media_alta - media_baja
+error_estandar_welch <- sqrt(var_alta / n_alta + var_baja / n_baja)
+
+t_manual_welch <- diferencia_medias / error_estandar_welch
+gl_manual_welch <- (var_alta / n_alta + var_baja / n_baja)^2 /
+	((var_alta / n_alta)^2 / (n_alta - 1) +
+		 (var_baja / n_baja)^2 / (n_baja - 1))
+
+alpha <- 0.05
+valor_critico_welch <- qt(1 - alpha / 2, df = gl_manual_welch)
+p_valor_manual_welch <- 2 * pt(-abs(t_manual_welch), df = gl_manual_welch)
+
+ic_manual_welch <- diferencia_medias + c(-1, 1) *
+	valor_critico_welch * error_estandar_welch
+
+c(
+	n_alta = n_alta,
+	n_baja = n_baja,
+	media_alta = media_alta,
+	media_baja = media_baja,
+	var_alta = var_alta,
+	var_baja = var_baja,
+	diferencia_medias = diferencia_medias,
+	error_estandar_welch = error_estandar_welch,
+	t_manual_welch = t_manual_welch,
+	gl_manual_welch = gl_manual_welch,
+	valor_critico_welch = valor_critico_welch,
+	p_valor_manual_welch = p_valor_manual_welch
+)
+ic_manual_welch
+```
+
+```{r welch-verificacion-objetivo-2}
+t.test(
+	x = y_alta,
+	y = y_baja,
+	var.equal = FALSE,
+	paired = FALSE
+)
+```
+
+```{r wilcoxon-objetivo-2}
+wilcox.test(
+	x = y_alta,
+	y = y_baja,
+	paired = FALSE,
+	exact = FALSE
+)
+```
+
+```{r efecto-objetivo-2}
+effsize::cohen.d(y_alta, y_baja, paired = FALSE)
+```
