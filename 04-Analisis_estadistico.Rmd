@@ -1,6 +1,6 @@
 # Análisis paramétrico y no paramétrico {#Análisis_estadístico}
 
-## Librerías ---
+## Librerías
 ```{r Librerías}
 library(readxl)
 library(moments)
@@ -14,13 +14,335 @@ library(BSDA)
 library(rstatix)
 ```
 
+Se cargan los datos de cáncer.
 
-## 4.1 Presión arterial: carga y EDA
+```{r data}
+data_cancer <- read.csv("Data/cancer_reg.csv")
 
-Se cargan los datos de presión sistólica y diastólica.
-
-```{r data-presion}
-df_cancer <- read.csv("Data/cancer_reg.csv")
-
-summary(df_cancer)
+summary(data_cancer)
 ```
+
+Ahora, repitamos todas las transformaciones de datos para preparar el análisis estadístico.
+
+En primer lugar, volvamos a imputar los datos faltantes
+
+```{r imp}
+data_cancer %>% 
+  mutate(across(
+    where(is.numeric),
+    ~ ifelse(is.na(.),mean(., na.rm= TRUE), .)
+  )) -> df
+```
+
+Verificar si tiene datos faltantes nuevamente
+
+```{r faltante}
+df %>% 
+  summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
+```
+Aplicando nuevamente ingeniería de características entre `pctprivatecoverage` y `pctpubliccoverage`.
+```{r ingeniería características}
+df <- df %>% 
+  mutate(
+    coverage_balance = pctprivatecoverage - pctpubliccoverage,
+  ) %>% 
+  select(-pctprivatecoverage, -pctpubliccoverage)
+
+df %>% 
+  select(coverage_balance)%>% 
+  head()
+  
+```
+
+##  Objetivo #3. Cuantificar la asociación lineal
+
+Para verificar si el uso de correlación de Pearson es apropiado se evalúan los supuestos de normalidad
+```{r variables_corr}
+variables_corr <- c("target_deathrate","medincome", "pctbachdeg25_over", "coverage_balance", "pctunemployed16_over")
+```
+Aplicando Shapiro-Wilk por tener menos de 5000 observaciones
+```{r Shapiro-Wilk}
+# Shapiro-Wilk
+resultados_shapiro <- lapply(variables_corr, function(v) {
+  test <- shapiro.test(df[[v]])
+  data.frame(variable = v, estadistico = round(test$statistic, 4), p_value = round(test$p.value, 4))
+}) %>% bind_rows()
+
+resultados_shapiro
+```
+Verificando con la prueba de Anderson-Darling
+```{r Anderson-Darling}
+resultados_ad <- lapply(variables_corr, function(v) {
+  test <- ad.test(df[[v]])
+  data.frame(variable = v, estadistico = round(test$statistic, 4), p_value = round(test$p.value, 4))
+}) %>% bind_rows()
+
+resultados_ad
+```
+Tanto la prueba de Shapiro-Wilk como la prueba de Anderson-Darling confirman 
+resultados consistentes entre sí: con un 95% de confianza, se rechaza la 
+hipótesis de normalidad para las cinco variables evaluadas, ya que todos 
+los p-valores obtenidos son menores a 0.01 (prácticamente iguales a 0). 
+Esto indica que ni la variable respuesta (`target_deathrate`) ni ninguna de 
+las variables predictoras (`medincome`, `pctbachdeg25_over`, 
+`coverage_balance`, `pctunemployed16_over`) sigue una distribución normal.
+
+Es importante destacar que `coverage_balance` presenta el estadístico de 
+Shapiro-Wilk más cercano a 1 (W = 0.9968) y el valor más bajo de 
+Anderson-Darling (A = 2.02) entre todas las variables, lo cual sugiere que, 
+aunque el supuesto de normalidad se rechaza formalmente por el tamaño 
+muestral, esta variable es la que más se aproxima a un comportamiento 
+normal —consistente con lo observado en el EDA, donde presentó una 
+distribución casi simétrica con curtosis cercana a 3. En contraste, 
+`medincome` y `pctbachdeg25_over` muestran los estadísticos de 
+Anderson-Darling más altos (47.29 y 42.15, respectivamente), reflejando una 
+desviación más marcada de la normalidad, en línea con los altos 
+coeficientes de asimetría y curtosis identificados previamente para ambas 
+variables.
+
+Dado que el supuesto de normalidad no se cumple para ninguna de las 
+variables involucradas, se procede a estimar la asociación mediante 
+coeficientes de correlación no paramétricos.
+
+En primer lugar, se calcula el coeficiente de correlación de Spearman:
+
+```{r Spearman}
+resultados_spearman <- lapply(variables_corr[-1], function(v) {
+  test <- cor.test(df[[v]], df$target_deathrate, method = "spearman")
+  data.frame(
+    variable = v,
+    correlacion = round(test$estimate, 3),
+    p_value = round(test$p.value, 4)
+  )
+}) %>% bind_rows()
+
+resultados_spearman
+```
+Posteriormente, se verifican los resultados mediante el coeficiente de 
+correlación de Kendall's Tau, dado que la presencia de valores repetidos 
+(empates) en los datos impide calcular un p-valor exacto para Spearman:
+
+```{r Kendalls Tau}
+resultados_kendall <- lapply(variables_corr[-1], function(v) {
+  test <- cor.test(df[[v]], df$target_deathrate, method = "kendall")
+  data.frame(
+    variable = v,
+    correlacion = round(test$estimate, 3),
+    p_value = round(test$p.value, 4)
+  )
+}) %>% bind_rows()
+
+resultados_kendall
+```
+`pctbachdeg25_over` presenta la asociación más fuerte con `target_deathrate` 
+(ρ = -0.502, τ = -0.355), de signo negativo, lo que indica que a mayor 
+porcentaje de personas con título universitario, menor tiende a ser la 
+tasa de mortalidad por cáncer. Le sigue `medincome` (ρ = -0.463, τ = -0.325), 
+también con relación negativa, consistente con la idea de que un mayor 
+ingreso medio se asocia con menor mortalidad. `coverage_balance` muestra 
+una asociación negativa de magnitud similar (ρ = -0.430, τ = -0.305), lo 
+que sugiere que un mayor predominio de cobertura privada frente a la 
+pública se relaciona con tasas de mortalidad más bajas. Finalmente, 
+`pctunemployed16_over` es la única variable con asociación positiva 
+(ρ = 0.403, τ = 0.283), indicando que a mayor tasa de desempleo, mayor 
+tiende a ser la mortalidad por cáncer.
+
+En todos los casos, los p-valores son menores a 0.001, por lo que las 
+cuatro asociaciones son estadísticamente significativas al 95% de 
+confianza, y ambos coeficientes coinciden tanto en el signo como en el 
+orden de fuerza de las variables, lo que respalda la consistencia de los 
+resultados. En términos de magnitud, todas las correlaciones se ubican en 
+un rango moderado (entre 0.3 y 0.5 en valor absoluto), lo cual confirma lo 
+observado en los diagramas de dispersión del EDA: cada variable por sí 
+sola guarda una relación real pero no lo suficientemente fuerte como para 
+explicar la totalidad de la variabilidad de `target_deathrate`, reforzando 
+la necesidad de un modelo de regresión múltiple que capture el efecto 
+conjunto de estas variables.
+
+##  Objetivo #4. Contrastar el efecto del balance de cobertura médica
+
+**Paso 1: Categorización de coverage_balance en 3 grupos (terciles)**
+Se optó por dividir `coverage_balance` en terciles (en lugar de utilizar 
+puntos de corte fijos o arbitrarios) porque este método garantiza que cada 
+grupo contenga aproximadamente el mismo número de observaciones (33.3% de 
+los datos cada uno), lo cual es preferible para un análisis de varianza, ya 
+que grupos con tamaños muestrales muy desbalanceados pueden afectar la 
+potencia estadística de la prueba y la validez del supuesto de 
+homogeneidad de varianzas. Además, al basarse en los percentiles reales de 
+la distribución de la variable (y no en umbrales predefinidos sin 
+fundamento estadístico, como 0 o 30), los terciles reflejan de forma más 
+fiel la estructura y variabilidad observada en los datos, evitando que la 
+elección subjetiva de los puntos de corte introduzca sesgos en la 
+comparación de grupos.
+```{r 3 grupos}
+terciles <- quantile(df$coverage_balance, probs = c(1/3, 2/3))
+
+df <- df %>% 
+  mutate(categoria_cobertura = case_when(
+    coverage_balance <= terciles[1] ~ "Predominio público",
+    coverage_balance <= terciles[2] ~ "Balance intermedio",
+    TRUE ~ "Predominio privado"
+  )) %>% 
+  mutate(categoria_cobertura = factor(categoria_cobertura, 
+         levels = c("Predominio público", "Balance intermedio", "Predominio privado")))
+
+table(df$categoria_cobertura)
+```
+
+**Paso 2: Resumen descriptivo de target_deathrate por grupo**
+
+
+```{r Resumen descriptivo}
+df %>% 
+  group_by(categoria_cobertura) %>% 
+  summarise(
+    n = length(target_deathrate),
+    media = mean(target_deathrate), 
+    d_est = sd(target_deathrate),
+    mediana = median(target_deathrate), 
+    RIC = IQR(target_deathrate), 
+    Q1 = quantile(target_deathrate, 0.25), 
+    Q3 = quantile(target_deathrate, 0.75), 
+    min = min(target_deathrate), 
+    max = max(target_deathrate), 
+    curtosis = kurtosis(target_deathrate), 
+    Coef_asim = skewness(target_deathrate)
+  )
+```
+El resumen descriptivo de `target_deathrate` por categoría de balance de 
+cobertura muestra que la media de mortalidad disminuye a medida que 
+aumenta el predominio de la cobertura privada, pasando de 191.26 en 
+"Predominio público" a 179.66 en "Balance intermedio" y 164.99 en 
+"Predominio privado" —una diferencia de aproximadamente 26 muertes por 
+cada 100,000 habitantes entre los grupos extremos. Este mismo patrón se 
+replica en la mediana, lo que refuerza la consistencia de la tendencia.
+
+Los tres grupos presentan tamaños muestrales muy similares (1016, 1020 y 
+1011 respectivamente), como era de esperarse al dividir la variable en 
+terciles. En cuanto a la dispersión, "Predominio público" muestra la mayor 
+variabilidad (DE = 29.89, RIC = 39.45), mientras que "Predominio privado" 
+es el más homogéneo (DE = 22.66, RIC = 26.80), sugiriendo que las regiones 
+con mayor dependencia de cobertura pública no solo presentan mortalidad 
+más alta en promedio, sino también más heterogénea.
+
+Respecto a la forma de las distribuciones, "Balance intermedio" destaca 
+por una curtosis notablemente más alta (7.11) que los otros dos grupos 
+(3.45 y 4.82), lo que indica una concentración de datos más marcada 
+alrededor de su media junto con colas más pesadas —consistente con su 
+valor máximo considerablemente más alto (362.8) respecto a los otros dos 
+grupos. En cuanto a la asimetría, los tres grupos muestran coeficientes 
+cercanos a cero (entre -0.06 y 0.39), indicando distribuciones 
+razonablemente simétricas dentro de cada categoría, con "Balance 
+intermedio" presentando el sesgo positivo más notorio.
+
+**Paso 3: Visualización - boxplot por grupo**
+
+```{r boxplot}
+df %>% 
+  ggplot(aes(x = categoria_cobertura, y = target_deathrate)) +
+  geom_boxplot(fill = "#8ecae6", color = "#023047", 
+  outlier.color = "#e63946")+
+    stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = '#023047') +
+  labs(title = "Tasa de mortalidad por categoría de balance de cobertura",
+       x = "Categoría de cobertura", y = "Tasa de mortalidad (por 100,000 hab.)") +
+  theme_bw() +
+  theme(legend.position = "none")
+
+```
+
+El diagrama de cajas y bigotes muestra un patrón claro entre las tres 
+categorías: a medida que aumenta el predominio de la cobertura privada 
+sobre la pública, la tasa de mortalidad por cáncer tiende a disminuir. El 
+grupo de "Predominio público" presenta la mediana más alta (cercana a 190), 
+seguido por "Balance intermedio" (mediana alrededor de 180), y finalmente 
+"Predominio privado" con la mediana más baja (cercana a 165).
+
+Asimismo, se observa que la dispersión de los datos disminuye ligeramente 
+a medida que aumenta el predominio de la cobertura privada, siendo el 
+grupo de "Predominio público" el que presenta el rango intercuartílico más 
+amplio. Los tres grupos muestran una cantidad considerable de valores 
+atípicos en ambos extremos, particularmente en la cola superior.
+
+En conjunto, estas diferencias visuales entre las medianas de los tres 
+grupos sugieren que el tipo de cobertura médica predominante podría estar 
+asociado con diferencias en la tasa de mortalidad, lo cual será contrastado 
+formalmente mediante la prueba de análisis de varianza (o su alternativa 
+no paramétrica, según los supuestos evaluados).
+
+**Paso 4: Verificar supuestos de ANOVA**
+
+Se prueba la normalidad de `target_deathrate` dentro de cada grupo con la prueba Shapiro-Wilk y verificando con la prueba Anderson-Darling
+
+```{r normalidad por grupo}
+df %>% 
+  group_by(categoria_cobertura) %>% 
+  summarise(
+    shapiro_W = round(shapiro.test(target_deathrate)$statistic, 4),
+    shapiro_p = round(shapiro.test(target_deathrate)$p.value, 4),
+    ad_stat = round(ad.test(target_deathrate)$statistic, 4),
+    ad_p = round(ad.test(target_deathrate)$p.value, 4)
+  )
+```
+
+Los resultados muestran que se rechaza la hipótesis de normalidad en los 
+tres grupos (p < 0.05 en todos los casos, tanto para Shapiro-Wilk como para 
+Anderson-Darling). El grupo "Predominio público" presenta el p-valor más 
+alto en ambas pruebas (Shapiro: p = 0.0092; Anderson-Darling: p = 0.0047), 
+indicando que, aunque técnicamente no cumple normalidad, es el que más se 
+aproxima a ella entre los tres. En contraste, "Balance intermedio" muestra 
+el rechazo más contundente (p < 0.001 en ambas pruebas), consistente con 
+la elevada curtosis (7.11) identificada previamente en su resumen 
+descriptivo, producto del valor atípico presente en ese grupo.
+
+Dado que el supuesto de normalidad no se cumple en ninguno de los tres 
+grupos, se opta por la alternativa no paramétrica de ANOVA, es decir, prueba de Kruskal-Wallis.
+
+**Paso 5: Implementar el modelo pertinente**
+
+```{r Kruskal}
+kruskal.test(target_deathrate ~ categoria_cobertura, data = df)
+
+```
+
+Dado que no se cumple el supuesto de normalidad en ninguno de los tres 
+grupos, se aplica la prueba no paramétrica de Kruskal-Wallis como 
+alternativa al ANOVA clásico. El resultado obtenido (χ² = 491.08, gl = 2, 
+p < 2.2e-16) indica que se rechaza la hipótesis nula de igualdad de 
+distribuciones entre los tres grupos, con un nivel de significancia muy 
+por debajo de 0.001. Esto confirma, con alta confianza estadística, que 
+existen diferencias significativas en la tasa de mortalidad por cáncer 
+entre las categorías de balance de cobertura médica (predominio público, 
+balance intermedio y predominio privado).
+
+Este resultado es consistente con el patrón observado en el análisis 
+descriptivo, donde las medias y medianas de `target_deathrate` mostraban 
+una disminución progresiva desde el grupo de predominio público hacia el 
+de predominio privado. Para determinar específicamente entre qué pares de 
+grupos existen estas diferencias, se procede a realizar un análisis 
+post-hoc mediante la prueba de Dunn.
+
+```{r Dunn}
+df %>% 
+  dunn_test(target_deathrate ~ categoria_cobertura, p.adjust.method = "bonferroni")
+```
+El análisis post-hoc mediante la prueba de Dunn confirma que las 
+diferencias son estadísticamente significativas entre **todos** los pares 
+de grupos comparados (p.adj < 0.001 en los tres casos, con el máximo nivel 
+de significancia posible, indicado por ****).
+
+La diferencia más marcada se observa entre "Predominio público" y 
+"Predominio privado" (estadístico = -22.03, p.adj ≈ 4.89e-107), lo cual es 
+coherente con que estos representan los extremos opuestos del espectro de 
+cobertura médica. Le sigue la comparación entre "Balance intermedio" y 
+"Predominio privado" (estadístico = -13.16, p.adj ≈ 4.51e-39), y finalmente 
+la diferencia menos pronunciada, aunque igualmente significativa, entre 
+"Predominio público" y "Balance intermedio" (estadístico = -8.90, 
+p.adj ≈ 1.69e-18).
+
+En conjunto, estos resultados confirman que la tasa de mortalidad por 
+cáncer difiere significativamente entre las tres categorías de balance de 
+cobertura médica, y que dicha diferencia sigue un patrón gradual y 
+consistente: a mayor predominio de cobertura privada, menor es la tasa de 
+mortalidad, validando estadísticamente la tendencia observada en el 
+análisis descriptivo y gráfico previo.
+
