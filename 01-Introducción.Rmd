@@ -30,24 +30,36 @@ estos factores y la mortalidad?**
 Para dar respuesta a esta pregunta, el estudio se estructura en torno a los 
 siguientes objetivos:
 
-1. **Comparar la mortalidad** entre regiones con alta y baja pobreza 
-   (divididas según la mediana de `povertypercent`) utilizando pruebas t 
-   y z para dos muestras independientes.
+1. **Evaluar los supuestos de normalidad y homogeneidad de varianzas** de 
+   `target_deathrate` entre regiones con alta y baja pobreza (divididas 
+   según la mediana de `povertypercent`), mediante pruebas de normalidad 
+   y una prueba F para la homocedasticidad, con el fin de determinar el 
+   test más adecuado para la comparación de medias entre ambos grupos.
 
-2. **Evaluar la homogeneidad de varianzas** de `target_deathrate` entre 
-   esos mismos grupos mediante una prueba F, con el fin de justificar el 
-   uso de la prueba t agrupada (pooled) o la corrección de Welch.
+2. **Comparar la mortalidad** entre esos mismos grupos utilizando pruebas 
+   t o z para dos muestras independientes, en su versión pooled, Welch, o 
+   mediante una alternativa no paramétrica, según lo determinado por los 
+   supuestos evaluados en el objetivo anterior.
 
 3. **Cuantificar la asociación lineal** entre `target_deathrate` y las 
-   variables socioeconómicas clave (`medincome`, `pctbachdeg25_over`, 
-   `pctprivatecoverage`, `pctpubliccoverage`, `pctunemployed16_over`) 
-   mediante coeficientes de correlación de Pearson y sus respectivas 
-   pruebas de hipótesis, con apoyo de un mapa de correlaciones general.
-4. **Contrastar el efecto de la cobertura médica** sobre la mortalidad 
-   mediante un segundo análisis de varianza (ANOVA), agrupando la 
-   variable `pctprivatecoverage` en categorías, con el fin de verificar 
-   si el patrón hallado con el nivel de ingreso se sostiene al usar un 
-   indicador socioeconómico distinto.
+   variables socioeconómicas clave mediante coeficientes de 
+   correlación de Pearson y sus respectivas pruebas de hipótesis, con 
+   apoyo de un mapa de correlaciones general.
+   
+4. **Contrastar el efecto del balance de cobertura médica** sobre la 
+   mortalidad mediante un análisis de varianza (ANOVA), agrupando la 
+   variable `coverage_balance` en categorías (por ejemplo, predominio de 
+   cobertura pública, balance intermedio y predominio de cobertura 
+   privada), con el fin de determinar si el tipo de cobertura predominante 
+   en una región se asocia con diferencias significativas en la tasa de 
+   mortalidad.
+5. **Evaluar la asociación entre desempleo y mortalidad**, categorizando tanto 
+   `pctunemployed16_over` como `target_deathrate` en niveles alto/bajo 
+   según su mediana, y aplicando una prueba Chi-cuadrado de independencia 
+   sobre la tabla de contingencia resultante, con el fin de contrastar, 
+   desde un enfoque categórico, la relación ya explorada mediante 
+   coeficientes de correlación.
+   
 A través de estos objetivos, se busca aportar evidencia estadística que 
 permita comprender mejor los determinantes de la mortalidad por cáncer, 
 sentando una base cuantitativa que podría orientar decisiones en materia 

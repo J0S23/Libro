@@ -322,7 +322,7 @@ El diagrama de dispersión entre `pctunemployed16_over` y `target_deathrate` mue
 
 
 
-## Análisis exploratorio bivariado
+## Análisis exploratorio bivariado de las variables independientes entre sí
 
 ```{r variables-bivariado}
 variables_bivariado <- c(
@@ -331,7 +331,7 @@ variables_bivariado <- c(
   "pctbachdeg25_over",
   "pctprivatecoverage",
   "pctpubliccoverage",
-  "pctunemployed16_over",
+  "pctunemployed16_over"
 )
 
 df_bivariado <- df %>%
@@ -474,8 +474,10 @@ La distribución de los datos es bastante centrada dentro de la cobertura públi
 La relación es positiva y de fuerza moderada.
 
 
-**Ingeniería de Características**
+##Ingeniería de Características
 
+Aplicando ingeniería de características entre `pctprivatecoverage` y `pctpubliccoverage`.
+Creando así una nueva variable (`coverage_balance`) que describe el balance entre las coberturas pública y privada.
 ```{r ingeniería características}
 df <- df %>% 
   mutate(
