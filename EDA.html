@@ -145,6 +145,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.2" data-path=""><a href="#an%C3%A1lisis-exploratorio-univariado-de-cada-variable-explicativa"><i class="fa fa-check"></i><b>1.2</b> Análisis exploratorio univariado de cada variable explicativa</a></li>
 <li class="chapter" data-level="1.3" data-path=""><a href="#an%C3%A1lisis-exploratorio-univariado-de-otras-variables-pertinentes"><i class="fa fa-check"></i><b>1.3</b> Análisis exploratorio univariado de otras variables pertinentes</a></li>
 <li class="chapter" data-level="1.4" data-path=""><a href="#an%C3%A1lisis-exploratorio-bivariado-entre-la-variable-dependiente-y-las-variables-independientes"><i class="fa fa-check"></i><b>1.4</b> Análisis exploratorio bivariado entre la variable dependiente y las variables independientes</a></li>
+<li class="chapter" data-level="1.5" data-path=""><a href="#an%C3%A1lisis-exploratorio-bivariado-entre-las-variables-independientes"><i class="fa fa-check"></i><b>1.5</b> Análisis exploratorio bivariado entre las variables independientes</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -505,6 +506,140 @@ El diagrama de dispersión entre <code>povertypercent</code> y <code>target_deat
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="fu">plot_dispersion_respuesta</span>(df, pctunemployed16_over, <span class="st">&quot;pctunemployed16_over&quot;</span>)</span></code></pre></div>
 <p><img src="02-EDA_files/figure-html/deathrateVspctunemployed16_over-1.png" alt="" width="672" /></p>
 <p>El diagrama de dispersión entre <code>pctunemployed16_over</code> y <code>target_deathrate</code> muestra una relación positiva moderada: a mayor tasa de desempleo, se observa una tendencia al aumento en la tasa de mortalidad por cáncer. La mayoría de las observaciones se concentra entre 4% y 12% de desempleo, con tasas de mortalidad principalmente entre 150 y 220 muertes por cada 100,000 habitantes. Además, la dispersión vertical aumenta en niveles altos de desempleo (superiores a 15%), donde varias regiones presentan tasas cercanas o superiores a 250 muertes por cada 100,000 habitantes, aunque también se observan algunos casos con tasas bajas en niveles altos de desempleo (como el valor cercano a 110 muertes con desempleo superior a 25%), lo que introduce cierta inconsistencia en la tendencia general. También se identifica el mismo valor atípico notable alrededor del 12% de desempleo con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, la relación positiva entre ambas variables es consistente con el patrón observado en povertypercent y pctpubliccoverage, sugiriendo que las condiciones adversas del mercado laboral podrían estar vinculadas a una mayor mortalidad por cáncer, aunque, al igual que en los casos anteriores, esta relación por sí sola no es suficiente para explicar la variabilidad completa de target_deathrate, lo que anticipa la necesidad de un modelo de regresión múltiple.</p>
+</div>
+<div id="análisis-exploratorio-bivariado-entre-las-variables-independientes" class="section level2 hasAnchor" number="1.5">
+<h2><span class="header-section-number">1.5</span> Análisis exploratorio bivariado entre las variables independientes<a href="#an%C3%A1lisis-exploratorio-bivariado-entre-las-variables-independientes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a>variables_bivariado <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a>  <span class="st">&quot;povertypercent&quot;</span>,</span>
+<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a>  <span class="st">&quot;medincome&quot;</span>,</span>
+<span id="cb48-4"><a href="#cb48-4" tabindex="-1"></a>  <span class="st">&quot;pctbachdeg25_over&quot;</span>,</span>
+<span id="cb48-5"><a href="#cb48-5" tabindex="-1"></a>  <span class="st">&quot;pctprivatecoverage&quot;</span>,</span>
+<span id="cb48-6"><a href="#cb48-6" tabindex="-1"></a>  <span class="st">&quot;pctpubliccoverage&quot;</span>,</span>
+<span id="cb48-7"><a href="#cb48-7" tabindex="-1"></a>  <span class="st">&quot;pctunemployed16_over&quot;</span></span>
+<span id="cb48-8"><a href="#cb48-8" tabindex="-1"></a>)</span>
+<span id="cb48-9"><a href="#cb48-9" tabindex="-1"></a></span>
+<span id="cb48-10"><a href="#cb48-10" tabindex="-1"></a>df_bivariado <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb48-11"><a href="#cb48-11" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">all_of</span>(variables_bivariado))</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a>grafico_dispersion <span class="ot">&lt;-</span> <span class="cf">function</span>(datos, variable_x, variable_y) {</span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>  datos <span class="sc">%&gt;%</span></span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .data[[variable_x]], <span class="at">y =</span> .data[[variable_y]])) <span class="sc">+</span></span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">color =</span> <span class="st">&quot;darkblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a>      <span class="at">title =</span> <span class="fu">paste</span>(variable_y, <span class="st">&quot;vs&quot;</span>, variable_x),</span>
+<span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a>      <span class="at">x =</span> variable_x,</span>
+<span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a>      <span class="at">y =</span> variable_y</span>
+<span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span>
+<span id="cb49-11"><a href="#cb49-11" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Porcentaje de Pobreza vs Ingreso Medio</strong></p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;povertypercent&quot;</span>, <span class="st">&quot;medincome&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/povertypercent-medincome-1.png" alt="" width="672" />
+Los puntos muestran una tendencia descendente clara, mientras aumenta el <code>Porcentaje de Pobreza</code> disminuye el <code>Ingreso Medio</code>. Podemos notar que la mayoría de condados se concentran entre los porcentajes de probreza de 8% y 22%, con gran parte de los valores de estas zonas por debajo de los 60000 USD de ingreso medio.
+Asimismo, podemos notar como la dispersión se mantiene bastante concentrada, la variabilidad de los ingresos aumenta considerablemente cuando el porcentaje de pobreza alcanza porcentajes por debajo de 8% o cuando el ingreso medio llega a valores por debajo de los 27000 USD aumenta la variabilidad del porcentaje de pobreza.
+En general, la relación es negativa, siendo curva, y notablemente fuerte dentro de este dataset, permitiendo ver como el porcentaje de pobreza está directamente relacionado con los ingresos.</p>
+<p><strong>Porcentaje de Pobreza vs Porcentaje de Personas mayores a 25 años con Título Universitario</strong></p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;povertypercent&quot;</span>, <span class="st">&quot;pctbachdeg25_over&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/povertypercent-pctbachdeg25-over-1.png" alt="" width="672" />
+Los puntos muestran una tendencia descendente moderada, mientras aumenta el <code>Porcentaje de Pobreza</code> disminuye el <code>Porcentaje de Personas mayores a 25 años con Título Universitario</code>. Se evidencia como los datos de los condados están concentrados entre los porcentajes de probreza de 10% y 20%, con dicha concentración de zonas por debajo del 16% de personas con título y mayores a 25 años.
+Este gráfico contiene un gran nivel de dispersión el cual se hace notar con la gran cantidad de outliers que está gráfica maneja, llegando hasta porcentajes de 42.2% de personas mayores a 25 años con título, lo cual nos muestra que en ningún condado de Estados Unidos el porcentaje de personas “educadas”, a través de la Universidad, es la mayoría de personas del condado. De igual manera, en el porcentaje de pobreza hay valores que llegan hasta el 47.4%.
+En general, la relación es negativa, siendo ligeramente curva, y fuerte, clarificando la ligera relación entre el porcentaje de pobreza y el porcentaje de personas mayores a 25 con título universitario. Evidenciando como el ser personas “educadas” si se relaciona moderadamente con el porcentaje de pobreza.</p>
+<p><strong>Porcentaje de Pobreza vs Porcentaje con Cobertura Privada</strong></p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;povertypercent&quot;</span>, <span class="st">&quot;pctprivatecoverage&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/povertypercent-pctprivatecoverage-1.png" alt="" width="672" />
+Los puntos muestran una tendencia descendente clara, mientras aumenta el <code>Porcentaje de Pobreza</code> disminuye el <code>Porcentaje con Cobertura Privada</code>. La mayoría de condados están concentrados entre 12% y 20% de pobreza, con valores de cobertura privada que rondan entre el 57% y el 72%.
+El nivel de dispersión es moderado, puesto que a partir de aproximadamente el 8% de porcentaje de pobreza, comienzan a haber outliers mayores, aunque manteniendo una concentración clara, la cual se sitúa entre el 7% y 20% de pobreza, y el 55% y 80% de condados con seguro médico privado.
+En general, la relación es negativa, lineal y muy fuerte, lo que evidencia que el acceso a seguro médico privado está estrechamente ligado al nivel de pobreza de un condado.</p>
+<p><strong>Porcentaje de Pobreza vs Porcentaje con Cobertura Pública</strong></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;povertypercent&quot;</span>, <span class="st">&quot;pctpubliccoverage&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/povertypercent-pctpubliccoverage-1.png" alt="" width="672" />
+A diferencia del gráfico anterior, aquí la tendencia es ascendente, a mayor <code>Porcentaje de Pobreza</code>, mayor tiende a ser el <code>Porcentaje con Cobertura Pública</code>. Con base en el contexto del problema, a mayor pobreza, más dependencia de programas de salud pública en vez de seguros privados es lógico y razonable.
+La mayoría de condados se concentran entre 12% y 20% de pobreza, con cobertura pública entre 31% y 42%.
+La relación es positiva, con curvatura moderada, y ligeramente fuerte.</p>
+<p><strong>Porcentaje de Pobreza vs Porcentaje de Desempleo</strong></p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;povertypercent&quot;</span>, <span class="st">&quot;pctunemployed16_over&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/povertypercent-pctunemployed16-over-1.png" alt="" width="672" />
+Se observa una tendencia ascendente moderada, a mayor pobreza, mayor desempleo en el condado, siendo esto esperable, ya que ambas variables reflejan dificultades económicas similares. La mayoría de los condados se concentran entre 12% y 20% de pobreza, con tasas de desempleo que se ubican en un rango de entre 5.5% y 9.7%.
+Existen algunos condados con desempleo notablemente alto, llegando hasta 29.4%, que se alejan del resto de datoa y podrían considerarse datos atípicos. La relación es positiva, de fuerza moderada y lineal con una leve curvatura.</p>
+<p><strong>Ingreso Medio vs Porcentaje con Título Universitario</strong></p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;medincome&quot;</span>, <span class="st">&quot;pctbachdeg25_over&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/medincome-pctbachdeg25-over-1.png" alt="" width="672" />
+Los puntos muestran una tendencia ascendente evidente, que a mayor <code>Ingreso Medio</code>, mayor <code>Porcentaje con Título Universitario</code>. Resultado predecible bajo el contextado dado que más educación suele traducirse en mejores oportunidades laborales e ingresos más altos.
+La mayoría de los condados se concentran entre 38,900 y 52,500 USD de ingreso, con porcentajes de título universitario entre 9.4% y 16.1% en esa zona.
+La relación es positiva, moderadamente curva, y fuerte.</p>
+<p><strong>Ingreso Medio vs Porcentaje con Cobertura Privada</strong></p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;medincome&quot;</span>, <span class="st">&quot;pctprivatecoverage&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/medincome-pctprivatecoverage-1.png" alt="" width="672" />
+Se observa una tendencia ascendente, a mayor <code>Ingreso Medio</code>, mayor <code>Porcentaje con Cobertura Privada</code>. Esto es coherente con la lógica de los seguros privados puesto que suelen depender de la capacidad de pago o de acceder a un empleo formal con beneficios.
+La mayoría de condados se concentran entre 38,900 y 52,500 USD de ingreso, con cobertura privada entre 57% y 72%.
+La relación es positiva y fuerte, siendo una de las más claras al hablar del ingreso medio.</p>
+<p><strong>Ingreso Medio vs Porcentaje con Cobertura Pública</strong></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;medincome&quot;</span>, <span class="st">&quot;pctpubliccoverage&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/medincome-pctpubliccoverage-1.png" alt="" width="672" />
+Aquí la tendencia es descendente, conforme aumenta el <code>Ingreso Medio</code>, disminuye el <code>Porcentaje con Cobertura Pública</code>, siendo consistente con el hecho de que a mayor capacidad económica, menor dependencia de programas de salud pública.
+La concentración de los datos se encuentra 28000 USD y los 55000 USD de ingreso medio, junto a un rango de entre 27% y 48% de cobertura pública.
+La relación es negativa y fuerte, la más fuerte entre todas las comparaciones de <code>medincome</code> con las variables de cobertura de salud.</p>
+<p><strong>Ingreso Medio vs Porcentaje de Desempleo</strong></p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;medincome&quot;</span>, <span class="st">&quot;pctunemployed16_over&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/medincome-pctunemployed16-over-1.png" alt="" width="672" />
+Se observa una tendencia descendente, no obstante con una dispersión mayor a lo usual dentro de este dataset, a mayor <code>Ingreso Medio</code>, tiende a disminuir el <code>Porcentaje de Desempleo</code>.
+En este sentido, la distribución de los datos está mucho más esparcida, sin embargo, podemos notar cierto nivel de concentración dentro de la zona de ingresos bajos-medios.
+La relación es negativa y con un nivel de fuerza moderada, debido a que más allá de la concentración de datos, el resto de la distribución pese a seguir esta relación, es con datos más atípicos que normales.</p>
+<p><strong>Porcentaje con Título Universitario vs Porcentaje con Cobertura Privada</strong></p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;pctbachdeg25_over&quot;</span>, <span class="st">&quot;pctprivatecoverage&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/pctbachdeg25-over-pctprivatecoverage-1.png" alt="" width="672" />
+Los puntos muestran una tendencia ascendente moderada, a mayor <code>Porcentaje con Título Universitario</code>, mayor <code>Porcentaje con Cobertura Privada</code>. La mayoría de los condados se concentran entre 9.4% y 16.1% de título universitario, con cobertura privada entre 57% y 72%.
+Podemos observar como tiene una distribución la cual está un poco esparcida pero se desarrolla principalmente por arriba del 50% de cobertura privada.
+La relación es positiva, con una curvatura medianamente notable y con una fuerza moderada.</p>
+<p><strong>Porcentaje con Título Universitario vs Porcentaje con Cobertura Pública</strong></p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;pctbachdeg25_over&quot;</span>, <span class="st">&quot;pctpubliccoverage&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/pctbachdeg25-over-pctpubliccoverage-1.png" alt="" width="672" />
+Se observa una tendencia descendente moderada, a mayor <code>Porcentaje con Título Universitario</code>, menor <code>Porcentaje con Cobertura Pública</code>, como en casos anteriores, siendo consistente dado que con mayor educación se asocia con mejores condiciones económicas y menor dependencia de programas públicos de salud.
+Seguidamente, podemos notar que la concentración de los datos se da dentro de niveles medio-bajo del porcentaje con título universitario, lo cual implica y confirma lo antes mencionado.
+La relación es negativa y de fuerza moderada.</p>
+<p><strong>Porcentaje con Título Universitario vs Porcentaje de Desempleo</strong></p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;pctbachdeg25_over&quot;</span>, <span class="st">&quot;pctunemployed16_over&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/pctbachdeg25-over-pctunemployed16-over-1.png" alt="" width="672" />
+Este es uno de los gráficos con menor fuerza de relación entre todos los analizados, aunque se aprecia una leve tendencia descendente. a mayor título universitario, menor desempleo. La concentración de los datos está considerablemente dispersa, sin un patrón tan marcado como en los pares anteriores.
+La relación es negativa, pero débil-moderada, sugiriendo que el nivel educativo por sí solo no explica gran parte de la variabilidad del desempleo en los condados.</p>
+<p><strong>Porcentaje con Cobertura Privada vs Porcentaje con Cobertura Pública</strong></p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;pctprivatecoverage&quot;</span>, <span class="st">&quot;pctpubliccoverage&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/pctprivatecoverage-pctpubliccoverage-1.png" alt="" width="672" />
+Se observa una tendencia descendente clara, a mayor <code>Porcentaje con Cobertura Privada</code>, menor <code>Porcentaje con Cobertura Pública</code>, lo cual es esperable considerando que ambas variables representan, formas alternativas o competitivas de acceso a seguro médico dentro de un mismo condado.
+La distribución de los datos se concentra entre 55% y 76% de cobertura privada, y entre 25% y 42% de cobertura pública.
+La relación es negativa y fuerte, una de las más marcadas entre todos los pares que no involucran <code>povertypercent</code> o <code>medincome</code>.</p>
+<p><strong>Porcentaje con Cobertura Privada vs Porcentaje de Desempleo</strong></p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;pctprivatecoverage&quot;</span>, <span class="st">&quot;pctunemployed16_over&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/pctprivatecoverage-pctunemployed16-over-1.png" alt="" width="672" />
+Los puntos muestran una tendencia descendente moderada, a mayor <code>Porcentaje con Cobertura Privada</code>, menor <code>Porcentaje de Desempleo</code>. Esto es coherente con que la cobertura privada suele depender de tener empleo formal.
+La distribución de datos se encuentra notablemente concentrada dentro de niveles medio-altos de covertura privada y medio-bajos de desemplo. La cantidad de datos dispersos es bastante moderada a diferencia de muchos otros gráficos.
+La relación es negativa y de fuerza moderada-fuerte.</p>
+<p><strong>Porcentaje con Cobertura Pública vs Porcentaje de Desempleo</strong></p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;pctpubliccoverage&quot;</span>, <span class="st">&quot;pctunemployed16_over&quot;</span>)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/pctpubliccoverage-pctunemployed16-over-1.png" alt="" width="672" />
+Se observa una tendencia ascendente moderada, a mayor <code>Porcentaje con Cobertura Pública</code>, mayor <code>Porcentaje de Desempleo</code>. Siguiendo la misma línea, la idea de que la dependencia de programas públicos de salud tiende a acompañar contextos de mayor desempleo.
+La distribución de los datos es bastante centrada dentro de la cobertura pública y medio-baja dentro de el nivel de desempleo.
+La relación es positiva y de fuerza moderada.</p>
+<p>#Ingeniería de Características</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb65-3"><a href="#cb65-3" tabindex="-1"></a>    <span class="at">coverage_balance =</span> pctprivatecoverage <span class="sc">-</span> pctpubliccoverage,</span>
+<span id="cb65-4"><a href="#cb65-4" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb65-5"><a href="#cb65-5" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>pctprivatecoverage, <span class="sc">-</span>pctpubliccoverage)</span>
+<span id="cb65-6"><a href="#cb65-6" tabindex="-1"></a></span>
+<span id="cb65-7"><a href="#cb65-7" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb65-8"><a href="#cb65-8" tabindex="-1"></a>  <span class="fu">select</span>(coverage_balance)<span class="sc">%&gt;%</span> </span>
+<span id="cb65-9"><a href="#cb65-9" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>##   coverage_balance
+## 1             42.2
+## 2             39.1
+## 3             21.6
+## 4             13.1
+## 5             17.6
+## 6             16.8</code></pre>
+<p><strong>Histograma y diagrama de cajas: coverage_balance</strong></p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, coverage_balance)</span></code></pre></div>
+<p><img src="02-EDA_files/figure-html/coverage_balance-1.png" alt="" width="672" />
+El histograma de <code>coverage_balance</code> muestra una distribución unimodal y aproximadamente simétrica, con una leve inclinación hacia la izquierda, concentrando la mayoría de las observaciones entre 15 y 50 aproximadamente. El diagrama de cajas y bigotes confirma esta simetría relativa, evidenciando muy pocos valores atípicos en ambos extremos (solo 6 condados por debajo, con valores negativos que indican una leve inclinación hacia la cobertura pública, y 1 condado por encima, cercano a 78.8). Esta escasa presencia de outliers y su distribución equilibrada en ambas colas es consistente con el coeficiente de asimetría cercano a cero (-0.17) y la curtosis moderada (2.75), sugiriendo que, la mayoría de los condados presentan un balance de cobertura relativamente predecible y sin concentraciones extremas, con una inclinación general hacia la cobertura privada por sobre la pública (mediana de 28.6).</p>
 </div>
 </div>
             </section>
