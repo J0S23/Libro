@@ -16,7 +16,7 @@ library(rstatix)
 
 Se cargan los datos de cáncer.
 
-```{r data}
+```{r data-analisis}
 data_cancer <- read.csv("Data/cancer_reg.csv")
 
 summary(data_cancer)
@@ -26,7 +26,7 @@ Ahora, repitamos todas las transformaciones de datos para preparar el análisis 
 
 En primer lugar, volvamos a imputar los datos faltantes
 
-```{r imp}
+```{r imp-analisis}
 data_cancer %>% 
   mutate(across(
     where(is.numeric),
@@ -36,12 +36,12 @@ data_cancer %>%
 
 Verificar si tiene datos faltantes nuevamente
 
-```{r faltante}
+```{r faltante-analisis}
 df %>% 
   summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
 ```
 Aplicando nuevamente ingeniería de características entre `pctprivatecoverage` y `pctpubliccoverage`.
-```{r ingeniería características}
+```{r ingenieria-analisis}
 df <- df %>% 
   mutate(
     coverage_balance = pctprivatecoverage - pctpubliccoverage,
@@ -115,7 +115,7 @@ Se verifica con la función de R:
 
 ```{r homogeneidad-objetivo-1}
 var.test(y_alta, y_baja)
-leveneTest(tasa_mortalidad ~ nivel_pobreza, data = df)
+leveneTest(target_deathrate ~ nivel_pobreza, data = df)
 ```
 
 Por medio de esta prueba podemos concluir que, se rechaza Ho y por ende, las varianzas son distintas (p-valor < 0.05). Finalmente con un 95% de confianza podemos afirmar que existen diferencias significativas entre las varianzas de ambos grupos. 
@@ -174,7 +174,7 @@ Con un 95% de confianza podemos afirmar que el tamaño del efecto obtenido media
 
 
 
-##  Objetivo #3. Cuantificar la asociación lineal
+##  Objetivo 3. Cuantificar la asociación lineal
 
 Para verificar si el uso de correlación de Pearson es apropiado se evalúan los supuestos de normalidad
 ```{r variables_corr}
@@ -279,7 +279,7 @@ explicar la totalidad de la variabilidad de `target_deathrate`, reforzando
 la necesidad de un modelo de regresión múltiple que capture el efecto 
 conjunto de estas variables.
 
-##  Objetivo #4. Contrastar el efecto del balance de cobertura médica
+##  Objetivo 4. Contrastar el efecto del balance de cobertura médica
 
 **Paso 1: Categorización de coverage_balance en 3 grupos (terciles)**
 Se optó por dividir `coverage_balance` en terciles (en lugar de utilizar 
