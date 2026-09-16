@@ -115,7 +115,7 @@ Se verifica con la función de R:
 
 ```{r homogeneidad-objetivo-1}
 var.test(y_alta, y_baja)
-leveneTest(tasa_mortalidad ~ nivel_pobreza, data = df)
+leveneTest(target_deathrate ~ nivel_pobreza, data = df)
 ```
 
 Por medio de esta prueba podemos concluir que, se rechaza Ho y por ende, las varianzas son distintas (p-valor < 0.05). Finalmente con un 95% de confianza podemos afirmar que existen diferencias significativas entre las varianzas de ambos grupos. 
