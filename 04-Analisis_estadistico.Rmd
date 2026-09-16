@@ -16,7 +16,7 @@ library(rstatix)
 
 Se cargan los datos de cáncer.
 
-```{r data}
+```{r data analisis}
 data_cancer <- read.csv("Data/cancer_reg.csv")
 
 summary(data_cancer)
@@ -26,7 +26,7 @@ Ahora, repitamos todas las transformaciones de datos para preparar el análisis 
 
 En primer lugar, volvamos a imputar los datos faltantes
 
-```{r imp}
+```{r imp_analisis}
 data_cancer %>% 
   mutate(across(
     where(is.numeric),
@@ -36,12 +36,12 @@ data_cancer %>%
 
 Verificar si tiene datos faltantes nuevamente
 
-```{r faltante}
+```{r faltante_analisis}
 df %>% 
   summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
 ```
 Aplicando nuevamente ingeniería de características entre `pctprivatecoverage` y `pctpubliccoverage`.
-```{r ingeniería características}
+```{r ingeniería características_analisis}
 df <- df %>% 
   mutate(
     coverage_balance = pctprivatecoverage - pctpubliccoverage,
