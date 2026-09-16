@@ -53,12 +53,14 @@ siguientes objetivos:
    privada), con el fin de determinar si el tipo de cobertura predominante 
    en una región se asocia con diferencias significativas en la tasa de 
    mortalidad.
-5. **Evaluar la asociación entre desempleo y mortalidad**, categorizando tanto 
-   `pctunemployed16_over` como `target_deathrate` en niveles alto/bajo 
-   según su mediana, y aplicando una prueba Chi-cuadrado de independencia 
-   sobre la tabla de contingencia resultante, con el fin de contrastar, 
-   desde un enfoque categórico, la relación ya explorada mediante 
-   coeficientes de correlación.
+5. **Evaluar la asociación entre el nivel de ingreso y el nivel de mortalidad** 
+   mediante una prueba de independencia Chi-cuadrado 
+   ($\chi^2$) sobre una tabla de contingencia, categorizando 
+   target_deathrate en niveles alto y bajo (según la mediana) y 
+   cruzándola con los niveles de binnedinc, con el fin de determinar 
+   si ambas variables categóricas son estadísticamente independientes o 
+   si, por el contrario, existe una asociación significativa entre el 
+   nivel de ingreso de una región y su categoría de mortalidad.
    
 A través de estos objetivos, se busca aportar evidencia estadística que 
 permita comprender mejor los determinantes de la mortalidad por cáncer, 

@@ -3,3 +3,111 @@ title: "03-Metodología"
 output: html_document
 ---
 
+# Metodología {-}
+
+## Fuente y preparación de los datos
+
+El análisis se realizó sobre un conjunto de datos que combina información 
+demográfica, socioeconómica y de salud pública para 3047 regiones (condados) 
+de Estados Unidos, obtenido de Kaggle. Previo al análisis, se realizó un 
+proceso de imputación de valores faltantes, sustituyendo los datos NA por 
+la media de cada variable numérica, con el fin de conservar el tamaño 
+muestral completo sin descartar observaciones. Asimismo, se aplicó una 
+ingeniería de características, creando la variable `coverage_balance` como 
+la diferencia entre `pctprivatecoverage` y `pctpubliccoverage`, con el 
+objetivo de sintetizar en un único indicador el predominio relativo de 
+cada tipo de cobertura médica en una región.
+
+## Objetivo 1: Evaluación de supuestos de normalidad y homocedasticidad
+
+Para determinar el test más adecuado en la comparación de medias entre 
+regiones de alta y baja pobreza, se dividió la muestra en dos grupos según 
+la mediana de `povertypercent`. Sobre estos grupos se evaluó:
+
+- **Normalidad:** mediante las pruebas de Shapiro-Wilk y Anderson-Darling, 
+  aplicadas a `target_deathrate` dentro de cada grupo, complementadas con 
+  gráficos Q-Q para una inspección visual del ajuste a la distribución 
+  normal.
+- **Homogeneidad de varianzas:** mediante una prueba F de razón de 
+  varianzas entre ambos grupos, y de forma complementaria, la prueba de 
+  Levene, más robusta ante desviaciones de normalidad.
+
+Los resultados de estas pruebas determinaron si correspondía aplicar la 
+prueba t clásica (varianzas iguales, prueba pooled), la corrección de 
+Welch (varianzas distintas), o una alternativa no paramétrica en caso de 
+que el supuesto de normalidad no se cumpliera.
+
+## Objetivo 2: Comparación de medias entre grupos de pobreza
+
+Con base en los resultados del objetivo anterior, se aplicó la prueba 
+estadística correspondiente para comparar la tasa de mortalidad promedio 
+entre los grupos de alta y baja pobreza:
+
+- Si se cumplía normalidad y homocedasticidad: prueba t de Student pooled.
+- Si se cumplía normalidad pero no homocedasticidad: prueba t de Welch.
+- Si no se cumplía normalidad: prueba no paramétrica de Mann-Whitney-Wilcoxon 
+  como alternativa robusta.
+
+En todos los casos, se estableció un nivel de significancia α = 0.05, y se 
+reportaron los intervalos de confianza correspondientes para la diferencia 
+de medias (o medianas, en el caso no paramétrico).
+
+## Objetivo 3: Cuantificación de la asociación lineal
+
+Se evaluó la relación entre `target_deathrate` y cuatro variables 
+socioeconómicas clave (`medincome`, `pctbachdeg25_over`, `coverage_balance`, 
+`pctunemployed16_over`). Previo al cálculo de la correlación, se verificó 
+el supuesto de normalidad univariado de cada variable mediante las pruebas 
+de Shapiro-Wilk y Anderson-Darling. Dado que este supuesto no se cumplió 
+para ninguna variable, se optó por calcular coeficientes de correlación no 
+paramétricos:
+
+- **Correlación de Spearman**, como medida principal de asociación 
+  monótona.
+- **Correlación de Kendall's Tau**, como verificación adicional, dado que 
+  la presencia de valores repetidos (empates) en los datos impedía el 
+  cálculo de un p-valor exacto para Spearman.
+
+Los resultados se complementaron con un mapa de correlaciones general 
+(heatmap) que incluyó todas las variables numéricas relevantes, permitiendo 
+visualizar de forma conjunta la magnitud y dirección de las asociaciones.
+
+## Objetivo 4: Efecto del balance de cobertura médica sobre la mortalidad
+
+La variable `coverage_balance` (numérica y continua) se categorizó en tres 
+grupos mediante terciles de su distribución: predominio de cobertura 
+pública, balance intermedio, y predominio de cobertura privada. Esta 
+estrategia de segmentación garantizó grupos de tamaño muestral equilibrado 
+(aproximadamente 33% de las observaciones en cada categoría).
+
+Se evaluaron los supuestos del análisis de varianza (ANOVA) mediante:
+
+- **Normalidad** de `target_deathrate` dentro de cada grupo (Shapiro-Wilk 
+  y Anderson-Darling).
+- **Homogeneidad de varianzas** entre los tres grupos (prueba de Levene).
+
+Dado que el supuesto de normalidad no se cumplió en ninguno de los tres 
+grupos, se optó por la alternativa no paramétrica del ANOVA: la prueba de 
+**Kruskal-Wallis**. Al resultar esta significativa, se realizó un análisis 
+post-hoc mediante la **prueba de Dunn** (con ajuste de Bonferroni para 
+comparaciones múltiples), con el fin de identificar entre qué pares 
+específicos de grupos existían diferencias significativas.
+
+## Objetivo 5: Asociación entre nivel de ingreso y nivel de mortalidad
+
+Para este objetivo, ambas variables se transformaron a escala categórica: 
+`target_deathrate` se dividió en dos niveles (alto y bajo) según su 
+mediana, mientras que `binnedinc` se mantuvo en sus diez categorías 
+originales (deciles de ingreso medio, ya provistas por el dataset). Con 
+ambas variables categorizadas, se construyó una tabla de contingencia y se 
+aplicó una **prueba de independencia Chi-cuadrado** ($\chi^2$), con el fin 
+de determinar si existía una asociación estadísticamente significativa 
+entre el nivel de ingreso de una región y su categoría de mortalidad, 
+contrastando así, desde un enfoque categórico, la relación ya explorada 
+mediante los coeficientes de correlación del objetivo 3.
+
+## Nivel de significancia
+
+Para todas las pruebas de hipótesis realizadas a lo largo del estudio, se 
+utilizó un nivel de significancia α = 0.05, correspondiente a un 95% de 
+confianza.
