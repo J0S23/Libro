@@ -470,52 +470,9 @@ análisis descriptivo y gráfico previo.
 
 ## Objetivo 5: asociación entre nivel de ingreso y mortalidad
 
-### Análisis univariado — diferencias en `target_deathrate` según `binnedinc`
+### Análisis estadístico de las diferencias en `target_deathrate` según `binnedinc`
 
-
-Resumen descriptivo de `target_deathrate` por grupo de ingreso.
-
-```{r resumen-objetivo-5}
-df %>%
-  group_by(binnedinc) %>%
-  summarise(n = length(target_deathrate),
-            media = mean(target_deathrate),
-            d_est = sd(target_deathrate),
-            mediana = median(target_deathrate),
-            RIC = IQR(target_deathrate),
-            min = min(target_deathrate),
-            max = max(target_deathrate))
-```
-El resumen descriptivo de `target_deathrate` por grupo de ingreso (binnedinc) muestra un patrón claro, este es que la media de mortalidad disminuye a medida que aumenta el nivel de ingreso, pasando de 202.70 (sd = 33.87) en el grupo de ingreso más bajo [22640, 34218.1] hasta 159.07 (sd = 23.17) en el grupo de ingreso más alto (61494.5, 125635], contando con una diferencia de aproximadamente 43.6 muertes por cada 100,000. 
-
-Este mismo patrón se replica en la mediana, que pasa de 204.30 (RIC = 42.90) en el grupo de menor ingreso a 158.80 (RIC = 25.625) en el de mayor ingreso.
-
-Los 10 grupos presentan tamaños muestrales similares, teniendo entre 302 y 306 observaciones. En cuanto a la dispersión, el grupo de menor ingreso muestra mayor variabilidad tanto en media (sd = 33.87) como en mediana (RIC = 42.90), mientras que el grupo de mayor ingreso es más homogéneo en ambas medidas (sd = 23.17, RIC = 25.625) lo que sugiere que las regiones de bajos ingresos no solo presentan mortalidad más alta en promedio, sino también más heterogénea entre sí.
-
-Un dato que destaca es el valor máximo del grupo (37413.8, 40362.7] (362.8), notablemente más alto que el resto de los máximos por grupo (que rondan 213-293), lo que sugiere la presencia de al menos un valor atípico marcado en ese grupo específico.
-
-
-
-Ahora, la visualización a través del gráfico de cajas y bigotes.
-
-```{r boxplot-objetivo-5}
-df %>%
-  ggplot(aes(x = binnedinc, y = target_deathrate)) +
-  geom_boxplot(fill = "#8ecae6", color = "#023047", outlier.color = "#e63946") +
-  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = '#023047') +
-  labs(title = "Tasa de mortalidad segun nivel de ingreso (binnedinc)",
-       x = "Nivel de ingreso", y = "Tasa de mortalidad") +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-El diagrama de cajas y bigotes muestra un patrón descendente, a medida que aumenta el nivel de ingreso, la tasa de mortalidad por cáncer tiende a disminuir. El grupo de menor ingreso [22640, 34218.1] presenta la mediana más alta, mientras que el grupo de mayor ingreso (61494.5, 125635] presenta la mediana más baja. Una tendencia notable y constante a lo largo de estos 10 grupos.
-
-La dispersión también tiende a disminuir común y ligeramente a medida que aumenta el ingreso, siendo el grupo de menor ingreso el que presenta la caja más amplia. Todos los grupos muestran una cantidad considerable de valores atípicos, mayormente en la cola .
-inferior
-
-
-Seguidamente, se verifica normalidad por grupo (Shapiro-Wilk).
+Primeramente, se verifica normalidad por grupo (Shapiro-Wilk).
 
 ```{r normalidad-objetivo-5}
 df %>%
