@@ -243,16 +243,46 @@ plot_univariado(df, pctunemployed16_over)
 
 El histograma de `pctunemployed16_over` muestra una distribución unimodal con un sesgo notorio hacia la derecha, concentrando la mayoría de las observaciones entre 4% y 12%. El diagrama de cajas y bigotes confirma esta asimetría, evidenciando un número considerable de valores atípicos por encima del bigote superior (regiones con tasas de desempleo superiores a 16%, llegando hasta cerca de 29%), sin presencia de outliers en la cola inferior. Esta concentración de valores extremos únicamente en la parte superior es consistente con el coeficiente de asimetría positivo (0.89) y la marcada curtosis (5.29), sugiriendo que, si bien la mayoría de las regiones presenta tasas de desempleo moderadas, existe un subconjunto de regiones con niveles de desempleo considerablemente más altos que el resto.
 
-## Análisis exploratorio univariado de otras variables pertinentes
+## Análisis exploratorio univariado de la variable categórica `binnedinc`
 
-```{r incidencerateSummary}
-summarise_numeric(df, incidencerate)
-
+```{r binnedincFrecuencias}
+df %>% 
+  count(binnedinc, name = "frecuencia") %>% 
+  mutate(frecuecia_porcentual = round(100 * frecuencia / sum(frecuencia), 2))
 ```
-```{r binnedincSummary}
-#summarise_char(df, binnedinc)
+La tabla de frecuencias de `binnedinc` confirma que la variable se 
+distribuye de forma casi perfectamente equitativa entre sus 10 categorías, 
+con frecuencias que oscilan entre 302 y 306 observaciones por grupo (entre 
+9.91% y 10.04% del total). Esto es consistente con la naturaleza de la 
+variable, ya que al estar construida a partir de deciles del ingreso medio 
+(`medincome`), cada categoría fue diseñada para contener aproximadamente 
+el mismo número de regiones. No se observan categorías con representación 
+insuficiente o desbalanceada, lo cual es favorable de cara a la prueba de 
+independencia Chi-cuadrado que se realizará más adelante entre esta 
+variable y la categorización de `target_deathrate`.
 
+```{r gráfico de barras}
+df %>% 
+  ggplot(aes(x = binnedinc)) +
+  geom_bar(fill = "#8ecae6", color = "#023047") +
+  geom_text(stat = "count", aes(label = after_stat(count)), vjust = -0.5) +
+  labs(title = "Distribución de binnedinc",
+       x = "Rango de ingreso medio (binnedinc)", y = "Frecuencia") +
+  scale_y_continuous(limits = c(0, 330)) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(margin = margin(b = 15))
+  )
 ```
+El gráfico de barras confirma visualmente lo observado en la tabla de 
+frecuencias: las diez categorías de `binnedinc` presentan alturas 
+prácticamente idénticas entre sí, reflejando una distribución uniforme de 
+las regiones a lo largo de los distintos rangos de ingreso medio. Esta 
+homogeneidad en el tamaño de los grupos es una característica deseable 
+para la prueba de independencia Chi-cuadrado que se aplicará más adelante, 
+ya que evita que alguna categoría tenga una representación insuficiente 
+que pudiera comprometer la validez de dicha prueba.
 
 ## Análisis exploratorio bivariado entre la variable dependiente y las variables independientes
 
@@ -320,6 +350,44 @@ plot_dispersion_respuesta(df, pctunemployed16_over, "pctunemployed16_over")
 
 El diagrama de dispersión entre `pctunemployed16_over` y `target_deathrate` muestra una relación positiva moderada: a mayor tasa de desempleo, se observa una tendencia al aumento en la tasa de mortalidad por cáncer. La mayoría de las observaciones se concentra entre 4% y 12% de desempleo, con tasas de mortalidad principalmente entre 150 y 220 muertes por cada 100,000 habitantes. Además, la dispersión vertical aumenta en niveles altos de desempleo (superiores a 15%), donde varias regiones presentan tasas cercanas o superiores a 250 muertes por cada 100,000 habitantes, aunque también se observan algunos casos con tasas bajas en niveles altos de desempleo (como el valor cercano a 110 muertes con desempleo superior a 25%), lo que introduce cierta inconsistencia en la tendencia general. También se identifica el mismo valor atípico notable alrededor del 12% de desempleo con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, la relación positiva entre ambas variables es consistente con el patrón observado en povertypercent y pctpubliccoverage, sugiriendo que las condiciones adversas del mercado laboral podrían estar vinculadas a una mayor mortalidad por cáncer, aunque, al igual que en los casos anteriores, esta relación por sí sola no es suficiente para explicar la variabilidad completa de target_deathrate, lo que anticipa la necesidad de un modelo de regresión múltiple.
 
+Ahora veamos la relación entre la variable objetivo `target_deathrate` y la variable categórica `binnedinc`.
+
+Función para observar el gráfico de cajas y bigotes correspondiente a una variable numérica por cada uno de los grupos de la variable categórica `binnedinc`
+```{r numVScat}
+plot_binnedinc_vs <- function(df, var, var_label) {
+  df %>% 
+    ggplot(aes(x = binnedinc, y = {{ var }})) +
+    geom_boxplot(fill = "#8ecae6", color = "#023047", outlier.color = "#e63946") +
+    stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = '#023047') +
+    labs(title = paste(var_label, "por rango de ingreso medio"),
+         x = "Rango de ingreso medio (binnedinc)", 
+         y = var_label) +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
+```
+Ahora llamando dicha función con la variable dependiente `target_deathrate`
+```{r deathrateVSbinnedinc}
+plot_binnedinc_vs(df,target_deathrate,"target_deathrate")
+```
+El diagrama de cajas y bigotes muestra un patrón descendente claro y 
+consistente: a medida que aumenta el rango de ingreso medio (`binnedinc`), 
+la tasa de mortalidad por cáncer disminuye de forma progresiva. El primer 
+grupo, con los ingresos más bajos ([22640, 34218.1]), presenta la mediana 
+más alta (cercana a 205), mientras que el último grupo, con los ingresos 
+más altos ((61494.5, 125635]), presenta la mediana más baja (cercana a 
+160), lo que indica que existe una diferencia de aproximadamente 45 muertes 
+por cada 100,000 habitantes entre los extremos del espectro de ingreso.
+
+La dispersión también parece disminuir levemente a medida que aumenta el 
+ingreso: los grupos de menor ingreso muestran cajas ligeramente más 
+amplias, mientras que los de mayor ingreso presentan una distribución algo 
+más compacta. Además, todos los grupos exhiben una cantidad considerable de 
+valores atípicos en ambos extremos.
+
+Este comportamiento gradual y monótono a lo largo de las diez categorías 
+sugiere que el ingreso medio de una región está asociado de forma negativa 
+con su tasa de mortalidad por cáncer.
 
 
 ## Análisis exploratorio bivariado de las variables independientes entre sí
@@ -352,8 +420,6 @@ grafico_dispersion <- function(datos, variable_x, variable_y) {
     theme_bw()
 }
 ```
-
-
 
 **Porcentaje de Pobreza vs Ingreso Medio**
 ```{r povertypercent-medincome}
@@ -473,11 +539,12 @@ Se observa una tendencia ascendente moderada, a mayor `Porcentaje con Cobertura 
 La distribución de los datos es bastante centrada dentro de la cobertura pública y medio-baja dentro de el nivel de desempleo. 
 La relación es positiva y de fuerza moderada.
 
+**Porcentaje con Cobertura Pública vs Porcentaje de Desempleo**
 
 ##Ingeniería de Características
 
-Aplicando ingeniería de características entre `pctprivatecoverage` y `pctpubliccoverage`.
-Creando así una nueva variable (`coverage_balance`) que describe el balance entre las coberturas pública y privada.
+Aplicando ingeniería de características entre `pctprivatecoverage` y `pctpubliccoverage`
+para crear así una nueva variable (`coverage_balance`) que describe el balance entre las coberturas pública y privada.
 ```{r ingeniería características}
 df <- df %>% 
   mutate(
@@ -497,3 +564,106 @@ df %>%
 plot_univariado(df, coverage_balance)
 ```
 El histograma de `coverage_balance` muestra una distribución unimodal y aproximadamente simétrica, con una leve inclinación hacia la izquierda, concentrando la mayoría de las observaciones entre 15 y 50 aproximadamente. El diagrama de cajas y bigotes confirma esta simetría relativa, evidenciando muy pocos valores atípicos en ambos extremos (solo 6 condados por debajo, con valores negativos que indican una leve inclinación hacia la cobertura pública, y 1 condado por encima, cercano a 78.8). Esta escasa presencia de outliers y su distribución equilibrada en ambas colas es consistente con el coeficiente de asimetría cercano a cero (-0.17) y la curtosis moderada (2.75), sugiriendo que, la mayoría de los condados presentan un balance de cobertura relativamente predecible y sin concentraciones extremas, con una inclinación general hacia la cobertura privada por sobre la pública (mediana de 28.6).
+
+
+## Análisis exploratorio bivariado entre las variables independientes y la variable categórica
+
+**Porcentaje de pobreza VS Rangos de ingreso medio**
+```{r povertypercentVSbinnedinc}
+plot_binnedinc_vs(df,povertypercent,"Porcentaje de pobreza")
+```
+
+El porcentaje de pobreza presenta una relación descendente marcada y 
+consistente a lo largo de los diez rangos de ingreso medio: el grupo con 
+menor ingreso ([22640, 34218.1]) exhibe la mediana más alta de pobreza, 
+cercana al 27%, mientras que el grupo con mayor ingreso ((61494.5, 
+125635]) presenta la mediana más baja, en torno al 9%. Esta caída de 
+aproximadamente 18 puntos porcentuales a lo largo del espectro de ingreso 
+confirma, desde una perspectiva categórica, la fuerte relación negativa 
+entre pobreza e ingreso ya observada en el análisis bivariado del EDA. 
+Adicionalmente, se aprecia que la dispersión de la pobreza es notablemente 
+mayor en los grupos de menor ingreso, con cajas más amplias y una cantidad 
+considerable de valores atípicos superiores, mientras que en los grupos de 
+mayor ingreso la distribución se vuelve más compacta y homogénea, 
+sugiriendo que la pobreza es un fenómeno más variable y heterogéneo en las 
+regiones económicamente más desfavorecidas.
+
+**ingreso medio VS Rangos de ingresos medios**
+```{r medincomeVSbinnedinc}
+plot_binnedinc_vs(df,medincome,"ingreso medio")
+```
+
+Como es de esperarse dado que `binnedinc` se construye directamente a 
+partir de esta variable, la relación entre `medincome` y el rango de 
+ingreso medio es marcadamente ascendente a lo largo de todos los grupos: 
+cada categoría sucesiva presenta una mediana de ingreso mayor que la 
+anterior, comenzando alrededor de 31000 en el grupo más bajo y llegando a 
+cerca de 73000 en el grupo más alto. La dispersión dentro de cada grupo es 
+mínima en las primeras nueve categorías, reflejando que los puntos de 
+corte de `binnedinc` efectivamente segmentan el ingreso en rangos estrechos 
+y bien definidos. Sin embargo, el último grupo ((61494.5, 125635]) 
+constituye una excepción notable: al ser un intervalo abierto que agrupa 
+todos los ingresos superiores a 61494.5 sin un límite superior definido, 
+presenta una caja considerablemente más amplia y una cantidad importante 
+de valores atípicos que se extienden hasta cerca de 125000, lo cual es una 
+consecuencia natural de cómo fue construido este último rango, y no un 
+hallazgo sustantivo sobre la variable en sí.
+
+**Porcentaje con Título Universitario VS Rangos de ingresos medios**
+```{r pctbachdeg25_overVSbinnedinc}
+plot_binnedinc_vs(df,pctbachdeg25_over,"Porcentaje con Título Universitario")
+```
+
+El porcentaje de personas con título universitario muestra una relación 
+ascendente clara y prácticamente monótona a lo largo de los rangos de 
+ingreso: el grupo de menor ingreso presenta una mediana de apenas 8%, 
+mientras que el grupo de mayor ingreso alcanza una mediana de 21%, más del 
+doble. Este patrón es coherente con la lógica socioeconómica esperada, 
+donde un mayor nivel educativo se traduce en mejores oportunidades 
+laborales y, por ende, en ingresos más altos. Es interesante notar que la 
+dispersión de esta variable aumenta progresivamente junto con el ingreso, 
+siendo los grupos de mayor ingreso los que presentan cajas más amplias y 
+una mayor cantidad de valores atípicos superiores (llegando hasta 
+porcentajes cercanos al 40%), lo que sugiere que, si bien el ingreso alto 
+generalmente se asocia con mayor educación, existe una heterogeneidad 
+considerable dentro de las regiones más ricas en cuanto al nivel educativo 
+de su población.
+
+**Porcentaje del balance entre las coberturas de salud VS Rangos de ingresos medios**
+```{r coverage_balanceVSbinnedinc}
+plot_binnedinc_vs(df,coverage_balance,"Porcentaje del balance entre coberturas")
+```
+
+El balance de cobertura médica muestra una tendencia ascendente clara a lo 
+largo de los rangos de ingreso: en el grupo de menor ingreso, la mediana 
+se ubica cerca de 0, indicando un equilibrio casi total entre cobertura 
+pública y privada, mientras que en el grupo de mayor ingreso la mediana 
+supera los 50 puntos, reflejando un predominio marcado de la cobertura 
+privada. Este patrón confirma, de forma coherente, lo observado 
+previamente al examinar `pctprivatecoverage` y `pctpubliccoverage` por 
+separado: a medida que aumenta el ingreso, las regiones dependen cada vez 
+más de seguros privados y cada vez menos de programas públicos de salud. 
+Asimismo, se observa que la dispersión es mayor en los grupos de menor 
+ingreso (incluyendo valores negativos, que indican predominio de cobertura 
+pública), mientras que en los grupos de mayor ingreso la variabilidad se 
+reduce y se concentra casi exclusivamente en valores positivos.
+
+**Porcentaje de Desempleo VS Rangos de ingresos medios**
+```{r pctunemployed16_overVSbinnedinc}
+plot_binnedinc_vs(df,pctunemployed16_over,"Porcentaje de Desempleo")
+```
+
+El porcentaje de desempleo presenta una relación descendente, aunque menos 
+pronunciada que las variables anteriores: el grupo de menor ingreso 
+muestra una mediana de desempleo de 12%, mientras que el grupo de mayor 
+ingreso registra una mediana de apenas 6%, es decir, la mitad. A diferencia 
+de `povertypercent` y `pctbachdeg25_over`, donde la tendencia era muy 
+marcada y consistente, aquí se observa una disminución más gradual y con 
+mayor superposición entre grupos intermedios, sugiriendo que el desempleo, 
+si bien está relacionado con el nivel de ingreso, depende también de otros 
+factores no capturados directamente por esta variable. La dispersión es 
+considerablemente mayor en los grupos de menor ingreso, con cajas más 
+amplias y numerosos valores atípicos superiores (algunos superando el 25% 
+de desempleo), mientras que en los grupos de mayor ingreso la distribución 
+se vuelve más compacta, reflejando una menor variabilidad en las 
+condiciones laborales de las regiones más prósperas.
