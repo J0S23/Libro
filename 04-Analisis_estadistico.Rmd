@@ -16,7 +16,7 @@ library(rstatix)
 
 Se cargan los datos de cáncer.
 
-```{r data}
+```{r data-analisis}
 data_cancer <- read.csv("Data/cancer_reg.csv")
 
 summary(data_cancer)
@@ -26,7 +26,7 @@ Ahora, repitamos todas las transformaciones de datos para preparar el análisis 
 
 En primer lugar, volvamos a imputar los datos faltantes
 
-```{r imp}
+```{r imp-analisis}
 data_cancer %>% 
   mutate(across(
     where(is.numeric),
@@ -36,12 +36,12 @@ data_cancer %>%
 
 Verificar si tiene datos faltantes nuevamente
 
-```{r faltante}
+```{r faltante-analisis}
 df %>% 
   summarise(across(everything(), ~sum(is.na(.)), .names = "NA_{.col}"))
 ```
 Aplicando nuevamente ingeniería de características entre `pctprivatecoverage` y `pctpubliccoverage`.
-```{r ingeniería características}
+```{r ingenieria-analisis}
 df <- df %>% 
   mutate(
     coverage_balance = pctprivatecoverage - pctpubliccoverage,
@@ -279,7 +279,7 @@ explicar la totalidad de la variabilidad de `target_deathrate`, reforzando
 la necesidad de un modelo de regresión múltiple que capture el efecto 
 conjunto de estas variables.
 
-##  Objetivo #4. Contrastar el efecto del balance de cobertura médica
+##  Objetivo 4. Contrastar el efecto del balance de cobertura médica
 
 **Paso 1: Categorización de coverage_balance en 3 grupos (terciles)**
 Se optó por dividir `coverage_balance` en terciles (en lugar de utilizar 
@@ -466,3 +466,107 @@ consistente: a mayor predominio de cobertura privada, menor es la tasa de
 mortalidad, validando estadísticamente la tendencia observada en el 
 análisis descriptivo y gráfico previo.
 
+
+
+## Objetivo 5: asociación entre nivel de ingreso y mortalidad
+
+### Análisis univariado — diferencias en `target_deathrate` según `binnedinc`
+
+
+Resumen descriptivo de `target_deathrate` por grupo de ingreso.
+
+```{r resumen-objetivo-5}
+df %>%
+  group_by(binnedinc) %>%
+  summarise(n = length(target_deathrate),
+            media = mean(target_deathrate),
+            d_est = sd(target_deathrate),
+            mediana = median(target_deathrate),
+            RIC = IQR(target_deathrate),
+            min = min(target_deathrate),
+            max = max(target_deathrate))
+```
+El resumen descriptivo de `target_deathrate` por grupo de ingreso (binnedinc) muestra un patrón claro, este es que la media de mortalidad disminuye a medida que aumenta el nivel de ingreso, pasando de 202.70 (sd = 33.87) en el grupo de ingreso más bajo [22640, 34218.1] hasta 159.07 (sd = 23.17) en el grupo de ingreso más alto (61494.5, 125635], contando con una diferencia de aproximadamente 43.6 muertes por cada 100,000. 
+
+Este mismo patrón se replica en la mediana, que pasa de 204.30 (RIC = 42.90) en el grupo de menor ingreso a 158.80 (RIC = 25.625) en el de mayor ingreso.
+
+Los 10 grupos presentan tamaños muestrales similares, teniendo entre 302 y 306 observaciones. En cuanto a la dispersión, el grupo de menor ingreso muestra mayor variabilidad tanto en media (sd = 33.87) como en mediana (RIC = 42.90), mientras que el grupo de mayor ingreso es más homogéneo en ambas medidas (sd = 23.17, RIC = 25.625) lo que sugiere que las regiones de bajos ingresos no solo presentan mortalidad más alta en promedio, sino también más heterogénea entre sí.
+
+Un dato que destaca es el valor máximo del grupo (37413.8, 40362.7] (362.8), notablemente más alto que el resto de los máximos por grupo (que rondan 213-293), lo que sugiere la presencia de al menos un valor atípico marcado en ese grupo específico.
+
+
+
+Ahora, la visualización a través del gráfico de cajas y bigotes.
+
+```{r boxplot-objetivo-5}
+df %>%
+  ggplot(aes(x = binnedinc, y = target_deathrate)) +
+  geom_boxplot(fill = "#8ecae6", color = "#023047", outlier.color = "#e63946") +
+  stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = '#023047') +
+  labs(title = "Tasa de mortalidad segun nivel de ingreso (binnedinc)",
+       x = "Nivel de ingreso", y = "Tasa de mortalidad") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+El diagrama de cajas y bigotes muestra un patrón descendente, a medida que aumenta el nivel de ingreso, la tasa de mortalidad por cáncer tiende a disminuir. El grupo de menor ingreso [22640, 34218.1] presenta la mediana más alta, mientras que el grupo de mayor ingreso (61494.5, 125635] presenta la mediana más baja. Una tendencia notable y constante a lo largo de estos 10 grupos.
+
+La dispersión también tiende a disminuir común y ligeramente a medida que aumenta el ingreso, siendo el grupo de menor ingreso el que presenta la caja más amplia. Todos los grupos muestran una cantidad considerable de valores atípicos, mayormente en la cola .
+inferior
+
+
+Seguidamente, se verifica normalidad por grupo (Shapiro-Wilk).
+
+```{r normalidad-objetivo-5}
+df %>%
+  group_by(binnedinc) %>%
+  summarise(shapiro_W = round(shapiro.test(target_deathrate)$statistic, 4),
+            shapiro_p = round(shapiro.test(target_deathrate)$p.value, 4))
+```
+
+Con un 95% de confianza la prueba de Shapiro-Wilk muestra resultados mixtos entre los 10 grupos de ingreso: en 4 de ellos ([22640, 34218.1], (40362.7, 42724.4], (48021.6, 51046.4], (51046.4, 54545.6]) no se rechaza la normalidad (p > 0.05), mientras que en los 6 restantes sí se rechaza (p-valor < 0.05). Dado que la normalidad no se cumple en la mayoría de los grupos, se aplica la alternativa no paramétrica de Kruskal-Wallis.
+
+```{r kruskal-objetivo-5}
+kruskal.test(target_deathrate ~ binnedinc, data = df)
+```
+
+La prueba de Kruskal-Wallis con un 95% de confianza, arroja un estadístico χ^2 = 651.49, con gl = 9 y p-valor = 0 aproximidamente (p-valor < 0.05). Por lo tanto, se rechaza Ho lo que significa que existen diferencias estadísticamente significativas en la distribución de target_deathrate entre al menos dos de los 10 grupos de nivel de ingreso (binnedinc).
+
+Ahora, aplicaremos una comparación post-hoc para identificar qué pares de grupos difieren.
+
+```{r dunn-objetivo-5}
+df %>%
+  dunn_test(target_deathrate ~ binnedinc, p.adjust.method = "bonferroni")
+```
+
+El análisis post-hoc mediante la prueba de Dunn con ajuste de Bonferroni y con un 95% de confianza muestra que, de los 45 pares de grupos comparados, 36 presentan diferencias estadísticamente significativas (p.adj < 0.05) y 9 no (p.adj ≥ 0.05). Los 9 pares no significativos corresponden, sin excepción, a grupos de ingreso consecutivos, mientras que las comparaciones entre grupos más distantes entre sí resultan con diferencias significativas.
+
+Este patrón es coherente con la tendencia descendente y gradual observada en el resumen descriptivo y el boxplot. Dado que la mortalidad decrece de forma progresiva a medida que aumenta el ingreso, dos grupos de ingreso muy cercanos entre sí no logran mostrar una diferencia lo suficientemente grande como para ser estadísticamente detectable, mientras que grupos más alejados en la escala sí.
+
+### Prueba Chi-cuadrado de independencia
+
+Primero, se categoriza `target_deathrate` en niveles de mortalidad alto/bajo según su mediana.
+
+```{r crear-mortalidad-nivel}
+mediana_target <- median(df$target_deathrate)
+
+df <- df %>%
+  mutate(mortalidad_nivel = ifelse(target_deathrate >= mediana_target, "Alta", "Baja"),
+         mortalidad_nivel = factor(mortalidad_nivel, levels = c("Alta", "Baja")))
+
+table(df$mortalidad_nivel)
+```
+
+Ho: el nivel de ingreso y el nivel de mortalidad son independientes.
+Ha: existe asociación entre el nivel de ingreso y el nivel de mortalidad.
+
+```{r tabla-contingencia-objetivo-5}
+tabla_contingencia <- table(df$binnedinc, df$mortalidad_nivel)
+tabla_contingencia
+```
+
+```{r chi-cuadrado-objetivo-5}
+chisq.test(tabla_contingencia)
+```
+
+Con un 95% de confianza, la prueba Chi-cuadrado de Pearson arroja un estadístico χ^2 = 504.54, con gl = 9 y un p-valor = 0 aproximadamente (p-valor < 0.05). Debido a eso, rechaza H0, por lo que existe una asociación estadísticamente significativa entre el nivel de ingreso (binnedinc) y el nivel de mortalidad (mortalidad_nivel), por lo que ambas variables no son independientes. Este resultado confirma lo visto anteriormente de que los condados de menor ingreso los que presentan una mayor proporción de mortalidad alta, y los de mayor ingreso los que presentan una mayor proporción de mortalidad baja.
