@@ -115,7 +115,7 @@ Se verifica con la función de R:
 
 ```{r homogeneidad-objetivo-1}
 var.test(y_alta, y_baja)
-leveneTest(target_deathrate ~ nivel_pobreza, data = df)
+leveneTest(tasa_mortalidad ~ nivel_pobreza, data = df)
 ```
 
 Por medio de esta prueba podemos concluir que, se rechaza Ho y por ende, las varianzas son distintas (p-valor < 0.05). Finalmente con un 95% de confianza podemos afirmar que existen diferencias significativas entre las varianzas de ambos grupos. 
@@ -174,7 +174,7 @@ Con un 95% de confianza podemos afirmar que el tamaño del efecto obtenido media
 
 
 
-##  Objetivo 3. Cuantificar la asociación lineal
+##  Objetivo #3. Cuantificar la asociación lineal
 
 Para verificar si el uso de correlación de Pearson es apropiado se evalúan los supuestos de normalidad
 ```{r variables_corr}
