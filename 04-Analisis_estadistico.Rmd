@@ -54,6 +54,126 @@ df %>%
   
 ```
 
+Se crea la variable `nivel_pobreza` a través de usar su mediana para poder clasificar el `povertypercent`.
+
+```{r crear-nivel-pobreza}
+mediana_pobreza <- median(df$povertypercent)
+
+df <- df %>%
+  mutate(nivel_pobreza = ifelse(povertypercent >= mediana_pobreza,
+                                  "Pobreza alta", "Pobreza baja"),
+         nivel_pobreza = factor(nivel_pobreza,
+                                  levels = c("Pobreza alta", "Pobreza baja")))
+
+table(df$nivel_pobreza)
+```
+Luego de esto, la nueva variable `nivel_pobreza` se divide en "Pobreza alta" y "Pobreza baja".
+
+## Objetivo 1: supuestos de normalidad y homogeneidad
+
+Ahora separaremos los valores de tasa de mortalidad según el nivel de pobreza.
+
+```{r preparar-objetivo-1}
+y_alta <- df %>% filter(nivel_pobreza == "Pobreza alta") %>% pull(target_deathrate)
+y_baja <- df %>% filter(nivel_pobreza == "Pobreza baja") %>% pull(target_deathrate)
+```
+Una vez dividido, observamos que se divide en 1525 condados que clasifican como Pobreza alta y 1522 condados como Pobreza baja. Ahora con Shapiro-Wilk vamos a comprobar su normalidad 
+
+Ho: x ~ N(μ, σ²) vs Ha: x !~ N(μ, σ²)
+
+```{r normalidad-objetivo-1}
+shapiro.test(y_alta)
+shapiro.test(y_baja)
+```
+
+Con un 95% podemos concluir que se rechaza Ho lo cual implica que se rechaza la normalidad de los datos en ambos grupos (p-valor < 0.001). Sin embargo, dado el gran tamaño de los datos en ambos grupos (n>1500), podemos seguir aplicando el t-test de manera robusta, apoyándonos en el Teorema de Límite Central.
+
+Seguidamente, con el uso de `var.test` vamos a comprobar los supuestos de las varianzas:
+
+Ho: σ²(alta) = σ²(baja) vs Ha: distintas.
+
+```{r fisher-manual-objetivo-1}
+n1 <- length(y_alta)
+n2 <- length(y_baja)
+var_alta <- var(y_alta)
+var_baja <- var(y_baja)
+
+F_manual <- var_alta / var_baja
+df1 <- n1 - 1
+df2 <- n2 - 1
+
+p_valor_F <- 2 * min(pf(F_manual, df1, df2), 1 - pf(F_manual, df1, df2))
+
+IC_inf_F <- (var_alta / var_baja) * (1 / qf(0.975, df1, df2))
+IC_sup_F <- (var_alta / var_baja) * (1 / qf(0.025, df1, df2))
+
+F_manual; df1; df2; p_valor_F
+c(IC_inf_F, IC_sup_F)
+```
+
+Se verifica con la función de R:
+
+```{r homogeneidad-objetivo-1}
+var.test(y_alta, y_baja)
+leveneTest(tasa_mortalidad ~ nivel_pobreza, data = df)
+```
+
+Por medio de esta prueba podemos concluir que, se rechaza Ho y por ende, las varianzas son distintas (p-valor < 0.05). Finalmente con un 95% de confianza podemos afirmar que existen diferencias significativas entre las varianzas de ambos grupos. 
+
+Con base en lo anterior, decidimos utiliza Welch para el desarrollo del objetivo dos dada la diferencia de varianzas. 
+
+
+## Objetivo 2: comparación de la tasa de mortalidad entre niveles de pobreza
+
+En este sentido, ahora queremos comprobar si existe una diferencia significativa entre la tasa de mortalidad promedio:
+
+Ho: μ(alta) = μ(baja) vs Ha: μ(alta) != μ(baja)
+
+```{r welch-manual-objetivo-2}
+media_alta <- mean(y_alta)
+media_baja <- mean(y_baja)
+
+diferencia <- media_alta - media_baja
+SE_welch <- sqrt(var_alta/n1 + var_baja/n2)
+
+t_manual <- diferencia / SE_welch
+gl_welch <- (var_alta/n1 + var_baja/n2)^2 /
+  ((var_alta/n1)^2/(n1-1) + (var_baja/n2)^2/(n2-1))
+
+p_valor_t <- 2 * (1 - pt(abs(t_manual), gl_welch))
+
+IC_inf_t <- diferencia - qt(0.975, gl_welch) * SE_welch
+IC_sup_t <- diferencia + qt(0.975, gl_welch) * SE_welch
+
+t_manual; gl_welch; p_valor_t
+c(IC_inf_t, IC_sup_t)
+```
+
+Se verifica con la función de R:
+
+```{r welch-verificacion-objetivo-2}
+t.test(x = y_alta, y = y_baja, var.equal = FALSE, paired = FALSE)
+```
+Con la prueba de Welch obtenemos que la media del grupo de Pobreza alta es de aproximadamente 189.24, mientras que la del grupo de Pobreza baja aproximadamente de 168.07, esto con una diferencia de aproximandamente 21.18. El estadístico t de Welch es t = 22.79 con gl = 2946.8 y p-valor = 0 aproxidamamente. En síntesis, se evidencia el rechazo de Ho (p-valor < 0.05), por lo que existe una diferencia significativa entre la tasa de mortalidad promedio de ambos grupos. Con un 95% de confianza, también podemos observar un intervalo de confianza de [19.35 , 22.99].
+
+
+Por otra parte, dado el rechazo de normalidad que nos brindó la prueba de Shapiro-Wilk, pese a que no se eliminara la validez del t-test dado el TCL, aplicaremos la prueba de Wilcoxon:
+
+```{r wilcoxon-objetivo-2}
+wilcox.test(x = y_alta, y = y_baja, paired = FALSE, exact = FALSE)
+```
+La prueba de Wilcoxon con un 95% de confianza nos arroja un estadístico W = 1690588, con un p-valor = 0 aproximadamente (p-valor < 0.05). Por lo tanto se rechaza Ho, y podemos concluir que existe una diferencia estadísticamente significativa en la distribución de la tasa de mortalidad entre los grupos de Pobreza alta y Pobreza baja. Este resultado coincide con la prueba de Welch, lo cual refuerza la robustez de esta conclusión al ser respaldada por pruebas paramétricas y no paramétricas.
+
+
+Finalmente, se medirá el tamaño del efecto:
+
+```{r cohend-objetivo-2}
+cohen.d(y_alta, y_baja, paired = FALSE)
+```
+Con un 95% de confianza podemos afirmar que el tamaño del efecto obtenido mediante la d de Cohen nos brinda un valor d = 0.825, que se acompaña junto con un intervalo de confianza de [0.761, 0.899], lo que corresponde a un tamaño de efecto grande dado que d > 0.8. Esto indica que la diferencia entre la tasa de mortalidad por cáncer entre condados de pobreza alta y baja no es solo algo estadísticamente significativo, sino que es relevante desde un punto de vista práctico y real.
+
+
+
 ##  Objetivo #3. Cuantificar la asociación lineal
 
 Para verificar si el uso de correlación de Pearson es apropiado se evalúan los supuestos de normalidad
