@@ -19,5 +19,5 @@ objetivo-2-comparación-de-la-tasa-de-mortalidad-entre-niveles-de-pobreza
 objetivo-3.-cuantificar-la-asociación-lineal
 objetivo-4.-contrastar-el-efecto-del-balance-de-cobertura-médica
 objetivo-5-asociación-entre-nivel-de-ingreso-y-mortalidad
-análisis-univariado-diferencias-en-target_deathrate-según-binnedinc
+análisis-estadístico-de-las-diferencias-en-target_deathrate-según-binnedinc
 prueba-chi-cuadrado-de-independencia

@@ -472,7 +472,7 @@ análisis descriptivo y gráfico previo.
 
 ### Análisis estadístico de las diferencias en `target_deathrate` según `binnedinc`
 
-Primeramente, se verifica normalidad por grupo (Shapiro-Wilk).
+Primeramente, se verifica normalidad por grupo mediante Shapiro-Wilk.
 
 ```{r normalidad-objetivo-5}
 df %>%
@@ -481,28 +481,28 @@ df %>%
             shapiro_p = round(shapiro.test(target_deathrate)$p.value, 4))
 ```
 
-Con un 95% de confianza la prueba de Shapiro-Wilk muestra resultados mixtos entre los 10 grupos de ingreso: en 4 de ellos ([22640, 34218.1], (40362.7, 42724.4], (48021.6, 51046.4], (51046.4, 54545.6]) no se rechaza la normalidad (p > 0.05), mientras que en los 6 restantes sí se rechaza (p-valor < 0.05). Dado que la normalidad no se cumple en la mayoría de los grupos, se aplica la alternativa no paramétrica de Kruskal-Wallis.
+Con un 95% de confianza, la prueba de Shapiro-Wilk muestra resultados mixtos entre los 10 grupos de ingreso: en 4 de ellos (`[22640, 34218.1]`, `(40362.7, 42724.4]`, `(48021.6, 51046.4]`, `(51046.4, 54545.6]`) no se rechaza la normalidad (p > 0.05), mientras que en los 6 restantes sí se rechaza (p < 0.05). Dado que la normalidad no se cumple en la mayoría de los grupos, se opta por la alternativa no paramétrica de Kruskal-Wallis.
 
 ```{r kruskal-objetivo-5}
 kruskal.test(target_deathrate ~ binnedinc, data = df)
 ```
 
-La prueba de Kruskal-Wallis con un 95% de confianza, arroja un estadístico χ^2 = 651.49, con gl = 9 y p-valor = 0 aproximidamente (p-valor < 0.05). Por lo tanto, se rechaza Ho lo que significa que existen diferencias estadísticamente significativas en la distribución de target_deathrate entre al menos dos de los 10 grupos de nivel de ingreso (binnedinc).
+La prueba de Kruskal-Wallis arroja un estadístico χ² = 651.49, con gl = 9 y un p-valor prácticamente igual a 0 (p < 0.05). Se rechaza Ho: existen diferencias estadísticamente significativas en la distribución de `target_deathrate` entre al menos dos de los 10 grupos de nivel de ingreso.
 
-Ahora, aplicaremos una comparación post-hoc para identificar qué pares de grupos difieren.
+Para identificar específicamente qué pares de grupos difieren, se aplica una comparación post-hoc.
 
 ```{r dunn-objetivo-5}
 df %>%
   dunn_test(target_deathrate ~ binnedinc, p.adjust.method = "bonferroni")
 ```
 
-El análisis post-hoc mediante la prueba de Dunn con ajuste de Bonferroni y con un 95% de confianza muestra que, de los 45 pares de grupos comparados, 36 presentan diferencias estadísticamente significativas (p.adj < 0.05) y 9 no (p.adj ≥ 0.05). Los 9 pares no significativos corresponden, sin excepción, a grupos de ingreso consecutivos, mientras que las comparaciones entre grupos más distantes entre sí resultan con diferencias significativas.
+El análisis post-hoc mediante la prueba de Dunn (con ajuste de Bonferroni) muestra que, de los 45 pares de grupos comparados, 36 presentan diferencias estadísticamente significativas (p.adj < 0.05) y 9 no (p.adj ≥ 0.05). Los 9 pares no significativos corresponden, sin excepción, a grupos de ingreso consecutivos, mientras que las comparaciones entre grupos más distantes entre sí resultan significativas.
 
-Este patrón es coherente con la tendencia descendente y gradual observada en el resumen descriptivo y el boxplot. Dado que la mortalidad decrece de forma progresiva a medida que aumenta el ingreso, dos grupos de ingreso muy cercanos entre sí no logran mostrar una diferencia lo suficientemente grande como para ser estadísticamente detectable, mientras que grupos más alejados en la escala sí.
+Este patrón es coherente con la tendencia descendente y gradual observada en el resumen descriptivo y el boxplot del EDA: como la mortalidad decrece de forma progresiva a medida que aumenta el ingreso, dos grupos consecutivos no logran mostrar una diferencia lo suficientemente grande como para ser estadísticamente detectable, mientras que grupos más alejados en la escala sí la muestran.
 
 ### Prueba Chi-cuadrado de independencia
 
-Primero, se categoriza `target_deathrate` en niveles de mortalidad alto/bajo según su mediana.
+Se categoriza `target_deathrate` en niveles de mortalidad alto/bajo según su mediana.
 
 ```{r crear-mortalidad-nivel}
 mediana_target <- median(df$target_deathrate)
@@ -526,4 +526,4 @@ tabla_contingencia
 chisq.test(tabla_contingencia)
 ```
 
-Con un 95% de confianza, la prueba Chi-cuadrado de Pearson arroja un estadístico χ^2 = 504.54, con gl = 9 y un p-valor = 0 aproximadamente (p-valor < 0.05). Debido a eso, rechaza H0, por lo que existe una asociación estadísticamente significativa entre el nivel de ingreso (binnedinc) y el nivel de mortalidad (mortalidad_nivel), por lo que ambas variables no son independientes. Este resultado confirma lo visto anteriormente de que los condados de menor ingreso los que presentan una mayor proporción de mortalidad alta, y los de mayor ingreso los que presentan una mayor proporción de mortalidad baja.
+La prueba Chi-cuadrado de Pearson arroja un estadístico χ² = 504.54, con gl = 9 y un p-valor prácticamente igual a 0 (p < 0.05). Se rechaza Ho: existe una asociación estadísticamente significativa entre el nivel de ingreso (`binnedinc`) y el nivel de mortalidad (`mortalidad_nivel`) — ambas variables no son independientes. Este resultado confirma lo observado anteriormente: los condados de menor ingreso presentan una mayor proporción de mortalidad alta, mientras que los de mayor ingreso presentan una mayor proporción de mortalidad baja.
