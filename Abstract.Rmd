@@ -1,5 +1,5 @@
 --- 
-title: "Proyecto de Métodos Estadísticos"
+title: "Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer"
 author: "Sebastian Ariza y Joseph Arias"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
