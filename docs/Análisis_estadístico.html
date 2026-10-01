@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Análisis paramétrico y no paramétrico | Proyecto de Métodos Estadísticos</title>
+  <title>Chapter 2 Análisis paramétrico y no paramétrico | Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer</title>
   <meta name="description" content="Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos" />
   <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 Análisis paramétrico y no paramétrico | Proyecto de Métodos Estadísticos" />
+  <meta property="og:title" content="Chapter 2 Análisis paramétrico y no paramétrico | Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos" />
   <meta name="github-repo" content="j0s23/Libro" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Análisis paramétrico y no paramétrico | Proyecto de Métodos Estadísticos" />
+  <meta name="twitter:title" content="Chapter 2 Análisis paramétrico y no paramétrico | Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer" />
   
   <meta name="twitter:description" content="Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos" />
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Sebastian Ariza y Joseph Arias" />
 
 
-<meta name="date" content="2026-09-16" />
+<meta name="date" content="2026-10-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -55,8 +55,9 @@
 
 
 <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -66,7 +67,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -187,7 +188,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Proyecto de Métodos Estadísticos</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer</a>
           </h1>
         </div>
 
@@ -213,61 +214,45 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="Análisis_estadístico.html#cb76-1" tabindex="-1"></a>data_cancer <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/cancer_reg.csv&quot;</span>)</span>
 <span id="cb76-2"><a href="Análisis_estadístico.html#cb76-2" tabindex="-1"></a></span>
 <span id="cb76-3"><a href="Análisis_estadístico.html#cb76-3" tabindex="-1"></a><span class="fu">summary</span>(data_cancer)</span></code></pre></div>
-<pre><code>##   avganncount      avgdeathsperyear target_deathrate incidencerate      medincome     
-##  Min.   :    6.0   Min.   :    3    Min.   : 59.7    Min.   : 201.3   Min.   : 22640  
-##  1st Qu.:   76.0   1st Qu.:   28    1st Qu.:161.2    1st Qu.: 420.3   1st Qu.: 38883  
-##  Median :  171.0   Median :   61    Median :178.1    Median : 453.5   Median : 45207  
-##  Mean   :  606.3   Mean   :  186    Mean   :178.7    Mean   : 448.3   Mean   : 47063  
-##  3rd Qu.:  518.0   3rd Qu.:  149    3rd Qu.:195.2    3rd Qu.: 480.9   3rd Qu.: 52492  
-##  Max.   :38150.0   Max.   :14010    Max.   :362.8    Max.   :1206.9   Max.   :125635  
-##                                                                                       
-##    popest2015       povertypercent   studypercap       binnedinc           medianage     
-##  Min.   :     827   Min.   : 3.20   Min.   :   0.00   Length:3047        Min.   : 22.30  
-##  1st Qu.:   11684   1st Qu.:12.15   1st Qu.:   0.00   Class :character   1st Qu.: 37.70  
-##  Median :   26643   Median :15.90   Median :   0.00   Mode  :character   Median : 41.00  
-##  Mean   :  102637   Mean   :16.88   Mean   : 155.40                      Mean   : 45.27  
-##  3rd Qu.:   68671   3rd Qu.:20.40   3rd Qu.:  83.65                      3rd Qu.: 44.00  
-##  Max.   :10170292   Max.   :47.40   Max.   :9762.31                      Max.   :624.00  
-##                                                                                          
-##  medianagemale   medianagefemale  geography         percentmarried   pctnohs18_24  
-##  Min.   :22.40   Min.   :22.30   Length:3047        Min.   :23.10   Min.   : 0.00  
-##  1st Qu.:36.35   1st Qu.:39.10   Class :character   1st Qu.:47.75   1st Qu.:12.80  
-##  Median :39.60   Median :42.40   Mode  :character   Median :52.40   Median :17.10  
-##  Mean   :39.57   Mean   :42.15                      Mean   :51.77   Mean   :18.22  
-##  3rd Qu.:42.50   3rd Qu.:45.30                      3rd Qu.:56.40   3rd Qu.:22.70  
-##  Max.   :64.70   Max.   :65.70                      Max.   :72.50   Max.   :64.10  
-##                                                                                    
-##    pcths18_24   pctsomecol18_24 pctbachdeg18_24   pcths25_over   pctbachdeg25_over
-##  Min.   : 0.0   Min.   : 7.10   Min.   : 0.000   Min.   : 7.50   Min.   : 2.50    
-##  1st Qu.:29.2   1st Qu.:34.00   1st Qu.: 3.100   1st Qu.:30.40   1st Qu.: 9.40    
-##  Median :34.7   Median :40.40   Median : 5.400   Median :35.30   Median :12.30    
-##  Mean   :35.0   Mean   :40.98   Mean   : 6.158   Mean   :34.80   Mean   :13.28    
-##  3rd Qu.:40.7   3rd Qu.:46.40   3rd Qu.: 8.200   3rd Qu.:39.65   3rd Qu.:16.10    
-##  Max.   :72.5   Max.   :79.00   Max.   :51.800   Max.   :54.80   Max.   :42.20    
-##                 NA&#39;s   :2285                                                      
-##  pctemployed16_over pctunemployed16_over pctprivatecoverage pctprivatecoveragealone
-##  Min.   :17.60      Min.   : 0.400       Min.   :22.30      Min.   :15.70          
-##  1st Qu.:48.60      1st Qu.: 5.500       1st Qu.:57.20      1st Qu.:41.00          
-##  Median :54.50      Median : 7.600       Median :65.10      Median :48.70          
-##  Mean   :54.15      Mean   : 7.852       Mean   :64.35      Mean   :48.45          
-##  3rd Qu.:60.30      3rd Qu.: 9.700       3rd Qu.:72.10      3rd Qu.:55.60          
-##  Max.   :80.10      Max.   :29.400       Max.   :92.30      Max.   :78.90          
-##  NA&#39;s   :152                                                NA&#39;s   :609            
-##  pctempprivcoverage pctpubliccoverage pctpubliccoveragealone    pctwhite     
-##  Min.   :13.5       Min.   :11.20     Min.   : 2.60          Min.   : 10.20  
-##  1st Qu.:34.5       1st Qu.:30.90     1st Qu.:14.85          1st Qu.: 77.30  
-##  Median :41.1       Median :36.30     Median :18.80          Median : 90.06  
-##  Mean   :41.2       Mean   :36.25     Mean   :19.24          Mean   : 83.65  
-##  3rd Qu.:47.7       3rd Qu.:41.55     3rd Qu.:23.10          3rd Qu.: 95.45  
-##  Max.   :70.7       Max.   :65.10     Max.   :46.60          Max.   :100.00  
-##                                                                              
-##     pctblack          pctasian        pctotherrace     pctmarriedhouseholds   birthrate     
-##  Min.   : 0.0000   Min.   : 0.0000   Min.   : 0.0000   Min.   :22.99        Min.   : 0.000  
-##  1st Qu.: 0.6207   1st Qu.: 0.2542   1st Qu.: 0.2952   1st Qu.:47.76        1st Qu.: 4.521  
-##  Median : 2.2476   Median : 0.5498   Median : 0.8262   Median :51.67        Median : 5.381  
-##  Mean   : 9.1080   Mean   : 1.2540   Mean   : 1.9835   Mean   :51.24        Mean   : 5.640  
-##  3rd Qu.:10.5097   3rd Qu.: 1.2210   3rd Qu.: 2.1780   3rd Qu.:55.40        3rd Qu.: 6.494  
-##  Max.   :85.9478   Max.   :42.6194   Max.   :41.9303   Max.   :78.08        Max.   :21.326  
+<pre><code>##   avganncount      avgdeathsperyear target_deathrate incidencerate      medincome        popest2015       povertypercent 
+##  Min.   :    6.0   Min.   :    3    Min.   : 59.7    Min.   : 201.3   Min.   : 22640   Min.   :     827   Min.   : 3.20  
+##  1st Qu.:   76.0   1st Qu.:   28    1st Qu.:161.2    1st Qu.: 420.3   1st Qu.: 38883   1st Qu.:   11684   1st Qu.:12.15  
+##  Median :  171.0   Median :   61    Median :178.1    Median : 453.5   Median : 45207   Median :   26643   Median :15.90  
+##  Mean   :  606.3   Mean   :  186    Mean   :178.7    Mean   : 448.3   Mean   : 47063   Mean   :  102637   Mean   :16.88  
+##  3rd Qu.:  518.0   3rd Qu.:  149    3rd Qu.:195.2    3rd Qu.: 480.9   3rd Qu.: 52492   3rd Qu.:   68671   3rd Qu.:20.40  
+##  Max.   :38150.0   Max.   :14010    Max.   :362.8    Max.   :1206.9   Max.   :125635   Max.   :10170292   Max.   :47.40  
+##                                                                                                                          
+##   studypercap       binnedinc           medianage      medianagemale   medianagefemale  geography         percentmarried 
+##  Min.   :   0.00   Length:3047        Min.   : 22.30   Min.   :22.40   Min.   :22.30   Length:3047        Min.   :23.10  
+##  1st Qu.:   0.00   Class :character   1st Qu.: 37.70   1st Qu.:36.35   1st Qu.:39.10   Class :character   1st Qu.:47.75  
+##  Median :   0.00   Mode  :character   Median : 41.00   Median :39.60   Median :42.40   Mode  :character   Median :52.40  
+##  Mean   : 155.40                      Mean   : 45.27   Mean   :39.57   Mean   :42.15                      Mean   :51.77  
+##  3rd Qu.:  83.65                      3rd Qu.: 44.00   3rd Qu.:42.50   3rd Qu.:45.30                      3rd Qu.:56.40  
+##  Max.   :9762.31                      Max.   :624.00   Max.   :64.70   Max.   :65.70                      Max.   :72.50  
+##                                                                                                                          
+##   pctnohs18_24     pcths18_24   pctsomecol18_24 pctbachdeg18_24   pcths25_over   pctbachdeg25_over pctemployed16_over
+##  Min.   : 0.00   Min.   : 0.0   Min.   : 7.10   Min.   : 0.000   Min.   : 7.50   Min.   : 2.50     Min.   :17.60     
+##  1st Qu.:12.80   1st Qu.:29.2   1st Qu.:34.00   1st Qu.: 3.100   1st Qu.:30.40   1st Qu.: 9.40     1st Qu.:48.60     
+##  Median :17.10   Median :34.7   Median :40.40   Median : 5.400   Median :35.30   Median :12.30     Median :54.50     
+##  Mean   :18.22   Mean   :35.0   Mean   :40.98   Mean   : 6.158   Mean   :34.80   Mean   :13.28     Mean   :54.15     
+##  3rd Qu.:22.70   3rd Qu.:40.7   3rd Qu.:46.40   3rd Qu.: 8.200   3rd Qu.:39.65   3rd Qu.:16.10     3rd Qu.:60.30     
+##  Max.   :64.10   Max.   :72.5   Max.   :79.00   Max.   :51.800   Max.   :54.80   Max.   :42.20     Max.   :80.10     
+##                                 NA&#39;s   :2285                                                       NA&#39;s   :152       
+##  pctunemployed16_over pctprivatecoverage pctprivatecoveragealone pctempprivcoverage pctpubliccoverage pctpubliccoveragealone
+##  Min.   : 0.400       Min.   :22.30      Min.   :15.70           Min.   :13.5       Min.   :11.20     Min.   : 2.60         
+##  1st Qu.: 5.500       1st Qu.:57.20      1st Qu.:41.00           1st Qu.:34.5       1st Qu.:30.90     1st Qu.:14.85         
+##  Median : 7.600       Median :65.10      Median :48.70           Median :41.1       Median :36.30     Median :18.80         
+##  Mean   : 7.852       Mean   :64.35      Mean   :48.45           Mean   :41.2       Mean   :36.25     Mean   :19.24         
+##  3rd Qu.: 9.700       3rd Qu.:72.10      3rd Qu.:55.60           3rd Qu.:47.7       3rd Qu.:41.55     3rd Qu.:23.10         
+##  Max.   :29.400       Max.   :92.30      Max.   :78.90           Max.   :70.7       Max.   :65.10     Max.   :46.60         
+##                                          NA&#39;s   :609                                                                        
+##     pctwhite         pctblack          pctasian        pctotherrace     pctmarriedhouseholds   birthrate     
+##  Min.   : 10.20   Min.   : 0.0000   Min.   : 0.0000   Min.   : 0.0000   Min.   :22.99        Min.   : 0.000  
+##  1st Qu.: 77.30   1st Qu.: 0.6207   1st Qu.: 0.2542   1st Qu.: 0.2952   1st Qu.:47.76        1st Qu.: 4.521  
+##  Median : 90.06   Median : 2.2476   Median : 0.5498   Median : 0.8262   Median :51.67        Median : 5.381  
+##  Mean   : 83.65   Mean   : 9.1080   Mean   : 1.2540   Mean   : 1.9835   Mean   :51.24        Mean   : 5.640  
+##  3rd Qu.: 95.45   3rd Qu.:10.5097   3rd Qu.: 1.2210   3rd Qu.: 2.1780   3rd Qu.:55.40        3rd Qu.: 6.494  
+##  Max.   :100.00   Max.   :85.9478   Max.   :42.6194   Max.   :41.9303   Max.   :78.08        Max.   :21.326  
 ## </code></pre>
 <p>Ahora, repitamos todas las transformaciones de datos para preparar el análisis estadístico.</p>
 <p>En primer lugar, volvamos a imputar los datos faltantes</p>
@@ -279,22 +264,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Verificar si tiene datos faltantes nuevamente</p>
 <div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="Análisis_estadístico.html#cb79-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb79-2"><a href="Análisis_estadístico.html#cb79-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
-<pre><code>##   NA_avganncount NA_avgdeathsperyear NA_target_deathrate NA_incidencerate NA_medincome
-## 1              0                   0                   0                0            0
-##   NA_popest2015 NA_povertypercent NA_studypercap NA_binnedinc NA_medianage NA_medianagemale
-## 1             0                 0              0            0            0                0
-##   NA_medianagefemale NA_geography NA_percentmarried NA_pctnohs18_24 NA_pcths18_24
-## 1                  0            0                 0               0             0
-##   NA_pctsomecol18_24 NA_pctbachdeg18_24 NA_pcths25_over NA_pctbachdeg25_over
-## 1                  0                  0               0                    0
-##   NA_pctemployed16_over NA_pctunemployed16_over NA_pctprivatecoverage
-## 1                     0                       0                     0
-##   NA_pctprivatecoveragealone NA_pctempprivcoverage NA_pctpubliccoverage
-## 1                          0                     0                    0
-##   NA_pctpubliccoveragealone NA_pctwhite NA_pctblack NA_pctasian NA_pctotherrace
-## 1                         0           0           0           0               0
-##   NA_pctmarriedhouseholds NA_birthrate
-## 1                       0            0</code></pre>
+<pre><code>##   NA_avganncount NA_avgdeathsperyear NA_target_deathrate NA_incidencerate NA_medincome NA_popest2015 NA_povertypercent
+## 1              0                   0                   0                0            0             0                 0
+##   NA_studypercap NA_binnedinc NA_medianage NA_medianagemale NA_medianagefemale NA_geography NA_percentmarried NA_pctnohs18_24
+## 1              0            0            0                0                  0            0                 0               0
+##   NA_pcths18_24 NA_pctsomecol18_24 NA_pctbachdeg18_24 NA_pcths25_over NA_pctbachdeg25_over NA_pctemployed16_over
+## 1             0                  0                  0               0                    0                     0
+##   NA_pctunemployed16_over NA_pctprivatecoverage NA_pctprivatecoveragealone NA_pctempprivcoverage NA_pctpubliccoverage
+## 1                       0                     0                          0                     0                    0
+##   NA_pctpubliccoveragealone NA_pctwhite NA_pctblack NA_pctasian NA_pctotherrace NA_pctmarriedhouseholds NA_birthrate
+## 1                         0           0           0           0               0                       0            0</code></pre>
 <p>Aplicando nuevamente ingeniería de características entre <code>pctprivatecoverage</code> y <code>pctpubliccoverage</code>.</p>
 <div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="Análisis_estadístico.html#cb81-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
 <span id="cb81-2"><a href="Análisis_estadístico.html#cb81-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -514,14 +493,10 @@ coeficientes de correlación no paramétricos.</p>
 <span id="cb118-6"><a href="Análisis_estadístico.html#cb118-6" tabindex="-1"></a>    <span class="at">p_value =</span> <span class="fu">round</span>(test<span class="sc">$</span>p.value, <span class="dv">4</span>)</span>
 <span id="cb118-7"><a href="Análisis_estadístico.html#cb118-7" tabindex="-1"></a>  )</span>
 <span id="cb118-8"><a href="Análisis_estadístico.html#cb118-8" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span></code></pre></div>
-<pre><code>## Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot
-## compute exact p-value with ties
-## Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot
-## compute exact p-value with ties
-## Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot
-## compute exact p-value with ties
-## Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot
-## compute exact p-value with ties</code></pre>
+<pre><code>## Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot compute exact p-value with ties
+## Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot compute exact p-value with ties
+## Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot compute exact p-value with ties
+## Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot compute exact p-value with ties</code></pre>
 <div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="Análisis_estadístico.html#cb120-1" tabindex="-1"></a>resultados_spearman</span></code></pre></div>
 <pre><code>##                     variable correlacion p_value
 ## rho...1            medincome      -0.463       0
@@ -617,12 +592,11 @@ comparación de grupos.</p>
 <span id="cb126-14"><a href="Análisis_estadístico.html#cb126-14" tabindex="-1"></a>    <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(target_deathrate)</span>
 <span id="cb126-15"><a href="Análisis_estadístico.html#cb126-15" tabindex="-1"></a>  )</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 12
-##   categoria_cobertura     n media d_est mediana   RIC    Q1    Q3   min   max curtosis
-##   &lt;fct&gt;               &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
-## 1 Predominio público   1016  191.  29.9    193.  39.5  172.  211   66.3  292.     3.45
-## 2 Balance intermedio   1020  180.  23.6    180.  27.1  166.  193. 102.   363.     7.11
-## 3 Predominio privado   1011  165.  22.7    165.  26.8  152.  179.  59.7  292.     4.82
-## # ℹ 1 more variable: Coef_asim &lt;dbl&gt;</code></pre>
+##   categoria_cobertura     n media d_est mediana   RIC    Q1    Q3   min   max curtosis Coef_asim
+##   &lt;fct&gt;               &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Predominio público   1016  191.  29.9    193.  39.5  172.  211   66.3  292.     3.45   -0.0332
+## 2 Balance intermedio   1020  180.  23.6    180.  27.1  166.  193. 102.   363.     7.11    0.395 
+## 3 Predominio privado   1011  165.  22.7    165.  26.8  152.  179.  59.7  292.     4.82   -0.0589</code></pre>
 <p>El resumen descriptivo de <code>target_deathrate</code> por categoría de balance de
 cobertura muestra que la media de mortalidad disminuye a medida que
 aumenta el predominio de la cobertura privada, pasando de 191.26 en
@@ -725,11 +699,11 @@ post-hoc mediante la prueba de Dunn.</p>
 <div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="Análisis_estadístico.html#cb133-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb133-2"><a href="Análisis_estadístico.html#cb133-2" tabindex="-1"></a>  <span class="fu">dunn_test</span>(target_deathrate <span class="sc">~</span> categoria_cobertura, <span class="at">p.adjust.method =</span> <span class="st">&quot;bonferroni&quot;</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 9
-##   .y.              group1        group2    n1    n2 statistic         p     p.adj p.adj.signif
-## * &lt;chr&gt;            &lt;chr&gt;         &lt;chr&gt;  &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;       
-## 1 target_deathrate Predominio p… Balan…  1016  1020     -8.90 5.64e- 19 1.69e- 18 ****        
-## 2 target_deathrate Predominio p… Predo…  1016  1011    -22.0  1.63e-107 4.89e-107 ****        
-## 3 target_deathrate Balance inte… Predo…  1020  1011    -13.2  1.50e- 39 4.51e- 39 ****</code></pre>
+##   .y.              group1             group2                n1    n2 statistic         p     p.adj p.adj.signif
+## * &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;              &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;       
+## 1 target_deathrate Predominio público Balance intermedio  1016  1020     -8.90 5.64e- 19 1.69e- 18 ****        
+## 2 target_deathrate Predominio público Predominio privado  1016  1011    -22.0  1.63e-107 4.89e-107 ****        
+## 3 target_deathrate Balance intermedio Predominio privado  1020  1011    -13.2  1.50e- 39 4.51e- 39 ****</code></pre>
 <p>El análisis post-hoc mediante la prueba de Dunn confirma que las
 diferencias son estadísticamente significativas entre <strong>todos</strong> los pares
 de grupos comparados (p.adj &lt; 0.001 en los tres casos, con el máximo nivel
@@ -783,18 +757,18 @@ análisis descriptivo y gráfico previo.</p>
 <div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="Análisis_estadístico.html#cb139-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
 <span id="cb139-2"><a href="Análisis_estadístico.html#cb139-2" tabindex="-1"></a>  <span class="fu">dunn_test</span>(target_deathrate <span class="sc">~</span> binnedinc, <span class="at">p.adjust.method =</span> <span class="st">&quot;bonferroni&quot;</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 45 × 9
-##    .y.              group1         group2    n1    n2 statistic        p    p.adj p.adj.signif
-##  * &lt;chr&gt;            &lt;chr&gt;          &lt;chr&gt;  &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;       
-##  1 target_deathrate (34218.1, 374… (3741…   304   304     -2.39 1.69e- 2 7.61e- 1 ns          
-##  2 target_deathrate (34218.1, 374… (4036…   304   304     -3.91 9.39e- 5 4.23e- 3 **          
-##  3 target_deathrate (34218.1, 374… (4272…   304   305     -6.12 9.22e-10 4.15e- 8 ****        
-##  4 target_deathrate (34218.1, 374… (4520…   304   306     -7.70 1.37e-14 6.16e-13 ****        
-##  5 target_deathrate (34218.1, 374… (4802…   304   305    -10.6  3.83e-26 1.72e-24 ****        
-##  6 target_deathrate (34218.1, 374… (5104…   304   305    -11.3  1.10e-29 4.96e-28 ****        
-##  7 target_deathrate (34218.1, 374… (5454…   304   306    -13.0  9.62e-39 4.33e-37 ****        
-##  8 target_deathrate (34218.1, 374… (6149…   304   302    -16.3  1.87e-59 8.39e-58 ****        
-##  9 target_deathrate (34218.1, 374… [2264…   304   306      2.54 1.10e- 2 4.97e- 1 ns          
-## 10 target_deathrate (37413.8, 403… (4036…   304   304     -1.52 1.29e- 1 1   e+ 0 ns          
+##    .y.              group1             group2                n1    n2 statistic        p    p.adj p.adj.signif
+##  * &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;              &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;       
+##  1 target_deathrate (34218.1, 37413.8] (37413.8, 40362.7]   304   304     -2.39 1.69e- 2 7.61e- 1 ns          
+##  2 target_deathrate (34218.1, 37413.8] (40362.7, 42724.4]   304   304     -3.91 9.39e- 5 4.23e- 3 **          
+##  3 target_deathrate (34218.1, 37413.8] (42724.4, 45201]     304   305     -6.12 9.22e-10 4.15e- 8 ****        
+##  4 target_deathrate (34218.1, 37413.8] (45201, 48021.6]     304   306     -7.70 1.37e-14 6.16e-13 ****        
+##  5 target_deathrate (34218.1, 37413.8] (48021.6, 51046.4]   304   305    -10.6  3.83e-26 1.72e-24 ****        
+##  6 target_deathrate (34218.1, 37413.8] (51046.4, 54545.6]   304   305    -11.3  1.10e-29 4.96e-28 ****        
+##  7 target_deathrate (34218.1, 37413.8] (54545.6, 61494.5]   304   306    -13.0  9.62e-39 4.33e-37 ****        
+##  8 target_deathrate (34218.1, 37413.8] (61494.5, 125635]    304   302    -16.3  1.87e-59 8.39e-58 ****        
+##  9 target_deathrate (34218.1, 37413.8] [22640, 34218.1]     304   306      2.54 1.10e- 2 4.97e- 1 ns          
+## 10 target_deathrate (37413.8, 40362.7] (40362.7, 42724.4]   304   304     -1.52 1.29e- 1 1   e+ 0 ns          
 ## # ℹ 35 more rows</code></pre>
 <p>El análisis post-hoc mediante la prueba de Dunn (con ajuste de Bonferroni) muestra que, de los 45 pares de grupos comparados, 36 presentan diferencias estadísticamente significativas (p.adj &lt; 0.05) y 9 no (p.adj ≥ 0.05). Los 9 pares no significativos corresponden, sin excepción, a grupos de ingreso consecutivos, mientras que las comparaciones entre grupos más distantes entre sí resultan significativas.</p>
 <p>Este patrón es coherente con la tendencia descendente y gradual observada en el resumen descriptivo y el boxplot del EDA: como la mortalidad decrece de forma progresiva a medida que aumenta el ingreso, dos grupos consecutivos no logran mostrar una diferencia lo suficientemente grande como para ser estadísticamente detectable, mientras que grupos más alejados en la escala sí la muestran.</p>
