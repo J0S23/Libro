@@ -3,7 +3,7 @@ bookdown::gitbook:
   config:
     toc:
       before: |
-        <li>Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer</li>
+        <li>./Análisis Estadístico del Cáncer</a></li>
       after: |
         <li><a href="https://github.com/J0S23/Libro" target="_blank">🔗 Enlace al repositorio GitHub</a></li>
     download: ["pdf", "epub"]
