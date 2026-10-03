@@ -1,7 +1,14 @@
 # Análisis paramétrico y no paramétrico {#Análisis_estadístico}
 
+Mejorando la vista de las salidas (eliminando el prefijo `##`)
+```{r eliminar_comentarios2}
+knitr::opts_chunk$set(
+comment = NA
+)
+```
+
 ## Librerías
-```{r Librerías}
+```{r Librerías, message= FALSE, warning=FALSE}
 library(readxl)
 library(moments)
 library(tidyverse)

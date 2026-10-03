@@ -21,10 +21,12 @@ estadísticamente significativas en la tasa de mortalidad por cáncer
 así como cuantificar la fuerza de la asociación lineal entre estos factores 
 y la mortalidad.
 
+Con el fin de estudiar la dimensión económica desde enfoques complementarios, se emplearon dos representaciones del ingreso presentes en el conjunto de datos. La variable medincome se utilizó como una medida continua en los análisis de correlación, permitiendo evaluar asociaciones monotónicas con la mortalidad por cáncer, mientras que binnedinc, correspondiente a categorías de ingreso previamente definidas en el dataset, se utilizó en la prueba Chi-cuadrado para analizar la asociación entre niveles de ingreso y categorías de mortalidad. Aunque ambas variables describen la misma dimensión socioeconómica, cada una responde a objetivos inferenciales distintos.
+
 Así, la pregunta que guía este estudio es la siguiente: **¿Existen 
 diferencias estadísticamente significativas en la tasa de mortalidad por 
 cáncer entre regiones con distintos niveles socioeconómicos (pobreza, 
-ingreso, cobertura médica), y qué tan fuerte es la asociación lineal entre 
+ingreso, educación y cobertura médica), y qué tan fuerte es la asociación entre 
 estos factores y la mortalidad?**
 
 Para dar respuesta a esta pregunta, el estudio se estructura en torno a los 

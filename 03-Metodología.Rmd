@@ -18,6 +18,8 @@ la diferencia entre `pctprivatecoverage` y `pctpubliccoverage`, con el
 objetivo de sintetizar en un único indicador el predominio relativo de 
 cada tipo de cobertura médica en una región.
 
+Respecto a la dimensión económica, se utilizaron dos representaciones complementarias del ingreso presentes en el conjunto de datos. La variable `medincome` se empleó como medida continua en los análisis de correlación, mientras que `binnedinc` se utilizó como variable categórica en la prueba de independencia Chi-cuadrado. Esta estrategia permitió evaluar la relación entre ingreso y mortalidad tanto desde una perspectiva cuantitativa como categórica.
+
 ## Objetivo 1: Evaluación de supuestos de normalidad y homocedasticidad
 
 Para determinar el test más adecuado en la comparación de medias entre 

@@ -1,5 +1,14 @@
 # EDA {#EDA}
 
+Mejorando la vista de las salidas (eliminando el prefijo `##`)
+```{r eliminar_comentarios}
+knitr::opts_chunk$set(
+comment = NA
+)
+```
+
+
+
 Carguemos las librerias
 
 ```{r libreria, message= FALSE, warning=FALSE}
