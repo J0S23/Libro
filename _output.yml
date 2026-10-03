@@ -3,16 +3,17 @@ bookdown::gitbook:
   config:
     toc:
       before: |
-        <li><a href="./">A Minimal Book Example</a></li>
+        <li></Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer</a></li>
       after: |
-        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-    edit: https://github.com/rstudio/bookdown-demo/edit/master/%s
+        <li><a href="https://github.com/J0S23/Libro" target="blank">📘 Repositorio GitHub</a></li>
     download: ["pdf", "epub"]
+
 bookdown::pdf_book:
   includes:
     in_header: preamble.tex
   latex_engine: xelatex
   citation_package: natbib
   keep_tex: yes
+
 bookdown::epub_book: default
 bookdown::bs4_book: default
