@@ -193,7 +193,7 @@ Con un 95% de confianza podemos afirmar que el tamaño del efecto obtenido media
 
 
 
-##  Objetivo #3. Cuantificar la asociación lineal
+##  Objetivo 3. Cuantificar la asociación lineal
 
 Para verificar si el uso de correlación de Pearson es apropiado se evalúan los supuestos de normalidad
 ```{r variables_corr}
