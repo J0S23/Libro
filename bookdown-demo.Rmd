@@ -1,3 +1,79 @@
+---
+title: "01-introduccion"
+output: html_document
+---
+
+# Introducción {-}
+
+El cáncer es una de las principales causas de muerte en el mundo, y sus 
+tasas de mortalidad no se distribuyen de manera uniforme entre poblaciones. 
+Diversos estudios epidemiológicos han señalado que factores como el nivel 
+socioeconómico, el acceso a seguros de salud, la educación y las 
+condiciones demográficas de una región pueden influir de forma considerable 
+en los desenlaces relacionados con esta enfermedad, incluyendo tanto la 
+incidencia como la mortalidad.
+
+En este proyecto se analiza un conjunto de datos que recopila información 
+demográfica, socioeconómica y de salud pública para distintas regiones de 
+Estados Unidos, con el propósito de identificar si existen diferencias 
+estadísticamente significativas en la tasa de mortalidad por cáncer 
+(`target_deathrate`) entre regiones con distintos niveles socioeconómicos, 
+así como cuantificar la fuerza de la asociación lineal entre estos factores 
+y la mortalidad.
+
+Con el fin de estudiar la dimensión económica desde enfoques complementarios, se emplearon dos representaciones del ingreso presentes en el conjunto de datos. La variable medincome se utilizó como una medida continua en los análisis de correlación, permitiendo evaluar asociaciones monotónicas con la mortalidad por cáncer, mientras que binnedinc, correspondiente a categorías de ingreso previamente definidas en el dataset, se utilizó en la prueba Chi-cuadrado para analizar la asociación entre niveles de ingreso y categorías de mortalidad. Aunque ambas variables describen la misma dimensión socioeconómica, cada una responde a objetivos inferenciales distintos.
+
+Así, la pregunta que guía este estudio es la siguiente: **¿Existen 
+diferencias estadísticamente significativas en la tasa de mortalidad por 
+cáncer entre regiones con distintos niveles socioeconómicos (pobreza, 
+ingreso, educación y cobertura médica), y qué tan fuerte es la asociación entre 
+estos factores y la mortalidad?**
+
+Para dar respuesta a esta pregunta, el estudio se estructura en torno a los 
+siguientes objetivos:
+
+1. **Evaluar los supuestos de normalidad y homogeneidad de varianzas** de 
+   `target_deathrate` entre regiones con alta y baja pobreza (divididas 
+   según la mediana de `povertypercent`), mediante pruebas de normalidad 
+   y una prueba F para la homocedasticidad, con el fin de determinar el 
+   test más adecuado para la comparación de medias entre ambos grupos.
+
+2. **Comparar la mortalidad** entre esos mismos grupos utilizando pruebas 
+   t o z para dos muestras independientes, en su versión pooled, Welch, o 
+   mediante una alternativa no paramétrica, según lo determinado por los 
+   supuestos evaluados en el objetivo anterior.
+
+3. **Cuantificar la asociación lineal** entre `target_deathrate` y las 
+   variables socioeconómicas clave mediante coeficientes de 
+   correlación de Pearson y sus respectivas pruebas de hipótesis, con 
+   apoyo de un mapa de correlaciones general.
+   
+4. **Contrastar el efecto del balance de cobertura médica** sobre la 
+   mortalidad mediante un análisis de varianza (ANOVA), agrupando la 
+   variable `coverage_balance` en categorías (por ejemplo, predominio de 
+   cobertura pública, balance intermedio y predominio de cobertura 
+   privada), con el fin de determinar si el tipo de cobertura predominante 
+   en una región se asocia con diferencias significativas en la tasa de 
+   mortalidad.
+5. **Evaluar la asociación entre el nivel de ingreso y el nivel de mortalidad** 
+   mediante una prueba de independencia Chi-cuadrado 
+   ($\chi^2$) sobre una tabla de contingencia, categorizando 
+   target_deathrate en niveles alto y bajo (según la mediana) y 
+   cruzándola con los niveles de binnedinc, con el fin de determinar 
+   si ambas variables categóricas son estadísticamente independientes o 
+   si, por el contrario, existe una asociación significativa entre el 
+   nivel de ingreso de una región y su categoría de mortalidad.
+   
+A través de estos objetivos, se busca aportar evidencia estadística que 
+permita comprender mejor los determinantes de la mortalidad por cáncer, 
+sentando una base cuantitativa que podría orientar decisiones en materia 
+de política pública y asignación de recursos en salud. El desarrollo de un 
+modelo de regresión lineal múltiple que integre el efecto conjunto de 
+estas variables se plantea como una etapa posterior del análisis, una vez 
+establecida la evidencia bivariada aquí presentada.
+
+<!--chapter:end:01-Introducción.Rmd-->
+
 # EDA {#EDA}
 
 Mejorando la vista de las salidas (eliminando el prefijo `##`)
@@ -674,3 +750,757 @@ amplias y numerosos valores atípicos superiores (algunos superando el 25%
 de desempleo), mientras que en los grupos de mayor ingreso la distribución 
 se vuelve más compacta, reflejando una menor variabilidad en las 
 condiciones laborales de las regiones más prósperas.
+
+<!--chapter:end:02-EDA.Rmd-->
+
+---
+title: "03-Metodología"
+output: html_document
+---
+
+# Metodología {-}
+
+## Fuente y preparación de los datos
+
+El análisis se realizó sobre un conjunto de datos que combina información 
+demográfica, socioeconómica y de salud pública para 3047 regiones (condados) 
+de Estados Unidos, obtenido de Kaggle. Previo al análisis, se realizó un 
+proceso de imputación de valores faltantes, sustituyendo los datos NA por 
+la media de cada variable numérica, con el fin de conservar el tamaño 
+muestral completo sin descartar observaciones. Asimismo, se aplicó una 
+ingeniería de características, creando la variable `coverage_balance` como 
+la diferencia entre `pctprivatecoverage` y `pctpubliccoverage`, con el 
+objetivo de sintetizar en un único indicador el predominio relativo de 
+cada tipo de cobertura médica en una región.
+
+Respecto a la dimensión económica, se utilizaron dos representaciones complementarias del ingreso presentes en el conjunto de datos. La variable `medincome` se empleó como medida continua en los análisis de correlación, mientras que `binnedinc` se utilizó como variable categórica en la prueba de independencia Chi-cuadrado. Esta estrategia permitió evaluar la relación entre ingreso y mortalidad tanto desde una perspectiva cuantitativa como categórica.
+
+## Objetivo 1: Evaluación de supuestos de normalidad y homocedasticidad
+
+Para determinar el test más adecuado en la comparación de medias entre 
+regiones de alta y baja pobreza, se dividió la muestra en dos grupos según 
+la mediana de `povertypercent`. Sobre estos grupos se evaluó:
+
+- **Normalidad:** mediante las pruebas de Shapiro-Wilk y Anderson-Darling, 
+  aplicadas a `target_deathrate` dentro de cada grupo, complementadas con 
+  gráficos Q-Q para una inspección visual del ajuste a la distribución 
+  normal.
+- **Homogeneidad de varianzas:** mediante una prueba F de razón de 
+  varianzas entre ambos grupos, y de forma complementaria, la prueba de 
+  Levene, más robusta ante desviaciones de normalidad.
+
+Los resultados de estas pruebas determinaron si correspondía aplicar la 
+prueba t clásica (varianzas iguales, prueba pooled), la corrección de 
+Welch (varianzas distintas), o una alternativa no paramétrica en caso de 
+que el supuesto de normalidad no se cumpliera.
+
+## Objetivo 2: Comparación de medias entre grupos de pobreza
+
+Con base en los resultados del objetivo anterior, se aplicó la prueba 
+estadística correspondiente para comparar la tasa de mortalidad promedio 
+entre los grupos de alta y baja pobreza:
+
+- Si se cumplía normalidad y homocedasticidad: prueba t de Student pooled.
+- Si se cumplía normalidad pero no homocedasticidad: prueba t de Welch.
+- Si no se cumplía normalidad: prueba no paramétrica de Mann-Whitney-Wilcoxon 
+  como alternativa robusta.
+
+En todos los casos, se estableció un nivel de significancia α = 0.05, y se 
+reportaron los intervalos de confianza correspondientes para la diferencia 
+de medias (o medianas, en el caso no paramétrico).
+
+## Objetivo 3: Cuantificación de la asociación lineal
+
+Se evaluó la relación entre `target_deathrate` y cuatro variables 
+socioeconómicas clave (`medincome`, `pctbachdeg25_over`, `coverage_balance`, 
+`pctunemployed16_over`). Previo al cálculo de la correlación, se verificó 
+el supuesto de normalidad univariado de cada variable mediante las pruebas 
+de Shapiro-Wilk y Anderson-Darling. Dado que este supuesto no se cumplió 
+para ninguna variable, se optó por calcular coeficientes de correlación no 
+paramétricos:
+
+- **Correlación de Spearman**, como medida principal de asociación 
+  monótona.
+- **Correlación de Kendall's Tau**, como verificación adicional, dado que 
+  la presencia de valores repetidos (empates) en los datos impedía el 
+  cálculo de un p-valor exacto para Spearman.
+
+Los resultados se complementaron con un mapa de correlaciones general 
+(heatmap) que incluyó todas las variables numéricas relevantes, permitiendo 
+visualizar de forma conjunta la magnitud y dirección de las asociaciones.
+
+## Objetivo 4: Efecto del balance de cobertura médica sobre la mortalidad
+
+La variable `coverage_balance` (numérica y continua) se categorizó en tres 
+grupos mediante terciles de su distribución: predominio de cobertura 
+pública, balance intermedio, y predominio de cobertura privada. Esta 
+estrategia de segmentación garantizó grupos de tamaño muestral equilibrado 
+(aproximadamente 33% de las observaciones en cada categoría).
+
+Se evaluaron los supuestos del análisis de varianza (ANOVA) mediante:
+
+- **Normalidad** de `target_deathrate` dentro de cada grupo (Shapiro-Wilk 
+  y Anderson-Darling).
+- **Homogeneidad de varianzas** entre los tres grupos (prueba de Levene).
+
+Dado que el supuesto de normalidad no se cumplió en ninguno de los tres 
+grupos, se optó por la alternativa no paramétrica del ANOVA: la prueba de 
+**Kruskal-Wallis**. Al resultar esta significativa, se realizó un análisis 
+post-hoc mediante la **prueba de Dunn** (con ajuste de Bonferroni para 
+comparaciones múltiples), con el fin de identificar entre qué pares 
+específicos de grupos existían diferencias significativas.
+
+## Objetivo 5: Asociación entre nivel de ingreso y nivel de mortalidad
+
+Para este objetivo, ambas variables se transformaron a escala categórica: 
+`target_deathrate` se dividió en dos niveles (alto y bajo) según su 
+mediana, mientras que `binnedinc` se mantuvo en sus diez categorías 
+originales (deciles de ingreso medio, ya provistas por el dataset). Con 
+ambas variables categorizadas, se construyó una tabla de contingencia y se 
+aplicó una **prueba de independencia Chi-cuadrado** ($\chi^2$), con el fin 
+de determinar si existía una asociación estadísticamente significativa 
+entre el nivel de ingreso de una región y su categoría de mortalidad, 
+contrastando así, desde un enfoque categórico, la relación ya explorada 
+mediante los coeficientes de correlación del objetivo 3.
+
+## Nivel de significancia
+
+Para todas las pruebas de hipótesis realizadas a lo largo del estudio, se 
+utilizó un nivel de significancia α = 0.05, correspondiente a un 95% de 
+confianza.
+
+<!--chapter:end:03-Metodología.Rmd-->
+
+# Análisis paramétrico y no paramétrico {#Análisis_estadístico}
+
+Mejorando la vista de las salidas (eliminando el prefijo `##`)
+```{r eliminar_comentarios2}
+knitr::opts_chunk$set(
+comment = NA
+)
+```
+
+## Librerías
+```{r Librerías, message= FALSE, warning=FALSE}
+library(readxl)
+library(moments)
+library(tidyverse)
+library(effsize)
+library(openintro)
+library(nortest)
+library(car)
+library(coin)
+library(BSDA)
+library(rstatix)
+```
+
+Se cargan los datos de cáncer.
+
+```{r data-analisis}
+data_cancer <- read.csv("Data/cancer_reg.csv")
+
+summary(data_cancer)
+```
+
+Ahora, repitamos todas las transformaciones de datos para preparar el análisis estadístico.
+
+En primer lugar, volvamos a imputar los datos faltantes.
+
+```{r imp-analisis}
+data_cancer %>% 
+  mutate(
+    across(
+      where(is.numeric),
+      ~ ifelse(is.na(.), mean(., na.rm = TRUE), .)
+    )
+  ) -> df
+```
+
+Verificar si tiene datos faltantes nuevamente
+
+```{r faltante-analisis}
+df %>% 
+  summarise(
+    across(
+      everything(),
+      ~ sum(is.na(.)),
+      .names = "NA_{.col}"
+    )
+  )
+```
+
+Aplicando nuevamente ingeniería de características entre `pctprivatecoverage` y `pctpubliccoverage`.
+
+```{r ingenieria-analisis}
+df <- df %>% 
+  mutate(
+    coverage_balance = pctprivatecoverage - pctpubliccoverage
+  ) %>% 
+  select(
+    -pctprivatecoverage,
+    -pctpubliccoverage
+  )
+
+df %>% 
+  select(coverage_balance) %>% 
+  head()
+```
+
+Se crea la variable `nivel_pobreza` a través de usar su mediana para poder clasificar el `povertypercent`.
+
+```{r crear-nivel-pobreza}
+mediana_pobreza <- median(df$povertypercent)
+
+df <- df %>%
+  mutate(nivel_pobreza = ifelse(povertypercent >= mediana_pobreza,
+                                  "Pobreza alta", "Pobreza baja"),
+         nivel_pobreza = factor(nivel_pobreza,
+                                  levels = c("Pobreza alta", "Pobreza baja")))
+
+table(df$nivel_pobreza)
+```
+Luego de esto, la nueva variable `nivel_pobreza` se divide en "Pobreza alta" y "Pobreza baja".
+
+## Objetivo 1: supuestos de normalidad y homogeneidad
+
+Ahora separaremos los valores de tasa de mortalidad según el nivel de pobreza.
+
+```{r preparar-objetivo-1}
+y_alta <- df %>% filter(nivel_pobreza == "Pobreza alta") %>% pull(target_deathrate)
+y_baja <- df %>% filter(nivel_pobreza == "Pobreza baja") %>% pull(target_deathrate)
+```
+Una vez dividido, observamos que se divide en 1525 condados que clasifican como Pobreza alta y 1522 condados como Pobreza baja. Ahora con Shapiro-Wilk vamos a comprobar su normalidad 
+
+Ho: x ~ N(μ, σ²) vs Ha: x !~ N(μ, σ²)
+
+```{r normalidad-objetivo-1}
+shapiro.test(y_alta)
+shapiro.test(y_baja)
+```
+
+Con un 95% podemos concluir que se rechaza Ho lo cual implica que se rechaza la normalidad de los datos en ambos grupos (p-valor < 0.001). Sin embargo, dado el gran tamaño de los datos en ambos grupos (n>1500), podemos seguir aplicando el t-test de manera robusta, apoyándonos en el Teorema de Límite Central.
+
+Seguidamente, con el uso de `var.test` vamos a comprobar los supuestos de las varianzas:
+
+Ho: σ²(alta) = σ²(baja) vs Ha: distintas.
+
+```{r fisher-manual-objetivo-1}
+n1 <- length(y_alta)
+n2 <- length(y_baja)
+var_alta <- var(y_alta)
+var_baja <- var(y_baja)
+
+F_manual <- var_alta / var_baja
+df1 <- n1 - 1
+df2 <- n2 - 1
+
+p_valor_F <- 2 * min(pf(F_manual, df1, df2), 1 - pf(F_manual, df1, df2))
+
+IC_inf_F <- (var_alta / var_baja) * (1 / qf(0.975, df1, df2))
+IC_sup_F <- (var_alta / var_baja) * (1 / qf(0.025, df1, df2))
+
+F_manual; df1; df2; p_valor_F
+c(IC_inf_F, IC_sup_F)
+```
+
+Se verifica con la función de R:
+
+```{r homogeneidad-objetivo-1}
+var.test(y_alta, y_baja)
+leveneTest(target_deathrate ~ nivel_pobreza, data = df)
+```
+
+Por medio de esta prueba podemos concluir que, se rechaza Ho y por ende, las varianzas son distintas (p-valor < 0.05). Finalmente con un 95% de confianza podemos afirmar que existen diferencias significativas entre las varianzas de ambos grupos. 
+
+Con base en lo anterior, decidimos utiliza Welch para el desarrollo del objetivo dos dada la diferencia de varianzas. 
+
+
+## Objetivo 2: comparación de la tasa de mortalidad entre niveles de pobreza
+
+En este sentido, ahora queremos comprobar si existe una diferencia significativa entre la tasa de mortalidad promedio:
+
+Ho: μ(alta) = μ(baja) vs Ha: μ(alta) != μ(baja)
+
+```{r welch-manual-objetivo-2}
+media_alta <- mean(y_alta)
+media_baja <- mean(y_baja)
+
+diferencia <- media_alta - media_baja
+SE_welch <- sqrt(var_alta/n1 + var_baja/n2)
+
+t_manual <- diferencia / SE_welch
+gl_welch <- (var_alta/n1 + var_baja/n2)^2 /
+  ((var_alta/n1)^2/(n1-1) + (var_baja/n2)^2/(n2-1))
+
+p_valor_t <- 2 * (1 - pt(abs(t_manual), gl_welch))
+
+IC_inf_t <- diferencia - qt(0.975, gl_welch) * SE_welch
+IC_sup_t <- diferencia + qt(0.975, gl_welch) * SE_welch
+
+t_manual; gl_welch; p_valor_t
+c(IC_inf_t, IC_sup_t)
+```
+
+Se verifica con la función de R:
+
+```{r welch-verificacion-objetivo-2}
+t.test(x = y_alta, y = y_baja, var.equal = FALSE, paired = FALSE)
+```
+Con la prueba de Welch obtenemos que la media del grupo de Pobreza alta es de aproximadamente 189.24, mientras que la del grupo de Pobreza baja aproximadamente de 168.07, esto con una diferencia de aproximandamente 21.18. El estadístico t de Welch es t = 22.79 con gl = 2946.8 y p-valor = 0 aproxidamamente. En síntesis, se evidencia el rechazo de Ho (p-valor < 0.05), por lo que existe una diferencia significativa entre la tasa de mortalidad promedio de ambos grupos. Con un 95% de confianza, también podemos observar un intervalo de confianza de [19.35 , 22.99].
+
+
+Por otra parte, dado el rechazo de normalidad que nos brindó la prueba de Shapiro-Wilk, pese a que no se eliminara la validez del t-test dado el TCL, aplicaremos la prueba de Wilcoxon:
+
+```{r wilcoxon-objetivo-2}
+wilcox.test(x = y_alta, y = y_baja, paired = FALSE, exact = FALSE)
+```
+La prueba de Wilcoxon con un 95% de confianza nos arroja un estadístico W = 1690588, con un p-valor = 0 aproximadamente (p-valor < 0.05). Por lo tanto se rechaza Ho, y podemos concluir que existe una diferencia estadísticamente significativa en la distribución de la tasa de mortalidad entre los grupos de Pobreza alta y Pobreza baja. Este resultado coincide con la prueba de Welch, lo cual refuerza la robustez de esta conclusión al ser respaldada por pruebas paramétricas y no paramétricas.
+
+
+Finalmente, se medirá el tamaño del efecto:
+
+```{r cohend-objetivo-2}
+cohen.d(y_alta, y_baja, paired = FALSE)
+```
+Con un 95% de confianza podemos afirmar que el tamaño del efecto obtenido mediante la d de Cohen nos brinda un valor d = 0.825, que se acompaña junto con un intervalo de confianza de [0.761, 0.899], lo que corresponde a un tamaño de efecto grande dado que d > 0.8. Esto indica que la diferencia entre la tasa de mortalidad por cáncer entre condados de pobreza alta y baja no es solo algo estadísticamente significativo, sino que es relevante desde un punto de vista práctico y real.
+
+
+
+##  Objetivo #3. Cuantificar la asociación lineal
+
+Para verificar si el uso de correlación de Pearson es apropiado se evalúan los supuestos de normalidad
+```{r variables_corr}
+variables_corr <- c("target_deathrate","medincome", "pctbachdeg25_over", "coverage_balance", "pctunemployed16_over")
+```
+Aplicando Shapiro-Wilk por tener menos de 5000 observaciones
+```{r Shapiro-Wilk}
+# Shapiro-Wilk
+resultados_shapiro <- lapply(variables_corr, function(v) {
+  test <- shapiro.test(df[[v]])
+  data.frame(variable = v, estadistico = round(test$statistic, 4), p_value = round(test$p.value, 4))
+}) %>% bind_rows()
+
+resultados_shapiro
+```
+Verificando con la prueba de Anderson-Darling
+```{r Anderson-Darling}
+resultados_ad <- lapply(variables_corr, function(v) {
+  test <- ad.test(df[[v]])
+  data.frame(variable = v, estadistico = round(test$statistic, 4), p_value = round(test$p.value, 4))
+}) %>% bind_rows()
+
+resultados_ad
+```
+Tanto la prueba de Shapiro-Wilk como la prueba de Anderson-Darling confirman 
+resultados consistentes entre sí: con un 95% de confianza, se rechaza la 
+hipótesis de normalidad para las cinco variables evaluadas, ya que todos 
+los p-valores obtenidos son menores a 0.01 (prácticamente iguales a 0). 
+Esto indica que ni la variable respuesta (`target_deathrate`) ni ninguna de 
+las variables predictoras (`medincome`, `pctbachdeg25_over`, 
+`coverage_balance`, `pctunemployed16_over`) sigue una distribución normal.
+
+Es importante destacar que `coverage_balance` presenta el estadístico de 
+Shapiro-Wilk más cercano a 1 (W = 0.9968) y el valor más bajo de 
+Anderson-Darling (A = 2.02) entre todas las variables, lo cual sugiere que, 
+aunque el supuesto de normalidad se rechaza formalmente por el tamaño 
+muestral, esta variable es la que más se aproxima a un comportamiento 
+normal —consistente con lo observado en el EDA, donde presentó una 
+distribución casi simétrica con curtosis cercana a 3. En contraste, 
+`medincome` y `pctbachdeg25_over` muestran los estadísticos de 
+Anderson-Darling más altos (47.29 y 42.15, respectivamente), reflejando una 
+desviación más marcada de la normalidad, en línea con los altos 
+coeficientes de asimetría y curtosis identificados previamente para ambas 
+variables.
+
+Dado que el supuesto de normalidad no se cumple para ninguna de las 
+variables involucradas, se procede a estimar la asociación mediante 
+coeficientes de correlación no paramétricos.
+
+En primer lugar, se calcula el coeficiente de correlación de Spearman:
+
+```{r Spearman}
+resultados_spearman <- lapply(variables_corr[-1], function(v) {
+  test <- cor.test(df[[v]], df$target_deathrate, method = "spearman")
+  data.frame(
+    variable = v,
+    correlacion = round(test$estimate, 3),
+    p_value = round(test$p.value, 4)
+  )
+}) %>% bind_rows()
+
+resultados_spearman
+```
+Posteriormente, se verifican los resultados mediante el coeficiente de 
+correlación de Kendall's Tau, dado que la presencia de valores repetidos 
+(empates) en los datos impide calcular un p-valor exacto para Spearman:
+
+```{r Kendalls Tau}
+resultados_kendall <- lapply(variables_corr[-1], function(v) {
+  test <- cor.test(df[[v]], df$target_deathrate, method = "kendall")
+  data.frame(
+    variable = v,
+    correlacion = round(test$estimate, 3),
+    p_value = round(test$p.value, 4)
+  )
+}) %>% bind_rows()
+
+resultados_kendall
+```
+`pctbachdeg25_over` presenta la asociación más fuerte con `target_deathrate` 
+(ρ = -0.502, τ = -0.355), de signo negativo, lo que indica que a mayor 
+porcentaje de personas con título universitario, menor tiende a ser la 
+tasa de mortalidad por cáncer. Le sigue `medincome` (ρ = -0.463, τ = -0.325), 
+también con relación negativa, consistente con la idea de que un mayor 
+ingreso medio se asocia con menor mortalidad. `coverage_balance` muestra 
+una asociación negativa de magnitud similar (ρ = -0.430, τ = -0.305), lo 
+que sugiere que un mayor predominio de cobertura privada frente a la 
+pública se relaciona con tasas de mortalidad más bajas. Finalmente, 
+`pctunemployed16_over` es la única variable con asociación positiva 
+(ρ = 0.403, τ = 0.283), indicando que a mayor tasa de desempleo, mayor 
+tiende a ser la mortalidad por cáncer.
+
+En todos los casos, los p-valores son menores a 0.001, por lo que las 
+cuatro asociaciones son estadísticamente significativas al 95% de 
+confianza, y ambos coeficientes coinciden tanto en el signo como en el 
+orden de fuerza de las variables, lo que respalda la consistencia de los 
+resultados. En términos de magnitud, todas las correlaciones se ubican en 
+un rango moderado (entre 0.3 y 0.5 en valor absoluto), lo cual confirma lo 
+observado en los diagramas de dispersión del EDA: cada variable por sí 
+sola guarda una relación real pero no lo suficientemente fuerte como para 
+explicar la totalidad de la variabilidad de `target_deathrate`, reforzando 
+la necesidad de un modelo de regresión múltiple que capture el efecto 
+conjunto de estas variables.
+
+##  Objetivo 4. Contrastar el efecto del balance de cobertura médica
+
+**Paso 1: Categorización de coverage_balance en 3 grupos (terciles)**
+Se optó por dividir `coverage_balance` en terciles (en lugar de utilizar 
+puntos de corte fijos o arbitrarios) porque este método garantiza que cada 
+grupo contenga aproximadamente el mismo número de observaciones (33.3% de 
+los datos cada uno), lo cual es preferible para un análisis de varianza, ya 
+que grupos con tamaños muestrales muy desbalanceados pueden afectar la 
+potencia estadística de la prueba y la validez del supuesto de 
+homogeneidad de varianzas. Además, al basarse en los percentiles reales de 
+la distribución de la variable (y no en umbrales predefinidos sin 
+fundamento estadístico, como 0 o 30), los terciles reflejan de forma más 
+fiel la estructura y variabilidad observada en los datos, evitando que la 
+elección subjetiva de los puntos de corte introduzca sesgos en la 
+comparación de grupos.
+```{r 3 grupos}
+terciles <- quantile(df$coverage_balance, probs = c(1/3, 2/3))
+
+df <- df %>% 
+  mutate(categoria_cobertura = case_when(
+    coverage_balance <= terciles[1] ~ "Predominio público",
+    coverage_balance <= terciles[2] ~ "Balance intermedio",
+    TRUE ~ "Predominio privado"
+  )) %>% 
+  mutate(categoria_cobertura = factor(categoria_cobertura, 
+         levels = c("Predominio público", "Balance intermedio", "Predominio privado")))
+
+table(df$categoria_cobertura)
+```
+
+**Paso 2: Resumen descriptivo de target_deathrate por grupo**
+
+
+```{r Resumen descriptivo}
+df %>% 
+  group_by(categoria_cobertura) %>% 
+  summarise(
+    n = length(target_deathrate),
+    media = mean(target_deathrate), 
+    d_est = sd(target_deathrate),
+    mediana = median(target_deathrate), 
+    RIC = IQR(target_deathrate), 
+    Q1 = quantile(target_deathrate, 0.25), 
+    Q3 = quantile(target_deathrate, 0.75), 
+    min = min(target_deathrate), 
+    max = max(target_deathrate), 
+    curtosis = kurtosis(target_deathrate), 
+    Coef_asim = skewness(target_deathrate)
+  )
+```
+El resumen descriptivo de `target_deathrate` por categoría de balance de 
+cobertura muestra que la media de mortalidad disminuye a medida que 
+aumenta el predominio de la cobertura privada, pasando de 191.26 en 
+"Predominio público" a 179.66 en "Balance intermedio" y 164.99 en 
+"Predominio privado" —una diferencia de aproximadamente 26 muertes por 
+cada 100,000 habitantes entre los grupos extremos. Este mismo patrón se 
+replica en la mediana, lo que refuerza la consistencia de la tendencia.
+
+Los tres grupos presentan tamaños muestrales muy similares (1016, 1020 y 
+1011 respectivamente), como era de esperarse al dividir la variable en 
+terciles. En cuanto a la dispersión, "Predominio público" muestra la mayor 
+variabilidad (DE = 29.89, RIC = 39.45), mientras que "Predominio privado" 
+es el más homogéneo (DE = 22.66, RIC = 26.80), sugiriendo que las regiones 
+con mayor dependencia de cobertura pública no solo presentan mortalidad 
+más alta en promedio, sino también más heterogénea.
+
+Respecto a la forma de las distribuciones, "Balance intermedio" destaca 
+por una curtosis notablemente más alta (7.11) que los otros dos grupos 
+(3.45 y 4.82), lo que indica una concentración de datos más marcada 
+alrededor de su media junto con colas más pesadas —consistente con su 
+valor máximo considerablemente más alto (362.8) respecto a los otros dos 
+grupos. En cuanto a la asimetría, los tres grupos muestran coeficientes 
+cercanos a cero (entre -0.06 y 0.39), indicando distribuciones 
+razonablemente simétricas dentro de cada categoría, con "Balance 
+intermedio" presentando el sesgo positivo más notorio.
+
+**Paso 3: Visualización - boxplot por grupo**
+
+```{r boxplot}
+df %>% 
+  ggplot(aes(x = categoria_cobertura, y = target_deathrate)) +
+  geom_boxplot(fill = "#8ecae6", color = "#023047", 
+  outlier.color = "#e63946")+
+    stat_summary(fun = mean, geom = 'point', shape = 20, size = 3, color = '#023047') +
+  labs(title = "Tasa de mortalidad por categoría de balance de cobertura",
+       x = "Categoría de cobertura", y = "Tasa de mortalidad (por 100,000 hab.)") +
+  theme_bw() +
+  theme(legend.position = "none")
+
+```
+
+El diagrama de cajas y bigotes muestra un patrón claro entre las tres 
+categorías: a medida que aumenta el predominio de la cobertura privada 
+sobre la pública, la tasa de mortalidad por cáncer tiende a disminuir. El 
+grupo de "Predominio público" presenta la mediana más alta (cercana a 190), 
+seguido por "Balance intermedio" (mediana alrededor de 180), y finalmente 
+"Predominio privado" con la mediana más baja (cercana a 165).
+
+Asimismo, se observa que la dispersión de los datos disminuye ligeramente 
+a medida que aumenta el predominio de la cobertura privada, siendo el 
+grupo de "Predominio público" el que presenta el rango intercuartílico más 
+amplio. Los tres grupos muestran una cantidad considerable de valores 
+atípicos en ambos extremos, particularmente en la cola superior.
+
+En conjunto, estas diferencias visuales entre las medianas de los tres 
+grupos sugieren que el tipo de cobertura médica predominante podría estar 
+asociado con diferencias en la tasa de mortalidad, lo cual será contrastado 
+formalmente mediante la prueba de análisis de varianza (o su alternativa 
+no paramétrica, según los supuestos evaluados).
+
+**Paso 4: Verificar supuestos de ANOVA**
+
+Se prueba la normalidad de `target_deathrate` dentro de cada grupo con la prueba Shapiro-Wilk y verificando con la prueba Anderson-Darling
+
+```{r normalidad por grupo}
+df %>% 
+  group_by(categoria_cobertura) %>% 
+  summarise(
+    shapiro_W = round(shapiro.test(target_deathrate)$statistic, 4),
+    shapiro_p = round(shapiro.test(target_deathrate)$p.value, 4),
+    ad_stat = round(ad.test(target_deathrate)$statistic, 4),
+    ad_p = round(ad.test(target_deathrate)$p.value, 4)
+  )
+```
+
+Los resultados muestran que se rechaza la hipótesis de normalidad en los 
+tres grupos (p < 0.05 en todos los casos, tanto para Shapiro-Wilk como para 
+Anderson-Darling). El grupo "Predominio público" presenta el p-valor más 
+alto en ambas pruebas (Shapiro: p = 0.0092; Anderson-Darling: p = 0.0047), 
+indicando que, aunque técnicamente no cumple normalidad, es el que más se 
+aproxima a ella entre los tres. En contraste, "Balance intermedio" muestra 
+el rechazo más contundente (p < 0.001 en ambas pruebas), consistente con 
+la elevada curtosis (7.11) identificada previamente en su resumen 
+descriptivo, producto del valor atípico presente en ese grupo.
+
+Dado que el supuesto de normalidad no se cumple en ninguno de los tres 
+grupos, se opta por la alternativa no paramétrica de ANOVA, es decir, prueba de Kruskal-Wallis.
+
+**Paso 5: Implementar el modelo pertinente**
+
+```{r Kruskal}
+kruskal.test(target_deathrate ~ categoria_cobertura, data = df)
+
+```
+
+Dado que no se cumple el supuesto de normalidad en ninguno de los tres 
+grupos, se aplica la prueba no paramétrica de Kruskal-Wallis como 
+alternativa al ANOVA clásico. El resultado obtenido (χ² = 491.08, gl = 2, 
+p < 2.2e-16) indica que se rechaza la hipótesis nula de igualdad de 
+distribuciones entre los tres grupos, con un nivel de significancia muy 
+por debajo de 0.001. Esto confirma, con alta confianza estadística, que 
+existen diferencias significativas en la tasa de mortalidad por cáncer 
+entre las categorías de balance de cobertura médica (predominio público, 
+balance intermedio y predominio privado).
+
+Este resultado es consistente con el patrón observado en el análisis 
+descriptivo, donde las medias y medianas de `target_deathrate` mostraban 
+una disminución progresiva desde el grupo de predominio público hacia el 
+de predominio privado. Para determinar específicamente entre qué pares de 
+grupos existen estas diferencias, se procede a realizar un análisis 
+post-hoc mediante la prueba de Dunn.
+
+```{r Dunn}
+df %>% 
+  dunn_test(target_deathrate ~ categoria_cobertura, p.adjust.method = "bonferroni")
+```
+El análisis post-hoc mediante la prueba de Dunn confirma que las 
+diferencias son estadísticamente significativas entre **todos** los pares 
+de grupos comparados (p.adj < 0.001 en los tres casos, con el máximo nivel 
+de significancia posible, indicado por ****).
+
+La diferencia más marcada se observa entre "Predominio público" y 
+"Predominio privado" (estadístico = -22.03, p.adj ≈ 4.89e-107), lo cual es 
+coherente con que estos representan los extremos opuestos del espectro de 
+cobertura médica. Le sigue la comparación entre "Balance intermedio" y 
+"Predominio privado" (estadístico = -13.16, p.adj ≈ 4.51e-39), y finalmente 
+la diferencia menos pronunciada, aunque igualmente significativa, entre 
+"Predominio público" y "Balance intermedio" (estadístico = -8.90, 
+p.adj ≈ 1.69e-18).
+
+En conjunto, estos resultados confirman que la tasa de mortalidad por 
+cáncer difiere significativamente entre las tres categorías de balance de 
+cobertura médica, y que dicha diferencia sigue un patrón gradual y 
+consistente: a mayor predominio de cobertura privada, menor es la tasa de 
+mortalidad, validando estadísticamente la tendencia observada en el 
+análisis descriptivo y gráfico previo.
+
+
+
+## Objetivo 5: asociación entre nivel de ingreso y mortalidad
+
+### Análisis estadístico de las diferencias en `target_deathrate` según `binnedinc`
+
+Primeramente, se verifica normalidad por grupo mediante Shapiro-Wilk.
+
+```{r normalidad-objetivo-5}
+df %>%
+  group_by(binnedinc) %>%
+  summarise(shapiro_W = round(shapiro.test(target_deathrate)$statistic, 4),
+            shapiro_p = round(shapiro.test(target_deathrate)$p.value, 4))
+```
+
+Con un 95% de confianza, la prueba de Shapiro-Wilk muestra resultados mixtos entre los 10 grupos de ingreso: en 4 de ellos (`[22640, 34218.1]`, `(40362.7, 42724.4]`, `(48021.6, 51046.4]`, `(51046.4, 54545.6]`) no se rechaza la normalidad (p > 0.05), mientras que en los 6 restantes sí se rechaza (p < 0.05). Dado que la normalidad no se cumple en la mayoría de los grupos, se opta por la alternativa no paramétrica de Kruskal-Wallis.
+
+```{r kruskal-objetivo-5}
+kruskal.test(target_deathrate ~ binnedinc, data = df)
+```
+
+La prueba de Kruskal-Wallis arroja un estadístico χ² = 651.49, con gl = 9 y un p-valor prácticamente igual a 0 (p < 0.05). Se rechaza Ho: existen diferencias estadísticamente significativas en la distribución de `target_deathrate` entre al menos dos de los 10 grupos de nivel de ingreso.
+
+Para identificar específicamente qué pares de grupos difieren, se aplica una comparación post-hoc.
+
+```{r dunn-objetivo-5}
+df %>%
+  dunn_test(target_deathrate ~ binnedinc, p.adjust.method = "bonferroni")
+```
+
+El análisis post-hoc mediante la prueba de Dunn (con ajuste de Bonferroni) muestra que, de los 45 pares de grupos comparados, 36 presentan diferencias estadísticamente significativas (p.adj < 0.05) y 9 no (p.adj ≥ 0.05). Los 9 pares no significativos corresponden, sin excepción, a grupos de ingreso consecutivos, mientras que las comparaciones entre grupos más distantes entre sí resultan significativas.
+
+Este patrón es coherente con la tendencia descendente y gradual observada en el resumen descriptivo y el boxplot del EDA: como la mortalidad decrece de forma progresiva a medida que aumenta el ingreso, dos grupos consecutivos no logran mostrar una diferencia lo suficientemente grande como para ser estadísticamente detectable, mientras que grupos más alejados en la escala sí la muestran.
+
+### Prueba Chi-cuadrado de independencia
+
+Se categoriza `target_deathrate` en niveles de mortalidad alto/bajo según su mediana.
+
+```{r crear-mortalidad-nivel}
+mediana_target <- median(df$target_deathrate)
+
+df <- df %>%
+  mutate(mortalidad_nivel = ifelse(target_deathrate >= mediana_target, "Alta", "Baja"),
+         mortalidad_nivel = factor(mortalidad_nivel, levels = c("Alta", "Baja")))
+
+table(df$mortalidad_nivel)
+```
+
+Ho: el nivel de ingreso y el nivel de mortalidad son independientes.
+Ha: existe asociación entre el nivel de ingreso y el nivel de mortalidad.
+
+```{r tabla-contingencia-objetivo-5}
+tabla_contingencia <- table(df$binnedinc, df$mortalidad_nivel)
+tabla_contingencia
+```
+
+```{r chi-cuadrado-objetivo-5}
+chisq.test(tabla_contingencia)
+```
+
+La prueba Chi-cuadrado de Pearson arroja un estadístico χ² = 504.54, con gl = 9 y un p-valor prácticamente igual a 0 (p < 0.05). Se rechaza Ho: existe una asociación estadísticamente significativa entre el nivel de ingreso (`binnedinc`) y el nivel de mortalidad (`mortalidad_nivel`) — ambas variables no son independientes. Este resultado confirma lo observado anteriormente: los condados de menor ingreso presentan una mayor proporción de mortalidad alta, mientras que los de mayor ingreso presentan una mayor proporción de mortalidad baja.
+
+<!--chapter:end:04-Analisis_estadistico.Rmd-->
+
+---
+title: "05-Discusión"
+output: html_document
+---
+
+# Discusión {-}
+
+<!--chapter:end:05-Discusión.Rmd-->
+
+---
+title: "06-Conclusiones"
+output: html_document
+---
+
+# Conclusiones {-}
+
+<!--chapter:end:06-Conclusiones.Rmd-->
+
+---
+title: "07-Referencias"
+output: html_document
+---
+# Referencias {-}
+
+Raskar, V. (n.d.). *Cancer Regression* [Data set]. Kaggle. 
+https://www.kaggle.com/datasets/varunraskar/cancer-regression
+
+Centers for Disease Control and Prevention, National Center for Health 
+Statistics. (2024). *Cancer death rates per 100,000 population* 
+[Data set]. CDC WONDER Online Database. 
+https://wonder.cdc.gov/ucd-icd10-expanded.html
+
+<!--chapter:end:07-Referencias.Rmd-->
+
+--- 
+title: "Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer"
+author: "Sebastian Ariza y Joseph Arias"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: j0s23/Libro
+description: "Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos"
+---
+
+# Abstract {-}
+
+El cáncer representa una de las principales causas de mortalidad a nivel 
+mundial, y su tasa de muerte varía significativamente entre regiones debido 
+a factores socioeconómicos, demográficos y de acceso a servicios de salud. 
+Este estudio utiliza un conjunto de datos con información sobre incidencia, 
+mortalidad, cobertura médica y variables socioeconómicas de distintas 
+regiones de Estados Unidos, con el objetivo de identificar qué factores 
+influyen de manera significativa sobre la tasa de mortalidad por cáncer 
+(`target_deathrate`). 
+
+Se aplican múltiples técnicas de inferencia estadística: un modelo de 
+regresión lineal múltiple para cuantificar el efecto conjunto de variables 
+como pobreza, ingreso medio, nivel educativo y cobertura de seguro médico; 
+pruebas t y z para comparar la mortalidad entre regiones de alta y baja 
+pobreza; una prueba F para evaluar la homogeneidad de varianzas entre estos 
+grupos; un análisis de correlación entre las principales variables 
+numéricas; y un análisis de varianza (ANOVA) para comparar la mortalidad 
+entre distintos niveles de ingreso. 
+
+Los resultados buscan aportar evidencia estadísticamente significativa sobre los factores socioeconómicos asociados a la mortalidad por cáncer, con el fin de identificar posibles focos de intervención en políticas públicas de salud.
+
+**Palabras clave:** mortalidad por cáncer, regresión lineal múltiple, 
+prueba t, prueba F, correlación, ANOVA, factores socioeconómicos.
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```
+
+<!--chapter:end:Abstract.Rmd-->
+
