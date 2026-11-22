@@ -108,6 +108,41 @@ entre el nivel de ingreso de una región y su categoría de mortalidad,
 contrastando así, desde un enfoque categórico, la relación ya explorada 
 mediante los coeficientes de correlación del objetivo 3.
 
+## Objetivo 6: Modelo de regresión lineal múltiple
+
+Se ajustó un modelo de regresión lineal múltiple con `target_deathrate` como 
+variable respuesta. Para esta etapa se partió de los datos originales (con 
+la misma imputación por la media) y se mantuvieron `pctprivatecoverage` y 
+`pctpubliccoverage` como variables separadas, en lugar de `coverage_balance`, 
+que es una combinación lineal exacta de ambas. Se excluyó `avgdeathsperyear`, 
+porque interviene en la construcción de la propia tasa de mortalidad, y 
+`pctsomecol18_24`, por tener 2285 datos faltantes de 3047.
+
+La selección de variables se hizo mediante una búsqueda sobre todas las 
+variables numéricas, con tres reglas: cada variable podía entrar una sola 
+vez; se le podía aplicar una de las transformaciones vistas en la regresión 
+simple (logarítmica, raíz cuadrada, inversa, cuadrática y potencia 0.25); y 
+ningún VIF podía superar 5. Entre los modelos que cumplían estas reglas se 
+buscó maximizar el $R^2$ ajustado, y se compararon modelos de distinto tamaño 
+según $R^2$ ajustado, AIC y BIC. Cuando una variable tenía ceros, el 
+logaritmo se calculó como $\ln(1 + x)$. Como las variables se eligieron a 
+partir de los mismos datos, los valores p del modelo final deben leerse con 
+cautela.
+
+Sobre el modelo seleccionado se evaluó:
+
+- **Ajuste:** $R^2$, $R^2$ ajustado, error estándar residual y prueba F 
+  global.
+- **Multicolinealidad:** factor de inflación de la varianza (VIF), con el 
+  umbral de 5.
+- **Supuestos sobre los errores:** media cero (prueba t), normalidad 
+  (Shapiro-Wilk, asimetría, curtosis y gráfico Q-Q), homocedasticidad 
+  (Breusch-Pagan) e independencia (Durbin-Watson).
+- **Observaciones atípicas e influyentes:** residuos studentizados 
+  (|r| > 3), prueba de Bonferroni (`outlierTest`) y distancia de Cook.
+- **Inferencia robusta:** dado que no se cumplió la homocedasticidad, se 
+  recalcularon las pruebas de los coeficientes con errores estándar HC3.
+
 ## Nivel de significancia
 
 Para todas las pruebas de hipótesis realizadas a lo largo del estudio, se 

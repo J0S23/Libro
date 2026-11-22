@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Regresión lineal múltiple | Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer</title>
+  <meta name="description" content="Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Regresión lineal múltiple | Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos" />
+  <meta name="github-repo" content="j0s23/Libro" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Regresión lineal múltiple | Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer" />
+  
+  <meta name="twitter:description" content="Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos" />
+  
+
+<meta name="author" content="Sebastian Ariza y Joseph Arias" />
+
+
+<meta name="date" content="2026-11-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="Análisis_estadístico.html"/>
+<link rel="next" href="discusion.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="introducción.html"><a href="introducción.html"><i class="fa fa-check"></i>Introducción</a></li>
+<li class="chapter" data-level="1" data-path="EDA.html"><a href="EDA.html"><i class="fa fa-check"></i><b>1</b> EDA</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="EDA.html"><a href="EDA.html#an%C3%A1lisis-exploratorio-de-target_deathrate-variable-respuesta"><i class="fa fa-check"></i><b>1.1</b> Análisis exploratorio de ‘target_deathrate’ (Variable respuesta)</a></li>
+<li class="chapter" data-level="1.2" data-path="EDA.html"><a href="EDA.html#an%C3%A1lisis-exploratorio-univariado-de-cada-variable-explicativa"><i class="fa fa-check"></i><b>1.2</b> Análisis exploratorio univariado de cada variable explicativa</a></li>
+<li class="chapter" data-level="1.3" data-path="EDA.html"><a href="EDA.html#an%C3%A1lisis-exploratorio-univariado-de-la-variable-categ%C3%B3rica-binnedinc"><i class="fa fa-check"></i><b>1.3</b> Análisis exploratorio univariado de la variable categórica <code>binnedinc</code></a></li>
+<li class="chapter" data-level="1.4" data-path="EDA.html"><a href="EDA.html#an%C3%A1lisis-exploratorio-bivariado-entre-la-variable-dependiente-y-las-variables-independientes"><i class="fa fa-check"></i><b>1.4</b> Análisis exploratorio bivariado entre la variable dependiente y las variables independientes</a></li>
+<li class="chapter" data-level="1.5" data-path="EDA.html"><a href="EDA.html#an%C3%A1lisis-exploratorio-bivariado-de-las-variables-independientes-entre-s%C3%AD"><i class="fa fa-check"></i><b>1.5</b> Análisis exploratorio bivariado de las variables independientes entre sí</a></li>
+<li class="chapter" data-level="1.6" data-path="EDA.html"><a href="EDA.html#an%C3%A1lisis-exploratorio-bivariado-entre-las-variables-independientes-y-la-variable-categ%C3%B3rica"><i class="fa fa-check"></i><b>1.6</b> Análisis exploratorio bivariado entre las variables independientes y la variable categórica</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="metodología.html"><a href="metodología.html"><i class="fa fa-check"></i>Metodología</a>
+<ul>
+<li class="chapter" data-level="1.7" data-path="metodología.html"><a href="metodología.html#fuente-y-preparaci%C3%B3n-de-los-datos"><i class="fa fa-check"></i><b>1.7</b> Fuente y preparación de los datos</a></li>
+<li class="chapter" data-level="1.8" data-path="metodología.html"><a href="metodología.html#objetivo-1-evaluaci%C3%B3n-de-supuestos-de-normalidad-y-homocedasticidad"><i class="fa fa-check"></i><b>1.8</b> Objetivo 1: Evaluación de supuestos de normalidad y homocedasticidad</a></li>
+<li class="chapter" data-level="1.9" data-path="metodología.html"><a href="metodología.html#objetivo-2-comparaci%C3%B3n-de-medias-entre-grupos-de-pobreza"><i class="fa fa-check"></i><b>1.9</b> Objetivo 2: Comparación de medias entre grupos de pobreza</a></li>
+<li class="chapter" data-level="1.10" data-path="metodología.html"><a href="metodología.html#objetivo-3-cuantificaci%C3%B3n-de-la-asociaci%C3%B3n-lineal"><i class="fa fa-check"></i><b>1.10</b> Objetivo 3: Cuantificación de la asociación lineal</a></li>
+<li class="chapter" data-level="1.11" data-path="metodología.html"><a href="metodología.html#objetivo-4-efecto-del-balance-de-cobertura-m%C3%A9dica-sobre-la-mortalidad"><i class="fa fa-check"></i><b>1.11</b> Objetivo 4: Efecto del balance de cobertura médica sobre la mortalidad</a></li>
+<li class="chapter" data-level="1.12" data-path="metodología.html"><a href="metodología.html#objetivo-5-asociaci%C3%B3n-entre-nivel-de-ingreso-y-nivel-de-mortalidad"><i class="fa fa-check"></i><b>1.12</b> Objetivo 5: Asociación entre nivel de ingreso y nivel de mortalidad</a></li>
+<li class="chapter" data-level="1.13" data-path="metodología.html"><a href="metodología.html#objetivo-6-modelo-de-regresi%C3%B3n-lineal-m%C3%BAltiple"><i class="fa fa-check"></i><b>1.13</b> Objetivo 6: Modelo de regresión lineal múltiple</a></li>
+<li class="chapter" data-level="1.14" data-path="metodología.html"><a href="metodología.html#nivel-de-significancia"><i class="fa fa-check"></i><b>1.14</b> Nivel de significancia</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html"><i class="fa fa-check"></i><b>2</b> Análisis paramétrico y no paramétrico</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#librer%C3%ADas"><i class="fa fa-check"></i><b>2.1</b> Librerías</a></li>
+<li class="chapter" data-level="2.2" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#objetivo-1-supuestos-de-normalidad-y-homogeneidad"><i class="fa fa-check"></i><b>2.2</b> Objetivo 1: supuestos de normalidad y homogeneidad</a></li>
+<li class="chapter" data-level="2.3" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#objetivo-2-comparaci%C3%B3n-de-la-tasa-de-mortalidad-entre-niveles-de-pobreza"><i class="fa fa-check"></i><b>2.3</b> Objetivo 2: comparación de la tasa de mortalidad entre niveles de pobreza</a></li>
+<li class="chapter" data-level="2.4" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#objetivo-3.-cuantificar-la-asociaci%C3%B3n-lineal"><i class="fa fa-check"></i><b>2.4</b> Objetivo #3. Cuantificar la asociación lineal</a></li>
+<li class="chapter" data-level="2.5" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#objetivo-4.-contrastar-el-efecto-del-balance-de-cobertura-m%C3%A9dica"><i class="fa fa-check"></i><b>2.5</b> Objetivo 4. Contrastar el efecto del balance de cobertura médica</a></li>
+<li class="chapter" data-level="2.6" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#objetivo-5-asociaci%C3%B3n-entre-nivel-de-ingreso-y-mortalidad"><i class="fa fa-check"></i><b>2.6</b> Objetivo 5: asociación entre nivel de ingreso y mortalidad</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#an%C3%A1lisis-estad%C3%ADstico-de-las-diferencias-en-target_deathrate-seg%C3%BAn-binnedinc"><i class="fa fa-check"></i><b>2.6.1</b> Análisis estadístico de las diferencias en <code>target_deathrate</code> según <code>binnedinc</code></a></li>
+<li class="chapter" data-level="2.6.2" data-path="Análisis_estadístico.html"><a href="Análisis_estadístico.html#prueba-chi-cuadrado-de-independencia"><i class="fa fa-check"></i><b>2.6.2</b> Prueba Chi-cuadrado de independencia</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="rlm.html"><a href="rlm.html"><i class="fa fa-check"></i><b>3</b> Regresión lineal múltiple</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="rlm.html"><a href="rlm.html#modelo-de-10-variables"><i class="fa fa-check"></i><b>3.1</b> Modelo de 10 variables</a></li>
+<li class="chapter" data-level="3.2" data-path="rlm.html"><a href="rlm.html#r2-y-r2-ajustado"><i class="fa fa-check"></i><b>3.2</b> <span class="math inline">\(R^2\)</span> y <span class="math inline">\(R^2\)</span> ajustado</a></li>
+<li class="chapter" data-level="3.3" data-path="rlm.html"><a href="rlm.html#multicolinealidad"><i class="fa fa-check"></i><b>3.3</b> Multicolinealidad</a></li>
+<li class="chapter" data-level="3.4" data-path="rlm.html"><a href="rlm.html#an%C3%A1lisis-de-los-errores"><i class="fa fa-check"></i><b>3.4</b> Análisis de los errores</a></li>
+<li class="chapter" data-level="3.5" data-path="rlm.html"><a href="rlm.html#errores-est%C3%A1ndar-robustos"><i class="fa fa-check"></i><b>3.5</b> Errores estándar robustos</a></li>
+<li class="chapter" data-level="3.6" data-path="rlm.html"><a href="rlm.html#selecci%C3%B3n-del-mejor-modelo"><i class="fa fa-check"></i><b>3.6</b> Selección del mejor modelo</a></li>
+<li class="chapter" data-level="3.7" data-path="rlm.html"><a href="rlm.html#conclusi%C3%B3n-del-cap%C3%ADtulo"><i class="fa fa-check"></i><b>3.7</b> Conclusión del capítulo</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="discusion.html"><a href="discusion.html"><i class="fa fa-check"></i><b>4</b> Discusión</a></li>
+<li class="chapter" data-level="5" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i><b>5</b> Conclusiones</a></li>
+<li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
+<li class="chapter" data-level="" data-path="abstract.html"><a href="abstract.html"><i class="fa fa-check"></i>Abstract</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="rlm" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Regresión lineal múltiple<a href="rlm.html#rlm" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Hasta aquí se ha evaluado la asociación de cada variable socioeconómica con <code>target_deathrate</code> de forma individual. En esta sección se estudia su efecto conjunto mediante un modelo de regresión lineal múltiple (RLM), con <code>target_deathrate</code> como variable respuesta.</p>
+<p>El modelo poblacional es</p>
+<p><span class="math display">\[Y_i = \beta_0 + \beta_1 X_{1i} + \dots + \beta_k X_{ki} + \varepsilon_i, \qquad \varepsilon_i \overset{iid}{\sim} N(0, \sigma^2),\]</span></p>
+<p>y se evalúa mediante el coeficiente de determinación <span class="math inline">\(R^2\)</span>, el <span class="math inline">\(R^2\)</span> ajustado, el análisis de los residuos y los criterios de selección (AIC y BIC).</p>
+<p>Las regresoras se escogieron con una búsqueda sobre todas las variables numéricas del conjunto de datos, bajo estas reglas: cada variable entra una sola vez; se permiten las transformaciones vistas en la regresión simple (logarítmica, raíz cuadrada, inversa, cuadrática y <span class="math inline">\(x^{0.25}\)</span>); ninguna variable puede tener VIF mayor que 5; y se maximiza el <span class="math inline">\(R^2\)</span> ajustado. Se excluyeron <code>avgdeathsperyear</code>, porque interviene en la construcción de la propia tasa de mortalidad, y <code>pctsomecol18_24</code>, porque tiene 2285 datos faltantes de 3047. Como las variables se eligieron a partir de los mismos datos, los valores <span class="math inline">\(p\)</span> del modelo final son algo optimistas.</p>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="rlm.html#cb147-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb147-2"><a href="rlm.html#cb147-2" tabindex="-1"></a><span class="fu">library</span>(car)        <span class="co"># vif, outlierTest</span></span>
+<span id="cb147-3"><a href="rlm.html#cb147-3" tabindex="-1"></a><span class="fu">library</span>(moments)    <span class="co"># skewness, kurtosis</span></span>
+<span id="cb147-4"><a href="rlm.html#cb147-4" tabindex="-1"></a><span class="fu">library</span>(lmtest)     <span class="co"># bptest, dwtest, coeftest, coefci</span></span>
+<span id="cb147-5"><a href="rlm.html#cb147-5" tabindex="-1"></a><span class="fu">library</span>(sandwich)   <span class="co"># vcovHC (errores estándar robustos)</span></span></code></pre></div>
+<p>Se cargan los datos y se imputan los faltantes con la media, como en los capítulos anteriores. Este capítulo parte de los datos originales, de modo que no depende de los objetos creados antes.</p>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="rlm.html#cb148-1" tabindex="-1"></a>datos_rlm <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/cancer_reg.csv&quot;</span>)</span>
+<span id="cb148-2"><a href="rlm.html#cb148-2" tabindex="-1"></a></span>
+<span id="cb148-3"><a href="rlm.html#cb148-3" tabindex="-1"></a>datos_rlm <span class="ot">&lt;-</span> datos_rlm <span class="sc">%&gt;%</span></span>
+<span id="cb148-4"><a href="rlm.html#cb148-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(.), <span class="fu">mean</span>(., <span class="at">na.rm =</span> <span class="cn">TRUE</span>), .)))</span>
+<span id="cb148-5"><a href="rlm.html#cb148-5" tabindex="-1"></a></span>
+<span id="cb148-6"><a href="rlm.html#cb148-6" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(datos_rlm)</span>
+<span id="cb148-7"><a href="rlm.html#cb148-7" tabindex="-1"></a>n</span></code></pre></div>
+<pre><code>## [1] 3047</code></pre>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="rlm.html#cb150-1" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(datos_rlm<span class="sc">$</span>target_deathrate))</span></code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<p>La siguiente función aplica a cada variable la transformación indicada. Cuando una variable tiene ceros, el logaritmo se calcula como <span class="math inline">\(\ln(1 + x)\)</span>.</p>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="rlm.html#cb152-1" tabindex="-1"></a>tf <span class="ot">&lt;-</span> <span class="cf">function</span>(x, f) {</span>
+<span id="cb152-2"><a href="rlm.html#cb152-2" tabindex="-1"></a>  <span class="cf">switch</span>(f,</span>
+<span id="cb152-3"><a href="rlm.html#cb152-3" tabindex="-1"></a>         <span class="at">x    =</span> x,</span>
+<span id="cb152-4"><a href="rlm.html#cb152-4" tabindex="-1"></a>         <span class="at">log  =</span> <span class="cf">if</span> (<span class="fu">all</span>(x <span class="sc">&gt;</span> <span class="dv">0</span>)) <span class="fu">log</span>(x) <span class="cf">else</span> <span class="fu">log1p</span>(x),</span>
+<span id="cb152-5"><a href="rlm.html#cb152-5" tabindex="-1"></a>         <span class="at">sqrt =</span> <span class="fu">sqrt</span>(x),</span>
+<span id="cb152-6"><a href="rlm.html#cb152-6" tabindex="-1"></a>         <span class="at">inv  =</span> <span class="dv">1</span> <span class="sc">/</span> x,</span>
+<span id="cb152-7"><a href="rlm.html#cb152-7" tabindex="-1"></a>         <span class="at">sq   =</span> x<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb152-8"><a href="rlm.html#cb152-8" tabindex="-1"></a>         <span class="at">p25  =</span> x<span class="sc">^</span><span class="fl">0.25</span>)</span>
+<span id="cb152-9"><a href="rlm.html#cb152-9" tabindex="-1"></a>}</span>
+<span id="cb152-10"><a href="rlm.html#cb152-10" tabindex="-1"></a></span>
+<span id="cb152-11"><a href="rlm.html#cb152-11" tabindex="-1"></a>crear <span class="ot">&lt;-</span> <span class="cf">function</span>(especif) {</span>
+<span id="cb152-12"><a href="rlm.html#cb152-12" tabindex="-1"></a>  M <span class="ot">&lt;-</span> <span class="fu">sapply</span>(especif, <span class="cf">function</span>(e) {</span>
+<span id="cb152-13"><a href="rlm.html#cb152-13" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">(&quot;</span>, e)) {</span>
+<span id="cb152-14"><a href="rlm.html#cb152-14" tabindex="-1"></a>      f <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">(.*&quot;</span>, <span class="st">&quot;&quot;</span>, e)</span>
+<span id="cb152-15"><a href="rlm.html#cb152-15" tabindex="-1"></a>      v <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;.*</span><span class="sc">\\</span><span class="st">((.*)</span><span class="sc">\\</span><span class="st">)&quot;</span>, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">1&quot;</span>, e)</span>
+<span id="cb152-16"><a href="rlm.html#cb152-16" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb152-17"><a href="rlm.html#cb152-17" tabindex="-1"></a>      f <span class="ot">&lt;-</span> <span class="st">&quot;x&quot;</span></span>
+<span id="cb152-18"><a href="rlm.html#cb152-18" tabindex="-1"></a>      v <span class="ot">&lt;-</span> e</span>
+<span id="cb152-19"><a href="rlm.html#cb152-19" tabindex="-1"></a>    }</span>
+<span id="cb152-20"><a href="rlm.html#cb152-20" tabindex="-1"></a>    <span class="fu">tf</span>(datos_rlm[[v]], f)</span>
+<span id="cb152-21"><a href="rlm.html#cb152-21" tabindex="-1"></a>  })</span>
+<span id="cb152-22"><a href="rlm.html#cb152-22" tabindex="-1"></a>  <span class="fu">colnames</span>(M) <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">)&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="fu">gsub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">(&quot;</span>, <span class="st">&quot;_&quot;</span>, especif))</span>
+<span id="cb152-23"><a href="rlm.html#cb152-23" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">target_deathrate =</span> datos_rlm<span class="sc">$</span>target_deathrate, M)</span>
+<span id="cb152-24"><a href="rlm.html#cb152-24" tabindex="-1"></a>}</span></code></pre></div>
+<div id="modelo-de-10-variables" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Modelo de 10 variables<a href="rlm.html#modelo-de-10-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="rlm.html#cb153-1" tabindex="-1"></a>m10 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;sqrt(incidencerate)&quot;</span>, <span class="st">&quot;p25(pctbachdeg25_over)&quot;</span>, <span class="st">&quot;sq(pctprivatecoverage)&quot;</span>,</span>
+<span id="cb153-2"><a href="rlm.html#cb153-2" tabindex="-1"></a>         <span class="st">&quot;log(pctotherrace)&quot;</span>, <span class="st">&quot;sqrt(pcths18_24)&quot;</span>, <span class="st">&quot;p25(pctblack)&quot;</span>, <span class="st">&quot;p25(birthrate)&quot;</span>,</span>
+<span id="cb153-3"><a href="rlm.html#cb153-3" tabindex="-1"></a>         <span class="st">&quot;log(pcths25_over)&quot;</span>, <span class="st">&quot;sq(medianagefemale)&quot;</span>, <span class="st">&quot;inv(medincome)&quot;</span>)</span>
+<span id="cb153-4"><a href="rlm.html#cb153-4" tabindex="-1"></a></span>
+<span id="cb153-5"><a href="rlm.html#cb153-5" tabindex="-1"></a>dat10 <span class="ot">&lt;-</span> <span class="fu">crear</span>(m10)</span>
+<span id="cb153-6"><a href="rlm.html#cb153-6" tabindex="-1"></a>mod10 <span class="ot">&lt;-</span> <span class="fu">lm</span>(target_deathrate <span class="sc">~</span> ., <span class="at">data =</span> dat10)</span>
+<span id="cb153-7"><a href="rlm.html#cb153-7" tabindex="-1"></a><span class="fu">summary</span>(mod10)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = target_deathrate ~ ., data = dat10)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -91.09 -11.10  -0.22  10.47 136.93 
+## 
+## Coefficients:
+##                         Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)            1.311e+01  1.767e+01   0.742    0.458    
+## sqrt_incidencerate     8.551e+00  2.881e-01  29.681  &lt; 2e-16 ***
+## p25_pctbachdeg25_over -2.558e+01  3.853e+00  -6.640 3.70e-11 ***
+## sq_pctprivatecoverage -3.431e-03  5.197e-04  -6.602 4.77e-11 ***
+## log_pctotherrace      -5.275e+00  6.446e-01  -8.183 4.04e-16 ***
+## sqrt_pcths18_24        3.519e+00  5.263e-01   6.687 2.69e-11 ***
+## p25_pctblack           4.243e+00  6.186e-01   6.859 8.37e-12 ***
+## p25_birthrate         -1.097e+01  2.472e+00  -4.437 9.45e-06 ***
+## log_pcths25_over       1.113e+01  2.765e+00   4.026 5.81e-05 ***
+## sq_medianagefemale    -7.212e-03  9.261e-04  -7.788 9.30e-15 ***
+## inv_medincome          7.000e+05  1.330e+05   5.262 1.53e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 19.39 on 3036 degrees of freedom
+## Multiple R-squared:  0.5136, Adjusted R-squared:  0.512 
+## F-statistic: 320.6 on 10 and 3036 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Las diez variables son significativas (p &lt; 0.001; el intercepto no lo es, p = 0.46), y el modelo es globalmente significativo (F = 320.6 con 10 y 3036 grados de libertad, p &lt; 0.05): al menos un coeficiente es distinto de cero. La ecuación ajustada es</p>
+<p><span class="math display">\[\widehat{\text{target\_deathrate}} = 13.11 + 8.55\sqrt{\text{incidencerate}} - 25.58\,\text{pctbachdeg25\_over}^{0.25} - 0.00343\,\text{pctprivatecoverage}^2 - 5.27\ln(1+\text{pctotherrace}) + 3.52\sqrt{\text{pcths18\_24}} + 4.24\,\text{pctblack}^{0.25} - 10.97\,\text{birthrate}^{0.25} + 11.13\ln(\text{pcths25\_over}) - 0.00721\,\text{medianagefemale}^2 + 700\,007\,\frac{1}{\text{medincome}}\]</span></p>
+<p>La mortalidad aumenta con la incidencia de cáncer y disminuye con el nivel educativo universitario (<code>pctbachdeg25_over</code>), con la cobertura privada y con la tasa de natalidad. Como las variables están transformadas, cada coeficiente se interpreta sobre la variable transformada y condicionado a las demás; por ejemplo, <code>pcths25_over</code> y <code>pcths18_24</code> tienen coeficiente positivo, pero comparten información con las demás variables de educación e ingreso.</p>
+</div>
+<div id="r2-y-r2-ajustado" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> <span class="math inline">\(R^2\)</span> y <span class="math inline">\(R^2\)</span> ajustado<a href="rlm.html#r2-y-r2-ajustado" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="rlm.html#cb155-1" tabindex="-1"></a>s10 <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod10)</span>
+<span id="cb155-2"><a href="rlm.html#cb155-2" tabindex="-1"></a>sse10 <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">residuals</span>(mod10)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb155-3"><a href="rlm.html#cb155-3" tabindex="-1"></a>p10 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod10))</span>
+<span id="cb155-4"><a href="rlm.html#cb155-4" tabindex="-1"></a></span>
+<span id="cb155-5"><a href="rlm.html#cb155-5" tabindex="-1"></a><span class="fu">c</span>(<span class="at">R2 =</span> s10<span class="sc">$</span>r.squared,</span>
+<span id="cb155-6"><a href="rlm.html#cb155-6" tabindex="-1"></a>  <span class="at">R2_ajustado =</span> s10<span class="sc">$</span>adj.r.squared,</span>
+<span id="cb155-7"><a href="rlm.html#cb155-7" tabindex="-1"></a>  <span class="at">Error_residual =</span> s10<span class="sc">$</span>sigma,</span>
+<span id="cb155-8"><a href="rlm.html#cb155-8" tabindex="-1"></a>  <span class="at">AIC =</span> n <span class="sc">*</span> <span class="fu">log</span>(sse10 <span class="sc">/</span> n) <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> p10,</span>
+<span id="cb155-9"><a href="rlm.html#cb155-9" tabindex="-1"></a>  <span class="at">BIC =</span> n <span class="sc">*</span> <span class="fu">log</span>(sse10 <span class="sc">/</span> n) <span class="sc">+</span> p10 <span class="sc">*</span> <span class="fu">log</span>(n))</span></code></pre></div>
+<pre><code>##             R2    R2_ajustado Error_residual            AIC            BIC 
+##   5.135794e-01   5.119772e-01   1.938682e+01   1.807721e+04   1.814346e+04</code></pre>
+<p>El modelo explica el 51.4 % de la variabilidad de <code>target_deathrate</code> (<span class="math inline">\(R^2\)</span> = 0.5136; <span class="math inline">\(R^2\)</span> ajustado = 0.5120). El error estándar residual es de 19.39 muertes por cada 100 000 habitantes. El restante 48.6 % de la variabilidad no es explicado por estas variables, así que el modelo describe una asociación pero no es adecuado para predecir con precisión la tasa de un condado en particular. (AIC y BIC se calculan como <span class="math inline">\(n\ln(SSE/n) + 2p\)</span> y <span class="math inline">\(n\ln(SSE/n) + p\ln n\)</span>, la misma forma que usa <code>step()</code>.)</p>
+</div>
+<div id="multicolinealidad" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Multicolinealidad<a href="rlm.html#multicolinealidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="rlm.html#cb157-1" tabindex="-1"></a><span class="fu">vif</span>(mod10)</span></code></pre></div>
+<pre><code>##    sqrt_incidencerate p25_pctbachdeg25_over sq_pctprivatecoverage      log_pctotherrace       sqrt_pcths18_24 
+##              1.126620              4.199392              3.898936              1.571708              1.402075 
+##          p25_pctblack         p25_birthrate      log_pcths25_over    sq_medianagefemale         inv_medincome 
+##              1.260288              1.052150              3.121808              1.361300              3.867743</code></pre>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="rlm.html#cb159-1" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">vif</span>(mod10))</span></code></pre></div>
+<pre><code>## [1] 4.199392</code></pre>
+<p>Los VIF van de 1.05 a 4.20; el máximo corresponde a <code>p25_pctbachdeg25_over</code> (4.20), seguido de <code>sq_pctprivatecoverage</code> (3.90) y <code>inv_medincome</code> (3.87). Todos son inferiores a 5, por lo que no hay multicolinealidad problemática, aunque la educación universitaria, la cobertura privada y el ingreso comparten información.</p>
+</div>
+<div id="análisis-de-los-errores" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Análisis de los errores<a href="rlm.html#an%C3%A1lisis-de-los-errores" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Se verifican los supuestos del modelo sobre los residuos: media cero, normalidad, varianza constante, independencia y presencia de observaciones atípicas o influyentes. En todas las pruebas, Ho indica que el supuesto se cumple.</p>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="rlm.html#cb161-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb161-2"><a href="rlm.html#cb161-2" tabindex="-1"></a><span class="fu">plot</span>(mod10, <span class="at">which =</span> <span class="dv">1</span>)   <span class="co"># residuos vs ajustados</span></span>
+<span id="cb161-3"><a href="rlm.html#cb161-3" tabindex="-1"></a><span class="fu">plot</span>(mod10, <span class="at">which =</span> <span class="dv">2</span>)   <span class="co"># Q-Q normal</span></span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/graficos-residuos-10-1.png" width="864" /></p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="rlm.html#cb162-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><strong>Media cero.</strong> Ho: E(error) = 0.</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="rlm.html#cb163-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">residuals</span>(mod10)</span>
+<span id="cb163-2"><a href="rlm.html#cb163-2" tabindex="-1"></a><span class="fu">t.test</span>(res)</span></code></pre></div>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  res
+## t = -2.2169e-15, df = 3046, p-value = 1
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  -0.6875069  0.6875069
+## sample estimates:
+##     mean of x 
+## -7.773383e-16</code></pre>
+<p>No se rechaza Ho (p ≈ 1): la media de los errores es cero.</p>
+<p><strong>Normalidad.</strong> Ho: los errores siguen una distribución normal.</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="rlm.html#cb165-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(res)</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  res
+## W = 0.97783, p-value &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="rlm.html#cb167-1" tabindex="-1"></a><span class="fu">c</span>(<span class="at">asimetria =</span> <span class="fu">skewness</span>(res), <span class="at">curtosis =</span> <span class="fu">kurtosis</span>(res))</span></code></pre></div>
+<pre><code>## asimetria  curtosis 
+## 0.1560933 5.5243905</code></pre>
+<p>Se rechaza Ho (W = 0.978, p &lt; 0.05). Los residuos son prácticamente simétricos (asimetría = 0.16), pero con colas más pesadas que la normal (curtosis = 5.52 &gt; 3). Con n = 3047, la prueba detecta desviaciones pequeñas y el teorema del límite central hace que las pruebas t y F sigan siendo aproximadamente válidas.</p>
+<p><strong>Homocedasticidad.</strong> Ho: la varianza de los errores es constante.</p>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="rlm.html#cb169-1" tabindex="-1"></a><span class="fu">bptest</span>(mod10)</span></code></pre></div>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  mod10
+## BP = 111.88, df = 10, p-value &lt; 2.2e-16</code></pre>
+<p>Se rechaza Ho (BP = 111.9, gl = 10, p &lt; 0.05): hay heterocedasticidad. Los errores estándar clásicos no son confiables, por lo que más adelante se emplean errores estándar robustos.</p>
+<p><strong>Independencia.</strong> Ho: no hay autocorrelación de primer orden en los errores.</p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="rlm.html#cb171-1" tabindex="-1"></a><span class="fu">dwtest</span>(mod10)</span></code></pre></div>
+<pre><code>## 
+##  Durbin-Watson test
+## 
+## data:  mod10
+## DW = 1.7662, p-value = 4.067e-11
+## alternative hypothesis: true autocorrelation is greater than 0</code></pre>
+<p>El estadístico de Durbin-Watson es 1.766 (&lt; 2) y se rechaza Ho: hay una autocorrelación positiva leve entre residuos consecutivos. Hay que interpretarlo con cuidado, porque el orden de las filas del conjunto de datos no es temporal.</p>
+<p><strong>Observaciones atípicas e influyentes.</strong></p>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="rlm.html#cb173-1" tabindex="-1"></a><span class="fu">plot</span>(mod10, <span class="at">which =</span> <span class="dv">4</span>)   <span class="co"># distancia de Cook</span></span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/cook-10-1.png" width="672" /></p>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="rlm.html#cb174-1" tabindex="-1"></a>cook <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(mod10)</span>
+<span id="cb174-2"><a href="rlm.html#cb174-2" tabindex="-1"></a><span class="fu">c</span>(<span class="at">max_cook =</span> <span class="fu">max</span>(cook), <span class="at">n_cook_mayor_4n =</span> <span class="fu">sum</span>(cook <span class="sc">&gt;</span> <span class="dv">4</span> <span class="sc">/</span> n), <span class="at">n_cook_mayor_1 =</span> <span class="fu">sum</span>(cook <span class="sc">&gt;</span> <span class="dv">1</span>))</span></code></pre></div>
+<pre><code>##        max_cook n_cook_mayor_4n  n_cook_mayor_1 
+##      0.06982597    223.00000000      0.00000000</code></pre>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="rlm.html#cb176-1" tabindex="-1"></a>rstud <span class="ot">&lt;-</span> <span class="fu">rstudent</span>(mod10)</span>
+<span id="cb176-2"><a href="rlm.html#cb176-2" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">abs</span>(rstud) <span class="sc">&gt;</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] 30</code></pre>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="rlm.html#cb178-1" tabindex="-1"></a><span class="fu">outlierTest</span>(mod10)</span></code></pre></div>
+<pre><code>##       rstudent unadjusted p-value Bonferroni p
+## 1221  7.141475         1.1507e-12   3.5063e-09
+## 1366  5.651923         1.7337e-08   5.2825e-05
+## 2646 -4.739059         2.2459e-06   6.8432e-03
+## 2659 -4.681528         2.9723e-06   9.0566e-03
+## 282  -4.571771         5.0295e-06   1.5325e-02
+## 1497  4.422195         1.0113e-05   3.0816e-02
+## 116   4.420486         1.0193e-05   3.1059e-02</code></pre>
+<p>La distancia de Cook máxima es 0.070, muy inferior a 1: ninguna observación es realmente influyente (con el criterio <span class="math inline">\(4/n\)</span> se marcan 223 observaciones, pero con n tan grande ese umbral es muy estricto). Solo 30 observaciones (1.0 %) tienen residuos studentizados mayores a 3 en valor absoluto. La prueba de Bonferroni (<code>outlierTest</code>) marca 7 de ellas como atípicas (filas 1221, 1366, 2646, 2659, 282, 1497 y 116, con p ajustado &lt; 0.05), pero ninguna es influyente, de modo que se conservan en el modelo.</p>
+</div>
+<div id="errores-estándar-robustos" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Errores estándar robustos<a href="rlm.html#errores-est%C3%A1ndar-robustos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Dado el incumplimiento de la homocedasticidad, los contrastes de significancia individual se recalculan con errores estándar robustos (HC3).</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="rlm.html#cb180-1" tabindex="-1"></a><span class="fu">coeftest</span>(mod10, <span class="at">vcov. =</span> <span class="fu">vcovHC</span>(mod10, <span class="at">type =</span> <span class="st">&quot;HC3&quot;</span>))</span></code></pre></div>
+<pre><code>## 
+## t test of coefficients:
+## 
+##                          Estimate  Std. Error t value  Pr(&gt;|t|)    
+## (Intercept)            1.3106e+01  2.1525e+01  0.6089  0.542666    
+## sqrt_incidencerate     8.5515e+00  4.4445e-01 19.2404 &lt; 2.2e-16 ***
+## p25_pctbachdeg25_over -2.5585e+01  4.6336e+00 -5.5216 3.643e-08 ***
+## sq_pctprivatecoverage -3.4309e-03  5.9514e-04 -5.7648 8.996e-09 ***
+## log_pctotherrace      -5.2747e+00  7.7100e-01 -6.8414 9.449e-12 ***
+## sqrt_pcths18_24        3.5194e+00  6.3957e-01  5.5027 4.051e-08 ***
+## p25_pctblack           4.2431e+00  7.7064e-01  5.5059 3.979e-08 ***
+## p25_birthrate         -1.0969e+01  3.3802e+00 -3.2450  0.001187 ** 
+## log_pcths25_over       1.1133e+01  3.3864e+00  3.2876  0.001022 ** 
+## sq_medianagefemale    -7.2120e-03  1.0335e-03 -6.9782 3.657e-12 ***
+## inv_medincome          7.0001e+05  1.5810e+05  4.4277 9.862e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Con errores robustos, las diez variables siguen siendo significativas (|t| entre 3.2 y 19.2, todas con p &lt; 0.01); los estadísticos t bajan respecto a los clásicos, pero las conclusiones no cambian. El intercepto no es significativo (p = 0.54), lo cual no afecta la interpretación del modelo.</p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="rlm.html#cb182-1" tabindex="-1"></a><span class="fu">coefci</span>(mod10, <span class="at">vcov. =</span> <span class="fu">vcovHC</span>(mod10, <span class="at">type =</span> <span class="st">&quot;HC3&quot;</span>), <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div>
+<pre><code>##                               2.5 %        97.5 %
+## (Intercept)           -2.910007e+01  5.531184e+01
+## sqrt_incidencerate     7.680004e+00  9.422921e+00
+## p25_pctbachdeg25_over -3.466977e+01 -1.649932e+01
+## sq_pctprivatecoverage -4.597772e-03 -2.263942e-03
+## log_pctotherrace      -6.786462e+00 -3.762979e+00
+## sqrt_pcths18_24        2.265339e+00  4.773409e+00
+## p25_pctblack           2.732042e+00  5.754092e+00
+## p25_birthrate         -1.759640e+01 -4.340933e+00
+## log_pcths25_over       4.493194e+00  1.777279e+01
+## sq_medianagefemale    -9.238465e-03 -5.185558e-03
+## inv_medincome          3.900156e+05  1.009998e+06</code></pre>
+</div>
+<div id="selección-del-mejor-modelo" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Selección del mejor modelo<a href="rlm.html#selecci%C3%B3n-del-mejor-modelo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Se comparan modelos de distinto tamaño obtenidos con la misma búsqueda (cada variable una sola vez, VIF &lt; 5), según <span class="math inline">\(R^2\)</span> ajustado, AIC y BIC.</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="rlm.html#cb184-1" tabindex="-1"></a>m19 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;sqrt(avganncount)&quot;</span>, <span class="st">&quot;sqrt(incidencerate)&quot;</span>, <span class="st">&quot;inv(medincome)&quot;</span>, <span class="st">&quot;inv(popest2015)&quot;</span>,</span>
+<span id="cb184-2"><a href="rlm.html#cb184-2" tabindex="-1"></a>         <span class="st">&quot;sq(medianagemale)&quot;</span>, <span class="st">&quot;inv(percentmarried)&quot;</span>, <span class="st">&quot;sqrt(pcths18_24)&quot;</span>, <span class="st">&quot;p25(pctbachdeg18_24)&quot;</span>,</span>
+<span id="cb184-3"><a href="rlm.html#cb184-3" tabindex="-1"></a>         <span class="st">&quot;inv(pcths25_over)&quot;</span>, <span class="st">&quot;sqrt(pctbachdeg25_over)&quot;</span>, <span class="st">&quot;log(pctunemployed16_over)&quot;</span>,</span>
+<span id="cb184-4"><a href="rlm.html#cb184-4" tabindex="-1"></a>         <span class="st">&quot;inv(pctprivatecoveragealone)&quot;</span>, <span class="st">&quot;inv(pctpubliccoverage)&quot;</span>, <span class="st">&quot;sq(pctpubliccoveragealone)&quot;</span>,</span>
+<span id="cb184-5"><a href="rlm.html#cb184-5" tabindex="-1"></a>         <span class="st">&quot;p25(pctblack)&quot;</span>, <span class="st">&quot;log(pctasian)&quot;</span>, <span class="st">&quot;log(pctotherrace)&quot;</span>, <span class="st">&quot;sq(pctmarriedhouseholds)&quot;</span>,</span>
+<span id="cb184-6"><a href="rlm.html#cb184-6" tabindex="-1"></a>         <span class="st">&quot;sq(birthrate)&quot;</span>)</span>
+<span id="cb184-7"><a href="rlm.html#cb184-7" tabindex="-1"></a></span>
+<span id="cb184-8"><a href="rlm.html#cb184-8" tabindex="-1"></a>m15 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;sqrt(pctbachdeg25_over)&quot;</span>, <span class="st">&quot;sqrt(incidencerate)&quot;</span>, <span class="st">&quot;log(pctotherrace)&quot;</span>, <span class="st">&quot;sqrt(pcths18_24)&quot;</span>,</span>
+<span id="cb184-9"><a href="rlm.html#cb184-9" tabindex="-1"></a>         <span class="st">&quot;sq(pctmarriedhouseholds)&quot;</span>, <span class="st">&quot;p25(birthrate)&quot;</span>, <span class="st">&quot;inv(pcths25_over)&quot;</span>,</span>
+<span id="cb184-10"><a href="rlm.html#cb184-10" tabindex="-1"></a>         <span class="st">&quot;sq(pctpubliccoveragealone)&quot;</span>, <span class="st">&quot;p25(pctblack)&quot;</span>, <span class="st">&quot;inv(percentmarried)&quot;</span>, <span class="st">&quot;inv(medincome)&quot;</span>,</span>
+<span id="cb184-11"><a href="rlm.html#cb184-11" tabindex="-1"></a>         <span class="st">&quot;log(pctunemployed16_over)&quot;</span>, <span class="st">&quot;inv(pctpubliccoverage)&quot;</span>, <span class="st">&quot;sq(medianagemale)&quot;</span>,</span>
+<span id="cb184-12"><a href="rlm.html#cb184-12" tabindex="-1"></a>         <span class="st">&quot;inv(popest2015)&quot;</span>)</span>
+<span id="cb184-13"><a href="rlm.html#cb184-13" tabindex="-1"></a></span>
+<span id="cb184-14"><a href="rlm.html#cb184-14" tabindex="-1"></a>m9 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;sqrt(incidencerate)&quot;</span>, <span class="st">&quot;log(pctotherrace)&quot;</span>, <span class="st">&quot;sq(pctprivatecoverage)&quot;</span>,</span>
+<span id="cb184-15"><a href="rlm.html#cb184-15" tabindex="-1"></a>        <span class="st">&quot;sqrt(pctbachdeg25_over)&quot;</span>, <span class="st">&quot;sqrt(pcths18_24)&quot;</span>, <span class="st">&quot;p25(birthrate)&quot;</span>, <span class="st">&quot;p25(pctblack)&quot;</span>,</span>
+<span id="cb184-16"><a href="rlm.html#cb184-16" tabindex="-1"></a>        <span class="st">&quot;sq(medianagefemale)&quot;</span>, <span class="st">&quot;inv(medincome)&quot;</span>)</span>
+<span id="cb184-17"><a href="rlm.html#cb184-17" tabindex="-1"></a></span>
+<span id="cb184-18"><a href="rlm.html#cb184-18" tabindex="-1"></a>m7 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;sqrt(incidencerate)&quot;</span>, <span class="st">&quot;sqrt(pctbachdeg25_over)&quot;</span>, <span class="st">&quot;log(pctotherrace)&quot;</span>, <span class="st">&quot;pcths18_24&quot;</span>,</span>
+<span id="cb184-19"><a href="rlm.html#cb184-19" tabindex="-1"></a>        <span class="st">&quot;sq(pctprivatecoverage)&quot;</span>, <span class="st">&quot;sq(pctempprivcoverage)&quot;</span>, <span class="st">&quot;p25(pctmarriedhouseholds)&quot;</span>)</span>
+<span id="cb184-20"><a href="rlm.html#cb184-20" tabindex="-1"></a></span>
+<span id="cb184-21"><a href="rlm.html#cb184-21" tabindex="-1"></a>candidatos <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;19 variables&quot;</span> <span class="ot">=</span> m19, <span class="st">&quot;15 variables&quot;</span> <span class="ot">=</span> m15, <span class="st">&quot;10 variables&quot;</span> <span class="ot">=</span> m10,</span>
+<span id="cb184-22"><a href="rlm.html#cb184-22" tabindex="-1"></a>                   <span class="st">&quot;9 variables&quot;</span> <span class="ot">=</span> m9, <span class="st">&quot;7 variables&quot;</span> <span class="ot">=</span> m7)</span>
+<span id="cb184-23"><a href="rlm.html#cb184-23" tabindex="-1"></a></span>
+<span id="cb184-24"><a href="rlm.html#cb184-24" tabindex="-1"></a>comparar <span class="ot">&lt;-</span> <span class="cf">function</span>(especif) {</span>
+<span id="cb184-25"><a href="rlm.html#cb184-25" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">lm</span>(target_deathrate <span class="sc">~</span> ., <span class="at">data =</span> <span class="fu">crear</span>(especif))</span>
+<span id="cb184-26"><a href="rlm.html#cb184-26" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(m))</span>
+<span id="cb184-27"><a href="rlm.html#cb184-27" tabindex="-1"></a>  sse <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">residuals</span>(m)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb184-28"><a href="rlm.html#cb184-28" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">R2 =</span> <span class="fu">summary</span>(m)<span class="sc">$</span>r.squared,</span>
+<span id="cb184-29"><a href="rlm.html#cb184-29" tabindex="-1"></a>             <span class="at">R2_ajustado =</span> <span class="fu">summary</span>(m)<span class="sc">$</span>adj.r.squared,</span>
+<span id="cb184-30"><a href="rlm.html#cb184-30" tabindex="-1"></a>             <span class="at">AIC =</span> n <span class="sc">*</span> <span class="fu">log</span>(sse <span class="sc">/</span> n) <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> p,</span>
+<span id="cb184-31"><a href="rlm.html#cb184-31" tabindex="-1"></a>             <span class="at">BIC =</span> n <span class="sc">*</span> <span class="fu">log</span>(sse <span class="sc">/</span> n) <span class="sc">+</span> p <span class="sc">*</span> <span class="fu">log</span>(n),</span>
+<span id="cb184-32"><a href="rlm.html#cb184-32" tabindex="-1"></a>             <span class="at">VIF_max =</span> <span class="fu">max</span>(<span class="fu">vif</span>(m)))</span>
+<span id="cb184-33"><a href="rlm.html#cb184-33" tabindex="-1"></a>}</span>
+<span id="cb184-34"><a href="rlm.html#cb184-34" tabindex="-1"></a></span>
+<span id="cb184-35"><a href="rlm.html#cb184-35" tabindex="-1"></a>tabla <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(candidatos, comparar))</span>
+<span id="cb184-36"><a href="rlm.html#cb184-36" tabindex="-1"></a>tabla <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">Modelo =</span> <span class="fu">names</span>(candidatos), tabla)</span>
+<span id="cb184-37"><a href="rlm.html#cb184-37" tabindex="-1"></a><span class="fu">rownames</span>(tabla) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb184-38"><a href="rlm.html#cb184-38" tabindex="-1"></a>tabla <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">round</span>(., <span class="dv">4</span>)))</span></code></pre></div>
+<pre><code>##         Modelo     R2 R2_ajustado      AIC      BIC VIF_max
+## 1 19 variables 0.5252      0.5222 18021.39 18141.83  4.8450
+## 2 15 variables 0.5231      0.5208 18026.81 18123.16  4.7321
+## 3 10 variables 0.5136      0.5120 18077.21 18143.46  4.1994
+## 4  9 variables 0.5114      0.5099 18088.88 18149.10  3.8538
+## 5  7 variables 0.5044      0.5032 18128.45 18176.62  4.8587</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th>Modelo</th>
+<th><span class="math inline">\(R^2\)</span> ajustado</th>
+<th>AIC</th>
+<th>BIC</th>
+<th>VIF máximo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>19 variables</td>
+<td><strong>0.5222</strong></td>
+<td><strong>18021.4</strong></td>
+<td>18141.8</td>
+<td>4.85</td>
+</tr>
+<tr class="even">
+<td>15 variables</td>
+<td>0.5208</td>
+<td>18026.8</td>
+<td><strong>18123.2</strong></td>
+<td>4.73</td>
+</tr>
+<tr class="odd">
+<td>10 variables</td>
+<td>0.5120</td>
+<td>18077.2</td>
+<td>18143.5</td>
+<td>4.20</td>
+</tr>
+<tr class="even">
+<td>9 variables</td>
+<td>0.5099</td>
+<td>18088.9</td>
+<td>18149.1</td>
+<td>3.85</td>
+</tr>
+<tr class="odd">
+<td>7 variables</td>
+<td>0.5032</td>
+<td>18128.4</td>
+<td>18176.6</td>
+<td>4.86</td>
+</tr>
+</tbody>
+</table>
+<p>El <span class="math inline">\(R^2\)</span> ajustado y el AIC prefieren el modelo de 19 variables, y el BIC, que penaliza más la complejidad, prefiere el de 15. La mejora al pasar de 10 a 19 variables es de apenas 0.010 en <span class="math inline">\(R^2\)</span> ajustado. Se verifica con selección hacia atrás si alguna de las diez variables del modelo puede retirarse:</p>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="rlm.html#cb186-1" tabindex="-1"></a><span class="fu">step</span>(mod10, <span class="at">direction =</span> <span class="st">&quot;backward&quot;</span>, <span class="at">trace =</span> <span class="dv">0</span>)<span class="sc">$</span>call              <span class="co"># criterio AIC</span></span></code></pre></div>
+<pre><code>## lm(formula = target_deathrate ~ sqrt_incidencerate + p25_pctbachdeg25_over + 
+##     sq_pctprivatecoverage + log_pctotherrace + sqrt_pcths18_24 + 
+##     p25_pctblack + p25_birthrate + log_pcths25_over + sq_medianagefemale + 
+##     inv_medincome, data = dat10)</code></pre>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="rlm.html#cb188-1" tabindex="-1"></a><span class="fu">step</span>(mod10, <span class="at">direction =</span> <span class="st">&quot;backward&quot;</span>, <span class="at">trace =</span> <span class="dv">0</span>, <span class="at">k =</span> <span class="fu">log</span>(n))<span class="sc">$</span>call  <span class="co"># criterio BIC</span></span></code></pre></div>
+<pre><code>## lm(formula = target_deathrate ~ sqrt_incidencerate + p25_pctbachdeg25_over + 
+##     sq_pctprivatecoverage + log_pctotherrace + sqrt_pcths18_24 + 
+##     p25_pctblack + p25_birthrate + log_pcths25_over + sq_medianagefemale + 
+##     inv_medincome, data = dat10)</code></pre>
+<p>En ambos criterios el procedimiento no elimina ninguna variable: quitar cualquiera aumenta el AIC y el BIC (el menor aumento corresponde a <code>log_pcths25_over</code>, con AIC de 18091.4 frente a 18077.2).</p>
+<p><strong>Modelo seleccionado.</strong> Se retiene el modelo de 10 variables, porque (i) pierde solo 0.010 de <span class="math inline">\(R^2\)</span> ajustado frente al de 19 variables, con casi la mitad de variables, (ii) tiene un VIF máximo más holgado (4.20), y (iii) ninguna de sus variables puede retirarse según AIC y BIC. Si lo que se busca es la mejor relación entre ajuste y complejidad según el BIC, el de 15 variables es una alternativa válida.</p>
+</div>
+<div id="conclusión-del-capítulo" class="section level2 hasAnchor" number="3.7">
+<h2><span class="header-section-number">3.7</span> Conclusión del capítulo<a href="rlm.html#conclusi%C3%B3n-del-cap%C3%ADtulo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Las variables seleccionadas explican en conjunto cerca de la mitad de la variabilidad de la tasa de mortalidad por cáncer (<span class="math inline">\(R^2\)</span> ajustado = 0.512), y el modelo es globalmente significativo (p &lt; 0.05).</li>
+<li>La mortalidad aumenta con la incidencia de cáncer, y disminuye con el nivel educativo universitario, la cobertura privada y la tasa de natalidad. Los coeficientes están sobre variables transformadas y deben leerse condicionados a las demás variables.</li>
+<li>No hay multicolinealidad problemática (VIF máximo = 4.20).</li>
+<li>Los residuos no cumplen normalidad, homocedasticidad ni independencia estrictas. Por el tamaño muestral (n = 3047) la inferencia sigue siendo aproximadamente válida, y con errores estándar robustos HC3 las diez variables siguen siendo significativas.</li>
+<li>No hay observaciones influyentes (distancia de Cook máxima = 0.070).</li>
+<li>Por su <span class="math inline">\(R^2\)</span> moderado y la heterocedasticidad, el modelo sirve para describir la asociación conjunta de los factores con la mortalidad, y no para predecir la tasa de un condado individual.</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="Análisis_estadístico.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="discusion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/04-RLM.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

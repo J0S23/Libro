@@ -1,0 +1,150 @@
+---
+title: "03-Metodología"
+output: html_document
+---
+
+# Metodología {-}
+
+## Fuente y preparación de los datos
+
+El análisis se realizó sobre un conjunto de datos que combina información 
+demográfica, socioeconómica y de salud pública para 3047 regiones (condados) 
+de Estados Unidos, obtenido de Kaggle. Previo al análisis, se realizó un 
+proceso de imputación de valores faltantes, sustituyendo los datos NA por 
+la media de cada variable numérica, con el fin de conservar el tamaño 
+muestral completo sin descartar observaciones. Asimismo, se aplicó una 
+ingeniería de características, creando la variable `coverage_balance` como 
+la diferencia entre `pctprivatecoverage` y `pctpubliccoverage`, con el 
+objetivo de sintetizar en un único indicador el predominio relativo de 
+cada tipo de cobertura médica en una región.
+
+Respecto a la dimensión económica, se utilizaron dos representaciones complementarias del ingreso presentes en el conjunto de datos. La variable `medincome` se empleó como medida continua en los análisis de correlación, mientras que `binnedinc` se utilizó como variable categórica en la prueba de independencia Chi-cuadrado. Esta estrategia permitió evaluar la relación entre ingreso y mortalidad tanto desde una perspectiva cuantitativa como categórica.
+
+## Objetivo 1: Evaluación de supuestos de normalidad y homocedasticidad
+
+Para determinar el test más adecuado en la comparación de medias entre 
+regiones de alta y baja pobreza, se dividió la muestra en dos grupos según 
+la mediana de `povertypercent`. Sobre estos grupos se evaluó:
+
+- **Normalidad:** mediante las pruebas de Shapiro-Wilk y Anderson-Darling, 
+  aplicadas a `target_deathrate` dentro de cada grupo, complementadas con 
+  gráficos Q-Q para una inspección visual del ajuste a la distribución 
+  normal.
+- **Homogeneidad de varianzas:** mediante una prueba F de razón de 
+  varianzas entre ambos grupos, y de forma complementaria, la prueba de 
+  Levene, más robusta ante desviaciones de normalidad.
+
+Los resultados de estas pruebas determinaron si correspondía aplicar la 
+prueba t clásica (varianzas iguales, prueba pooled), la corrección de 
+Welch (varianzas distintas), o una alternativa no paramétrica en caso de 
+que el supuesto de normalidad no se cumpliera.
+
+## Objetivo 2: Comparación de medias entre grupos de pobreza
+
+Con base en los resultados del objetivo anterior, se aplicó la prueba 
+estadística correspondiente para comparar la tasa de mortalidad promedio 
+entre los grupos de alta y baja pobreza:
+
+- Si se cumplía normalidad y homocedasticidad: prueba t de Student pooled.
+- Si se cumplía normalidad pero no homocedasticidad: prueba t de Welch.
+- Si no se cumplía normalidad: prueba no paramétrica de Mann-Whitney-Wilcoxon 
+  como alternativa robusta.
+
+En todos los casos, se estableció un nivel de significancia α = 0.05, y se 
+reportaron los intervalos de confianza correspondientes para la diferencia 
+de medias (o medianas, en el caso no paramétrico).
+
+## Objetivo 3: Cuantificación de la asociación lineal
+
+Se evaluó la relación entre `target_deathrate` y cuatro variables 
+socioeconómicas clave (`medincome`, `pctbachdeg25_over`, `coverage_balance`, 
+`pctunemployed16_over`). Previo al cálculo de la correlación, se verificó 
+el supuesto de normalidad univariado de cada variable mediante las pruebas 
+de Shapiro-Wilk y Anderson-Darling. Dado que este supuesto no se cumplió 
+para ninguna variable, se optó por calcular coeficientes de correlación no 
+paramétricos:
+
+- **Correlación de Spearman**, como medida principal de asociación 
+  monótona.
+- **Correlación de Kendall's Tau**, como verificación adicional, dado que 
+  la presencia de valores repetidos (empates) en los datos impedía el 
+  cálculo de un p-valor exacto para Spearman.
+
+Los resultados se complementaron con un mapa de correlaciones general 
+(heatmap) que incluyó todas las variables numéricas relevantes, permitiendo 
+visualizar de forma conjunta la magnitud y dirección de las asociaciones.
+
+## Objetivo 4: Efecto del balance de cobertura médica sobre la mortalidad
+
+La variable `coverage_balance` (numérica y continua) se categorizó en tres 
+grupos mediante terciles de su distribución: predominio de cobertura 
+pública, balance intermedio, y predominio de cobertura privada. Esta 
+estrategia de segmentación garantizó grupos de tamaño muestral equilibrado 
+(aproximadamente 33% de las observaciones en cada categoría).
+
+Se evaluaron los supuestos del análisis de varianza (ANOVA) mediante:
+
+- **Normalidad** de `target_deathrate` dentro de cada grupo (Shapiro-Wilk 
+  y Anderson-Darling).
+- **Homogeneidad de varianzas** entre los tres grupos (prueba de Levene).
+
+Dado que el supuesto de normalidad no se cumplió en ninguno de los tres 
+grupos, se optó por la alternativa no paramétrica del ANOVA: la prueba de 
+**Kruskal-Wallis**. Al resultar esta significativa, se realizó un análisis 
+post-hoc mediante la **prueba de Dunn** (con ajuste de Bonferroni para 
+comparaciones múltiples), con el fin de identificar entre qué pares 
+específicos de grupos existían diferencias significativas.
+
+## Objetivo 5: Asociación entre nivel de ingreso y nivel de mortalidad
+
+Para este objetivo, ambas variables se transformaron a escala categórica: 
+`target_deathrate` se dividió en dos niveles (alto y bajo) según su 
+mediana, mientras que `binnedinc` se mantuvo en sus diez categorías 
+originales (deciles de ingreso medio, ya provistas por el dataset). Con 
+ambas variables categorizadas, se construyó una tabla de contingencia y se 
+aplicó una **prueba de independencia Chi-cuadrado** ($\chi^2$), con el fin 
+de determinar si existía una asociación estadísticamente significativa 
+entre el nivel de ingreso de una región y su categoría de mortalidad, 
+contrastando así, desde un enfoque categórico, la relación ya explorada 
+mediante los coeficientes de correlación del objetivo 3.
+
+## Objetivo 6: Modelo de regresión lineal múltiple
+
+Se ajustó un modelo de regresión lineal múltiple con `target_deathrate` como 
+variable respuesta. Para esta etapa se partió de los datos originales (con 
+la misma imputación por la media) y se mantuvieron `pctprivatecoverage` y 
+`pctpubliccoverage` como variables separadas, en lugar de `coverage_balance`, 
+que es una combinación lineal exacta de ambas. Se excluyó `avgdeathsperyear`, 
+porque interviene en la construcción de la propia tasa de mortalidad, y 
+`pctsomecol18_24`, por tener 2285 datos faltantes de 3047.
+
+La selección de variables se hizo mediante una búsqueda sobre todas las 
+variables numéricas, con tres reglas: cada variable podía entrar una sola 
+vez; se le podía aplicar una de las transformaciones vistas en la regresión 
+simple (logarítmica, raíz cuadrada, inversa, cuadrática y potencia 0.25); y 
+ningún VIF podía superar 5. Entre los modelos que cumplían estas reglas se 
+buscó maximizar el $R^2$ ajustado, y se compararon modelos de distinto tamaño 
+según $R^2$ ajustado, AIC y BIC. Cuando una variable tenía ceros, el 
+logaritmo se calculó como $\ln(1 + x)$. Como las variables se eligieron a 
+partir de los mismos datos, los valores p del modelo final deben leerse con 
+cautela.
+
+Sobre el modelo seleccionado se evaluó:
+
+- **Ajuste:** $R^2$, $R^2$ ajustado, error estándar residual y prueba F 
+  global.
+- **Multicolinealidad:** factor de inflación de la varianza (VIF), con el 
+  umbral de 5.
+- **Supuestos sobre los errores:** media cero (prueba t), normalidad 
+  (Shapiro-Wilk, asimetría, curtosis y gráfico Q-Q), homocedasticidad 
+  (Breusch-Pagan) e independencia (Durbin-Watson).
+- **Observaciones atípicas e influyentes:** residuos studentizados 
+  (|r| > 3), prueba de Bonferroni (`outlierTest`) y distancia de Cook.
+- **Inferencia robusta:** dado que no se cumplió la homocedasticidad, se 
+  recalcularon las pruebas de los coeficientes con errores estándar HC3.
+
+## Nivel de significancia
+
+Para todas las pruebas de hipótesis realizadas a lo largo del estudio, se 
+utilizó un nivel de significancia α = 0.05, correspondiente a un 95% de 
+confianza.

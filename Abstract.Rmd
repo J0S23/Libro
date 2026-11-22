@@ -32,6 +32,14 @@ grupos; un análisis de correlación entre las principales variables
 numéricas; y un análisis de varianza (ANOVA) para comparar la mortalidad 
 entre distintos niveles de ingreso. 
 
+En el modelo de regresión lineal múltiple final, con diez variables 
+explicativas transformadas y sin multicolinealidad (VIF máximo = 4.20), se 
+explica cerca de la mitad de la variabilidad de la tasa de mortalidad 
+(R² ajustado = 0.512), siendo la incidencia de cáncer la variable con mayor 
+estadístico t. Los residuos presentan heterocedasticidad, por lo que se 
+emplean errores estándar robustos. 
+
+
 Los resultados buscan aportar evidencia estadísticamente significativa sobre los factores socioeconómicos asociados a la mortalidad por cáncer, con el fin de identificar posibles focos de intervención en políticas públicas de salud.
 
 **Palabras clave:** mortalidad por cáncer, regresión lineal múltiple, 

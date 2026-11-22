@@ -1,0 +1,82 @@
+---
+title: "01-introduccion"
+output: html_document
+---
+
+# Introducción {-}
+
+El cáncer es una de las principales causas de muerte en el mundo, y sus 
+tasas de mortalidad no se distribuyen de manera uniforme entre poblaciones. 
+Diversos estudios epidemiológicos han señalado que factores como el nivel 
+socioeconómico, el acceso a seguros de salud, la educación y las 
+condiciones demográficas de una región pueden influir de forma considerable 
+en los desenlaces relacionados con esta enfermedad, incluyendo tanto la 
+incidencia como la mortalidad.
+
+En este proyecto se analiza un conjunto de datos que recopila información 
+demográfica, socioeconómica y de salud pública para distintas regiones de 
+Estados Unidos, con el propósito de identificar si existen diferencias 
+estadísticamente significativas en la tasa de mortalidad por cáncer 
+(`target_deathrate`) entre regiones con distintos niveles socioeconómicos, 
+así como cuantificar la fuerza de la asociación lineal entre estos factores 
+y la mortalidad.
+
+Con el fin de estudiar la dimensión económica desde enfoques complementarios, se emplearon dos representaciones del ingreso presentes en el conjunto de datos. La variable medincome se utilizó como una medida continua en los análisis de correlación, permitiendo evaluar asociaciones monotónicas con la mortalidad por cáncer, mientras que binnedinc, correspondiente a categorías de ingreso previamente definidas en el dataset, se utilizó en la prueba Chi-cuadrado para analizar la asociación entre niveles de ingreso y categorías de mortalidad. Aunque ambas variables describen la misma dimensión socioeconómica, cada una responde a objetivos inferenciales distintos.
+
+Así, la pregunta que guía este estudio es la siguiente: **¿Existen 
+diferencias estadísticamente significativas en la tasa de mortalidad por 
+cáncer entre regiones con distintos niveles socioeconómicos (pobreza, 
+ingreso, educación y cobertura médica), y qué tan fuerte es la asociación entre 
+estos factores y la mortalidad?**
+
+Para dar respuesta a esta pregunta, el estudio se estructura en torno a los 
+siguientes objetivos:
+
+1. **Evaluar los supuestos de normalidad y homogeneidad de varianzas** de 
+   `target_deathrate` entre regiones con alta y baja pobreza (divididas 
+   según la mediana de `povertypercent`), mediante pruebas de normalidad 
+   y una prueba F para la homocedasticidad, con el fin de determinar el 
+   test más adecuado para la comparación de medias entre ambos grupos.
+
+2. **Comparar la mortalidad** entre esos mismos grupos utilizando pruebas 
+   t o z para dos muestras independientes, en su versión pooled, Welch, o 
+   mediante una alternativa no paramétrica, según lo determinado por los 
+   supuestos evaluados en el objetivo anterior.
+
+3. **Cuantificar la asociación lineal** entre `target_deathrate` y las 
+   variables socioeconómicas clave mediante coeficientes de 
+   correlación de Pearson y sus respectivas pruebas de hipótesis, con 
+   apoyo de un mapa de correlaciones general.
+   
+4. **Contrastar el efecto del balance de cobertura médica** sobre la 
+   mortalidad mediante un análisis de varianza (ANOVA), agrupando la 
+   variable `coverage_balance` en categorías (por ejemplo, predominio de 
+   cobertura pública, balance intermedio y predominio de cobertura 
+   privada), con el fin de determinar si el tipo de cobertura predominante 
+   en una región se asocia con diferencias significativas en la tasa de 
+   mortalidad.
+5. **Evaluar la asociación entre el nivel de ingreso y el nivel de mortalidad** 
+   mediante una prueba de independencia Chi-cuadrado 
+   ($\chi^2$) sobre una tabla de contingencia, categorizando 
+   target_deathrate en niveles alto y bajo (según la mediana) y 
+   cruzándola con los niveles de binnedinc, con el fin de determinar 
+   si ambas variables categóricas son estadísticamente independientes o 
+   si, por el contrario, existe una asociación significativa entre el 
+   nivel de ingreso de una región y su categoría de mortalidad.
+
+6. **Ajustar y evaluar un modelo de regresión lineal múltiple** para 
+   `target_deathrate`, seleccionando las variables explicativas y sus 
+   transformaciones de modo que se maximice el $R^2$ ajustado sin 
+   multicolinealidad (VIF menor que 5), y verificando después los supuestos 
+   sobre los errores (media cero, normalidad, homocedasticidad e 
+   independencia), la presencia de observaciones atípicas o influyentes y 
+   la comparación entre modelos candidatos mediante AIC y BIC, con el fin 
+   de determinar qué parte de la variabilidad de la mortalidad es explicada 
+   conjuntamente por los factores del conjunto de datos.
+   
+A través de estos objetivos, se busca aportar evidencia estadística que 
+permita comprender mejor los determinantes de la mortalidad por cáncer, 
+sentando una base cuantitativa que podría orientar decisiones en materia 
+de política pública y asignación de recursos en salud. El modelo de 
+regresión lineal múltiple del objetivo 6 integra el efecto conjunto de 
+estas variables, una vez establecida la evidencia bivariada aquí presentada.

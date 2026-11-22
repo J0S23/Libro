@@ -63,11 +63,20 @@ siguientes objetivos:
    si ambas variables categóricas son estadísticamente independientes o 
    si, por el contrario, existe una asociación significativa entre el 
    nivel de ingreso de una región y su categoría de mortalidad.
+
+6. **Ajustar y evaluar un modelo de regresión lineal múltiple** para 
+   `target_deathrate`, seleccionando las variables explicativas y sus 
+   transformaciones de modo que se maximice el $R^2$ ajustado sin 
+   multicolinealidad (VIF menor que 5), y verificando después los supuestos 
+   sobre los errores (media cero, normalidad, homocedasticidad e 
+   independencia), la presencia de observaciones atípicas o influyentes y 
+   la comparación entre modelos candidatos mediante AIC y BIC, con el fin 
+   de determinar qué parte de la variabilidad de la mortalidad es explicada 
+   conjuntamente por los factores del conjunto de datos.
    
 A través de estos objetivos, se busca aportar evidencia estadística que 
 permita comprender mejor los determinantes de la mortalidad por cáncer, 
 sentando una base cuantitativa que podría orientar decisiones en materia 
-de política pública y asignación de recursos en salud. El desarrollo de un 
-modelo de regresión lineal múltiple que integre el efecto conjunto de 
-estas variables se plantea como una etapa posterior del análisis, una vez 
-establecida la evidencia bivariada aquí presentada.
+de política pública y asignación de recursos en salud. El modelo de 
+regresión lineal múltiple del objetivo 6 integra el efecto conjunto de 
+estas variables, una vez establecida la evidencia bivariada aquí presentada.
