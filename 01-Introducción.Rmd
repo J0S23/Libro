@@ -1,9 +1,4 @@
----
-title: "01-introduccion"
-output: html_document
----
-
-# Introducción {-}
+# Introducción {#introduccion}
 
 El cáncer es una de las principales causas de muerte en el mundo, y sus 
 tasas de mortalidad no se distribuyen de manera uniforme entre poblaciones. 
@@ -23,11 +18,12 @@ y la mortalidad.
 
 Con el fin de estudiar la dimensión económica desde enfoques complementarios, se emplearon dos representaciones del ingreso presentes en el conjunto de datos. La variable medincome se utilizó como una medida continua en los análisis de correlación, permitiendo evaluar asociaciones monotónicas con la mortalidad por cáncer, mientras que binnedinc, correspondiente a categorías de ingreso previamente definidas en el dataset, se utilizó en la prueba Chi-cuadrado para analizar la asociación entre niveles de ingreso y categorías de mortalidad. Aunque ambas variables describen la misma dimensión socioeconómica, cada una responde a objetivos inferenciales distintos.
 
-Así, la pregunta que guía este estudio es la siguiente: **¿Existen 
-diferencias estadísticamente significativas en la tasa de mortalidad por 
-cáncer entre regiones con distintos niveles socioeconómicos (pobreza, 
-ingreso, educación y cobertura médica), y qué tan fuerte es la asociación entre 
-estos factores y la mortalidad?**
+Así, la pregunta que guía este estudio es la siguiente:
+
+> ¿Existen diferencias estadísticamente significativas en la tasa de 
+> mortalidad por cáncer entre regiones con distintos niveles 
+> socioeconómicos (pobreza, ingreso, educación y cobertura médica), y qué 
+> tan fuerte es la asociación entre estos factores y la mortalidad?
 
 Para dar respuesta a esta pregunta, el estudio se estructura en torno a los 
 siguientes objetivos:
@@ -74,9 +70,19 @@ siguientes objetivos:
    de determinar qué parte de la variabilidad de la mortalidad es explicada 
    conjuntamente por los factores del conjunto de datos.
    
+7. **Ajustar un modelo con la variable categórica** `binnedinc` (la única 
+   variable categórica del conjunto de datos), codificándola mediante 
+   variables dummy con el decil de ingreso más bajo como referencia, primero 
+   como única covariable y luego junto con las variables del modelo del 
+   objetivo 6, con el fin de estimar la diferencia de mortalidad de cada 
+   nivel de ingreso y determinar si el ingreso conserva un efecto propio 
+   una vez se controla por los demás factores.
+
 A través de estos objetivos, se busca aportar evidencia estadística que 
 permita comprender mejor los determinantes de la mortalidad por cáncer, 
 sentando una base cuantitativa que podría orientar decisiones en materia 
 de política pública y asignación de recursos en salud. El modelo de 
 regresión lineal múltiple del objetivo 6 integra el efecto conjunto de 
-estas variables, una vez establecida la evidencia bivariada aquí presentada.
+estas variables, una vez establecida la evidencia bivariada aquí presentada, 
+y el modelo del objetivo 7 incorpora el nivel de ingreso como variable 
+categórica.

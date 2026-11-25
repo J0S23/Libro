@@ -1,0 +1,31 @@
+---
+title: "07-Discusión"
+output: html_document
+---
+
+# Discusión {#discusion}
+
+## Interpretación de los resultados
+
+Los siete objetivos apuntan en la misma dirección: en los condados de Estados Unidos, una peor situación socioeconómica se asocia con una mayor tasa de mortalidad por cáncer. Esta conclusión no depende de una sola prueba, sino que se repite con enfoques distintos.
+
+**Pobreza.** Los condados con pobreza alta tienen en promedio 21.18 muertes más por cada 100 000 habitantes que los de pobreza baja (189.24 frente a 168.07; IC 95 %: 19.35 a 22.99). La prueba de Welch se eligió porque la prueba F mostró varianzas distintas, y la prueba de Wilcoxon, que no supone normalidad, llegó a la misma conclusión. Además, la d de Cohen (0.825) indica un efecto grande, de modo que la diferencia no es solo estadísticamente significativa sino relevante en la práctica.
+
+**Educación, ingreso, cobertura y desempleo.** Las correlaciones de Spearman y Kendall muestran que la educación universitaria es el factor con asociación individual más fuerte (ρ = −0.502), seguida del ingreso medio (ρ = −0.463), el balance de cobertura médica (ρ = −0.430) y el desempleo (ρ = 0.403, el único con signo positivo). Todas son moderadas: cada factor por separado se relaciona con la mortalidad, pero ninguno la explica por sí solo.
+
+**Tipo de cobertura médica.** La mortalidad baja de forma escalonada al pasar de condados con predominio de cobertura pública (191.26) a balance intermedio (179.66) y a predominio privado (164.99). Kruskal-Wallis y las comparaciones de Dunn confirmaron que los tres grupos difieren entre sí. Este resultado debe leerse con cuidado: la cobertura pública predomina en condados con más población mayor o de menores ingresos, así que el tipo de cobertura también refleja el perfil de la población y no solo la calidad del acceso a la salud.
+
+**Nivel de ingreso.** El ingreso aparece en tres análisis con resultados coherentes. Kruskal-Wallis mostró diferencias entre los 10 niveles de `binnedinc`, y los únicos pares sin diferencia significativa fueron niveles consecutivos. La prueba Chi-cuadrado mostró que el nivel de ingreso y la categoría de mortalidad no son independientes. Y el modelo con variables dummy cuantificó la diferencia: el decil de ingreso más alto tiene en promedio 43.64 muertes menos que el más bajo.
+
+**Efecto conjunto.** El modelo de regresión lineal múltiple explica cerca de la mitad de la variabilidad de la mortalidad ($R^2$ ajustado = 0.512). La variable con mayor peso es la incidencia de cáncer, lo cual es esperable porque una región con más casos tiende a tener más muertes. Aun controlando por la incidencia, la educación universitaria, la cobertura privada y el ingreso siguen asociados con una menor mortalidad, lo que sugiere que los factores socioeconómicos influyen en la probabilidad de morir por cáncer una vez la enfermedad aparece, y no solo en cuántos casos hay.
+
+**Ingreso como variable categórica.** El modelo del objetivo 7 aporta un matiz que los análisis anteriores no mostraban. Al controlar por las demás variables, la diferencia de mortalidad asociada al ingreso se reduce mucho (de 43.64 a 11.13 muertes en el decil más alto), porque buena parte de esa diferencia se explica por la educación y la cobertura, que suben con el ingreso. Lo que queda del efecto del ingreso no es lineal: aumenta hasta el séptimo decil (ingreso medio de unos 48 000 dólares) y luego se estabiliza. En otras palabras, la reducción de mortalidad asociada al ingreso se concentra en pasar de ingresos bajos a ingresos medios. El modelo con el ingreso continuo, que impone una forma fija a esa relación, no permite ver este patrón.
+
+## Limitaciones
+
+- **Datos agregados por condado.** Las variables describen condados y no personas. Que los condados con más pobreza tengan más mortalidad no implica que cada persona pobre tenga mayor riesgo (falacia ecológica).
+- **Estudio observacional.** Los resultados muestran asociaciones, no causas. Los factores socioeconómicos están muy relacionados entre sí y con otras variables no medidas, como el consumo de tabaco, la ruralidad o la exposición ambiental.
+- **Imputación por la media.** Reemplazar los datos faltantes por la media conserva el tamaño muestral, pero reduce artificialmente la variabilidad de las variables imputadas.
+- **Supuestos de los modelos.** Los residuos de los modelos de regresión no son normales ni homocedásticos. Por el tamaño muestral (n = 3047) la inferencia sigue siendo aproximadamente válida, y las conclusiones se mantuvieron con errores estándar robustos HC3, pero los intervalos clásicos no deben tomarse como exactos.
+- **Selección de variables con los mismos datos.** Las variables del modelo múltiple se eligieron buscando el mejor ajuste en este mismo conjunto de datos, por lo que los valores p y el $R^2$ pueden ser algo optimistas.
+- **Variable categórica derivada.** `binnedinc` es una agrupación de `medincome`. Al usarla se pierde la información dentro de cada intervalo, y el modelo necesita 9 parámetros para el ingreso en lugar de uno.

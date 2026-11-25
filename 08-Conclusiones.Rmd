@@ -1,0 +1,26 @@
+---
+title: "08-Conclusiones"
+output: html_document
+---
+
+# Conclusiones {#conclusiones}
+
+En respuesta a la pregunta de investigación, sí existen diferencias estadísticamente significativas en la tasa de mortalidad por cáncer entre condados con distintos niveles socioeconómicos, y la asociación con cada factor es moderada. Por objetivo:
+
+1. **Supuestos.** La mortalidad no sigue una distribución normal en los grupos de pobreza alta y baja, y sus varianzas son distintas. Por eso la comparación de medias se hizo con la prueba de Welch, apoyada en la prueba de Wilcoxon.
+
+2. **Pobreza.** Los condados con pobreza alta tienen en promedio 21.18 muertes más por cada 100 000 habitantes que los de pobreza baja (p < 0.05), con un tamaño del efecto grande (d = 0.825).
+
+3. **Asociación.** La mortalidad disminuye con la educación universitaria (ρ = −0.502), el ingreso medio (ρ = −0.463) y el predominio de cobertura privada (ρ = −0.430), y aumenta con el desempleo (ρ = 0.403). Las cuatro asociaciones son significativas y de intensidad moderada.
+
+4. **Cobertura médica.** La mortalidad difiere entre los tres tipos de cobertura predominante: es más alta con predominio público (191.26), intermedia con balance (179.66) y más baja con predominio privado (164.99), y los tres grupos difieren entre sí.
+
+5. **Ingreso.** El nivel de ingreso y el nivel de mortalidad no son independientes (χ² = 504.54, p < 0.05): los condados de menor ingreso concentran una mayor proporción de mortalidad alta.
+
+6. **Modelo de regresión lineal múltiple.** Diez variables explican en conjunto cerca de la mitad de la variabilidad de la mortalidad ($R^2$ ajustado = 0.512), sin multicolinealidad. La mortalidad aumenta con la incidencia de cáncer y disminuye con la educación universitaria, la cobertura privada y la natalidad. Las conclusiones se mantienen con errores estándar robustos.
+
+7. **Modelo con variable categórica.** Por sí solo, el nivel de ingreso explica el 20.4 % de la variabilidad, y el decil más alto tiene 43.64 muertes menos que el más bajo. Al controlar por las demás variables, el ingreso sigue siendo significativo en conjunto (F parcial = 5.46, p < 0.05), aunque su efecto se reduce a entre 5 y 13 muertes menos y deja de crecer a partir del séptimo decil.
+
+En conjunto, la mortalidad por cáncer se relaciona con varias dimensiones socioeconómicas a la vez (pobreza, ingreso, educación, empleo y tipo de cobertura médica), y ninguna de ellas por sí sola la explica. Los resultados sugieren que las políticas de salud pública podrían priorizar los condados con menor nivel educativo, menor ingreso y mayor dependencia de la cobertura pública, y que el mayor beneficio asociado al ingreso estaría en los condados de ingresos bajos.
+
+Como trabajo futuro, se propone incluir variables que no están en el conjunto de datos, como el consumo de tabaco, la ruralidad o el acceso a centros oncológicos; usar métodos de imputación más completos que la media; y validar el modelo con datos de otros años para comprobar que las asociaciones se mantienen.

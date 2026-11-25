@@ -1,9 +1,4 @@
----
-title: "03-Metodología"
-output: html_document
----
-
-# Metodología {-}
+# Metodología {#metodologia}
 
 ## Fuente y preparación de los datos
 
@@ -142,6 +137,35 @@ Sobre el modelo seleccionado se evaluó:
   (|r| > 3), prueba de Bonferroni (`outlierTest`) y distancia de Cook.
 - **Inferencia robusta:** dado que no se cumplió la homocedasticidad, se 
   recalcularon las pruebas de los coeficientes con errores estándar HC3.
+
+## Objetivo 7: Modelo con variable categórica
+
+La única variable categórica del conjunto de datos es `binnedinc`, con 10 
+niveles de ingreso medio. Se incorporó a la regresión mediante 9 variables 
+dummy (una por nivel, excepto la referencia), tomando como referencia el 
+decil de ingreso más bajo. R genera esta codificación automáticamente al 
+tratar la variable como factor, y se verificó con `model.matrix()`.
+
+Se ajustaron dos modelos:
+
+- **Modelo con `binnedinc` como única covariable.** Su intercepto es la 
+  mortalidad media del decil de referencia y cada coeficiente es la 
+  diferencia de medias entre un decil y la referencia. Se evaluaron las 
+  pruebas t de cada coeficiente, la prueba F global (equivalente al ANOVA de 
+  una vía) y el $R^2$.
+- **Modelo múltiple con `binnedinc`.** Como `binnedinc` es una versión 
+  agrupada de `medincome`, se reemplazó `inv(medincome)` del modelo del 
+  objetivo 6 por las 9 dummies, conservando las otras nueve variables con 
+  sus transformaciones. El aporte conjunto de la variable categórica se 
+  evaluó con una prueba F parcial entre el modelo sin ingreso y el modelo 
+  con las dummies.
+
+Sobre el modelo múltiple se revisó la multicolinealidad con el VIF 
+generalizado ($GVIF^{1/(2\,gl)}$, con umbral $\sqrt{5} \approx 2.24$), los 
+supuestos de los errores (media cero, Shapiro-Wilk y Breusch-Pagan), y se 
+repitieron las pruebas con errores estándar robustos HC3. Finalmente, se 
+compararon el modelo con ingreso categórico y el modelo con ingreso continuo 
+mediante $R^2$ ajustado, AIC y BIC.
 
 ## Nivel de significancia
 

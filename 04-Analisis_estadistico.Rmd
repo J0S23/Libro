@@ -25,8 +25,25 @@ Se cargan los datos de cáncer.
 
 ```{r data-analisis}
 data_cancer <- read.csv("Data/cancer_reg.csv")
+```
 
-summary(data_cancer)
+Resumen de las variables numéricas del conjunto de datos:
+
+```{r resumen-analisis}
+data_cancer %>%
+  select(where(is.numeric)) %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "valor") %>%
+  group_by(Variable) %>%
+  summarise(Mín = min(valor, na.rm = TRUE),
+            Q1 = quantile(valor, 0.25, na.rm = TRUE),
+            Mediana = median(valor, na.rm = TRUE),
+            Media = mean(valor, na.rm = TRUE),
+            Q3 = quantile(valor, 0.75, na.rm = TRUE),
+            Máx = max(valor, na.rm = TRUE),
+            Faltantes = sum(is.na(valor))) %>%
+  mutate(Variable = factor(Variable, levels = names(data_cancer))) %>%
+  arrange(Variable) %>%
+  knitr::kable(digits = 2, caption = "Resumen de las variables numéricas")
 ```
 
 Ahora, repitamos todas las transformaciones de datos para preparar el análisis estadístico.
@@ -546,3 +563,287 @@ chisq.test(tabla_contingencia)
 ```
 
 La prueba Chi-cuadrado de Pearson arroja un estadístico χ² = 504.54, con gl = 9 y un p-valor prácticamente igual a 0 (p < 0.05). Se rechaza Ho: existe una asociación estadísticamente significativa entre el nivel de ingreso (`binnedinc`) y el nivel de mortalidad (`mortalidad_nivel`) — ambas variables no son independientes. Este resultado confirma lo observado anteriormente: los condados de menor ingreso presentan una mayor proporción de mortalidad alta, mientras que los de mayor ingreso presentan una mayor proporción de mortalidad baja.
+
+## Objetivo 7: modelo con variable categórica {#modelo-categorico}
+
+El conjunto de datos tiene una sola variable categórica: `binnedinc`, que agrupa los condados en 10 rangos de ingreso medio (deciles de `medincome`). En este objetivo se incorpora esa variable a la regresión mediante **variables dummy** (indicadoras), siguiendo dos pasos:
+
+1. Un modelo con `binnedinc` como única covariable, para estimar la diferencia de mortalidad de cada rango de ingreso frente a un rango de referencia.
+2. Un modelo múltiple que combina `binnedinc` con las variables del modelo de regresión lineal múltiple del objetivo 6 (Capítulo \@ref(rlm)), para saber si el nivel de ingreso conserva un efecto propio una vez se controla por las demás variables.
+
+### Variables dummy
+
+Una variable dummy toma solo los valores 0 o 1 e indica si una observación pertenece o no a una categoría. Una variable con $k$ categorías se representa con $k - 1$ dummies; la categoría que queda sin dummy es la **referencia**. Si se incluyeran las $k$ dummies junto con el intercepto, la suma de todas ellas sería igual a la columna de unos y el modelo no se podría estimar (trampa de las variables dummy).
+
+Como `binnedinc` tiene 10 niveles, se crean 9 dummies. Se toma como referencia el **decil 1** (el ingreso más bajo, de 22 640 a 34 218 dólares), de modo que cada coeficiente mide cuánto cambia la mortalidad en un rango de ingreso más alto respecto a los condados más pobres:
+
+$$D_{ji} = \begin{cases} 1 & \text{si el condado } i \text{ pertenece al decil } j \\ 0 & \text{en otro caso} \end{cases} \qquad j = 2, \dots, 10$$
+
+```{r cat-librerias, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(knitr)      # kable
+library(car)        # vif, linearHypothesis
+library(lmtest)     # bptest, coeftest
+library(sandwich)   # vcovHC (errores estándar robustos)
+```
+
+Se cargan los datos, se imputan los faltantes con la media (igual que en el resto del análisis) y se convierte `binnedinc` en factor. Para que los coeficientes sean legibles, los niveles se renombran como "Decil 1" a "Decil 10".
+
+```{r cat-datos}
+datos_cat <- read.csv("Data/cancer_reg.csv") %>%
+  mutate(across(where(is.numeric), ~ ifelse(is.na(.), mean(., na.rm = TRUE), .)))
+
+rangos_ingreso <- c("[22640, 34218.1]", "(34218.1, 37413.8]", "(37413.8, 40362.7]",
+                    "(40362.7, 42724.4]", "(42724.4, 45201]", "(45201, 48021.6]",
+                    "(48021.6, 51046.4]", "(51046.4, 54545.6]", "(54545.6, 61494.5]",
+                    "(61494.5, 125635]")
+
+datos_cat <- datos_cat %>%
+  mutate(ingreso = factor(binnedinc, levels = rangos_ingreso,
+                          labels = paste("Decil", 1:10)))
+
+sum(is.na(datos_cat$ingreso))   # todos los rangos quedaron asignados
+levels(datos_cat$ingreso)[1]    # categoría de referencia
+```
+
+```{r cat-tabla-rangos}
+datos_cat %>%
+  count(ingreso, binnedinc, name = "Condados") %>%
+  rename(Nivel = ingreso, `Rango de ingreso medio (USD)` = binnedinc) %>%
+  kable(caption = "Niveles de la variable categórica y su rango de ingreso")
+```
+
+### Exploración de la mortalidad por nivel de ingreso
+
+```{r cat-histogramas, fig.width=10, fig.height=5}
+datos_cat %>%
+  ggplot(aes(target_deathrate)) +
+  geom_histogram(bins = 20, fill = "#8ecae6", color = "#023047") +
+  facet_wrap(vars(ingreso), ncol = 5) +
+  labs(title = "Distribución de target_deathrate por nivel de ingreso",
+       x = "Muertes por cáncer por cada 100 000 habitantes", y = "Frecuencia") +
+  theme_bw()
+```
+
+```{r cat-medias}
+medias_ingreso <- datos_cat %>%
+  group_by(ingreso) %>%
+  summarise(n = n(),
+            media = mean(target_deathrate),
+            d_est = sd(target_deathrate)) %>%
+  mutate(diferencia_vs_decil1 = media - first(media))
+
+medias_ingreso %>%
+  kable(digits = 2, caption = "Tasa media de mortalidad por nivel de ingreso")
+```
+
+Los histogramas se desplazan hacia la izquierda a medida que sube el nivel de ingreso. La media pasa de 202.70 muertes por cada 100 000 habitantes en el decil 1 a 159.07 en el decil 10, una diferencia de 43.64. La caída es continua: cada decil tiene una media menor que el anterior.
+
+### Matriz de diseño
+
+R crea las dummies automáticamente cuando la variable es un factor. La función `model.matrix()` muestra la codificación; a continuación se ve una fila de cada nivel:
+
+```{r cat-model-matrix}
+una_fila_por_nivel <- datos_cat %>%
+  group_by(ingreso) %>%
+  slice(1) %>%
+  ungroup()
+
+X_dummy <- model.matrix(~ ingreso, data = una_fila_por_nivel)
+colnames(X_dummy) <- sub("ingreso", "", colnames(X_dummy))
+rownames(X_dummy) <- levels(datos_cat$ingreso)
+
+kable(X_dummy, caption = "Codificación dummy de binnedinc (referencia: Decil 1)")
+```
+
+El decil 1 tiene todas las dummies en 0, por eso es la referencia. Cada uno de los otros niveles tiene un 1 únicamente en su propia columna.
+
+### Modelo 1: `binnedinc` como única covariable
+
+$$Y_i = \beta_0 + \beta_2 D_{2i} + \beta_3 D_{3i} + \dots + \beta_{10} D_{10,i} + \varepsilon_i$$
+
+Con esta codificación, $\beta_0$ es la mortalidad media del decil 1 y $\beta_0 + \beta_j$ es la mortalidad media del decil $j$. Por lo tanto, $\beta_j$ es la diferencia de medias entre el decil $j$ y el decil 1.
+
+```{r cat-modelo1}
+mod_cat1 <- lm(target_deathrate ~ ingreso, data = datos_cat)
+summary(mod_cat1)
+```
+
+Se comprueba que el intercepto más cada coeficiente reproduce exactamente la media de cada grupo:
+
+```{r cat-verificacion-medias}
+b <- coef(mod_cat1)
+tibble(Nivel = levels(datos_cat$ingreso),
+       `Media observada` = medias_ingreso$media,
+       `Media según el modelo` = c(b[1], b[1] + b[-1])) %>%
+  kable(digits = 2)
+```
+
+**Interpretación.**
+
+- **Intercepto (202.70):** tasa media de mortalidad de los condados del decil 1 (ingreso más bajo).
+- **Coeficientes de las dummies:** todos son negativos y crecen en magnitud con el ingreso, desde −10.06 en el decil 2 hasta −43.64 en el decil 10. Por ejemplo, los condados del decil 10 tienen en promedio 43.64 muertes menos por cada 100 000 habitantes que los del decil 1.
+- **Pruebas t individuales:** Ho: $\beta_j = 0$ (el decil $j$ tiene la misma mortalidad media que el decil 1). Se rechaza Ho para las nueve dummies (p < 0.05): todos los niveles de ingreso difieren significativamente del más bajo.
+- **Prueba F global:** Ho: $\beta_2 = \dots = \beta_{10} = 0$. Se rechaza Ho (F = 86.24 con 9 y 3037 grados de libertad, p < 0.05): la mortalidad media no es la misma en todos los niveles de ingreso. Esta prueba F es exactamente el ANOVA de una vía, como se ve a continuación.
+
+```{r cat-anova1}
+anova(mod_cat1)
+```
+
+- **Ajuste:** $R^2$ = 0.204. El nivel de ingreso por sí solo explica el 20.4 % de la variabilidad de la mortalidad.
+
+Este resultado coincide con el objetivo 5, donde Kruskal-Wallis y la prueba Chi-cuadrado ya mostraron que la mortalidad depende del nivel de ingreso. El modelo con dummies añade la magnitud de cada diferencia.
+
+Se revisa la varianza de los errores:
+
+```{r cat-bp1}
+bptest(mod_cat1)
+coeftest(mod_cat1, vcov. = vcovHC(mod_cat1, type = "HC3"))
+```
+
+La prueba de Breusch-Pagan rechaza la homocedasticidad (p < 0.05). Con errores estándar robustos HC3 las nueve dummies siguen siendo significativas (|t| entre 4.06 y 18.53), así que las conclusiones no cambian.
+
+### Modelo 2: `binnedinc` junto con las demás variables
+
+El modelo 1 no controla por otras variables, así que parte de la diferencia entre deciles puede deberse a la educación, la cobertura médica o la incidencia de cáncer, que también cambian con el ingreso. Para aislar el efecto del ingreso, se parte del modelo de 10 variables del objetivo 6 (Capítulo \@ref(rlm)).
+
+`binnedinc` es una versión agrupada de `medincome`, que ya está en ese modelo como `inv(medincome)`. Incluir ambas sería medir el ingreso dos veces, así que en el modelo 2 **se reemplaza el ingreso continuo por el categórico**: se conservan las otras nueve variables (con sus mismas transformaciones) y se agregan las nueve dummies de `binnedinc`.
+
+$$Y_i = \beta_0 + \sum_{k=1}^{9} \gamma_k\, g_k(X_{ki}) + \sum_{j=2}^{10} \beta_j D_{ji} + \varepsilon_i$$
+
+donde $g_k(X_{ki})$ son las nueve variables transformadas del modelo del objetivo 6.
+
+```{r cat-variables}
+log_seguro <- function(x) if (all(x > 0)) log(x) else log1p(x)   # misma regla del modelo del objetivo 6
+
+datos_cat <- datos_cat %>%
+  mutate(sqrt_incidencerate     = sqrt(incidencerate),
+         p25_pctbachdeg25_over  = pctbachdeg25_over^0.25,
+         sq_pctprivatecoverage  = pctprivatecoverage^2,
+         log_pctotherrace       = log_seguro(pctotherrace),
+         sqrt_pcths18_24        = sqrt(pcths18_24),
+         p25_pctblack           = pctblack^0.25,
+         p25_birthrate          = birthrate^0.25,
+         log_pcths25_over       = log_seguro(pcths25_over),
+         sq_medianagefemale     = medianagefemale^2,
+         inv_medincome          = 1 / medincome)
+
+f_nueve <- target_deathrate ~ sqrt_incidencerate + p25_pctbachdeg25_over +
+  sq_pctprivatecoverage + log_pctotherrace + sqrt_pcths18_24 + p25_pctblack +
+  p25_birthrate + log_pcths25_over + sq_medianagefemale
+
+mod_nueve   <- lm(f_nueve, data = datos_cat)                                   # sin ingreso
+mod_diez    <- lm(update(f_nueve, . ~ . + inv_medincome), data = datos_cat)    # ingreso continuo (objetivo 6)
+mod_cat2    <- lm(update(f_nueve, . ~ . + ingreso), data = datos_cat)          # ingreso categórico
+```
+
+```{r cat-modelo2}
+summary(mod_cat2)
+```
+
+**Interpretación.** El modelo es globalmente significativo (p < 0.05) y explica el 51.7 % de la variabilidad ($R^2$ ajustado = 0.514). Los coeficientes de las dummies se leen ahora **manteniendo constantes las otras nueve variables**:
+
+- Las nueve dummies siguen siendo negativas y significativas (p < 0.01): a igualdad de incidencia, educación, cobertura y composición demográfica, los condados con más ingreso tienen menor mortalidad que los del decil 1.
+- Los efectos son mucho más pequeños que en el modelo 1 (por ejemplo, el decil 10 pasa de −43.64 a −11.13). Gran parte de la diferencia bruta entre niveles de ingreso se explica por las otras variables, sobre todo la educación universitaria y la cobertura privada, que suben con el ingreso.
+- El efecto ya no crece de forma continua: aumenta del decil 2 (−4.82) al decil 7 (−12.88) y luego se estabiliza alrededor de −11 a −12 en los deciles 8 a 10. Es decir, a partir de un ingreso medio de unos 48 000 dólares, tener más ingreso no se asocia con una reducción adicional de la mortalidad una vez se controla por las demás variables. Este patrón no lineal no se puede ver con una sola pendiente para `medincome`, y es la principal ventaja de modelar el ingreso como categórico.
+
+#### Prueba F parcial para la variable categórica
+
+Las pruebas t evalúan cada dummy por separado. Para saber si `binnedinc` aporta **en conjunto**, se compara el modelo sin ingreso con el modelo que agrega las nueve dummies.
+
+Ho: $\beta_2 = \beta_3 = \dots = \beta_{10} = 0$ (el nivel de ingreso no aporta una vez incluidas las otras variables).
+
+```{r cat-f-parcial}
+anova(mod_nueve, mod_cat2)
+```
+
+Se rechaza Ho (F = 5.46 con 9 y 3028 grados de libertad, p < 0.05): el nivel de ingreso aporta información sobre la mortalidad que no está contenida en las otras nueve variables.
+
+#### Multicolinealidad
+
+Cuando el modelo tiene un factor, `vif()` reporta el VIF generalizado (GVIF). Para comparar variables con distinto número de grados de libertad se usa $GVIF^{1/(2\,gl)}$, cuyo umbral equivalente a VIF = 5 es $\sqrt{5} \approx 2.24$.
+
+```{r cat-vif}
+vif(mod_cat2)
+```
+
+El factor de ingreso tiene $GVIF^{1/(2\,gl)}$ = 1.08, y el valor más alto del modelo es 2.05 (`p25_pctbachdeg25_over`, equivalente a un VIF de 4.21). Todos quedan por debajo de 2.24, así que no hay multicolinealidad problemática.
+
+#### Supuestos de los errores
+
+```{r cat-residuos, fig.width=9, fig.height=4}
+par(mfrow = c(1, 2))
+plot(mod_cat2, which = 1)
+plot(mod_cat2, which = 2)
+par(mfrow = c(1, 1))
+
+res_cat2 <- residuals(mod_cat2)
+t.test(res_cat2)$p.value     # media cero
+shapiro.test(res_cat2)       # normalidad
+bptest(mod_cat2)             # homocedasticidad
+```
+
+Los residuos tienen media cero, pero no son normales (Shapiro-Wilk: W = 0.978, p < 0.05; colas más pesadas que la normal) ni homocedásticos (Breusch-Pagan: BP = 126.5 con 18 gl, p < 0.05). Es el mismo comportamiento del modelo de 10 variables. Con n = 3047, las pruebas t y F siguen siendo aproximadamente válidas, pero se recalculan con errores robustos.
+
+#### Inferencia con errores estándar robustos
+
+```{r cat-hc3}
+coeftest(mod_cat2, vcov. = vcovHC(mod_cat2, type = "HC3"))
+```
+
+Con errores HC3 las nueve dummies siguen siendo significativas (|t| entre 2.46 y 5.78, p < 0.05). La prueba conjunta de `binnedinc` también se repite con la matriz robusta:
+
+```{r cat-f-robusta}
+# Matriz de hipótesis: una fila por dummy (cada fila prueba beta_j = 0)
+pos_dummies <- grep("^ingreso", names(coef(mod_cat2)))
+L <- matrix(0, nrow = length(pos_dummies), ncol = length(coef(mod_cat2)))
+L[cbind(seq_along(pos_dummies), pos_dummies)] <- 1
+
+linearHypothesis(mod_cat2, hypothesis.matrix = L, rhs = rep(0, nrow(L)),
+                 vcov. = vcovHC(mod_cat2, type = "HC3"))
+```
+
+Se mantiene el rechazo de Ho (F = 4.94, p < 0.05): el nivel de ingreso sigue siendo significativo en conjunto aun corrigiendo la heterocedasticidad.
+
+### Comparación de modelos
+
+```{r cat-comparacion}
+resumen_modelo <- function(m) {
+  s <- summary(m)
+  n_obs <- nobs(m)
+  p <- length(coef(m))
+  sse <- sum(residuals(m)^2)
+  tibble(Parametros = p,
+         R2 = s$r.squared,
+         R2_ajustado = s$adj.r.squared,
+         AIC = n_obs * log(sse / n_obs) + 2 * p,
+         BIC = n_obs * log(sse / n_obs) + p * log(n_obs))
+}
+
+bind_rows(
+  "Modelo 1: solo binnedinc"                 = resumen_modelo(mod_cat1),
+  "Nueve variables, sin ingreso"             = resumen_modelo(mod_nueve),
+  "Nueve variables + medincome (continuo)"   = resumen_modelo(mod_diez),
+  "Modelo 2: nueve variables + binnedinc"    = resumen_modelo(mod_cat2),
+  .id = "Modelo") %>%
+  kable(digits = 4, caption = "Comparación de modelos (AIC y BIC calculados como en el objetivo 6)")
+```
+
+| Modelo | Parámetros | $R^2$ ajustado | AIC | BIC |
+|---|---|---|---|---|
+| Modelo 1: solo `binnedinc` | 10 | 0.2012 | 19577.7 | 19637.9 |
+| Nueve variables, sin ingreso | 10 | 0.5077 | 18102.9 | 18163.1 |
+| Nueve variables + `medincome` continuo | 11 | 0.5120 | 18077.2 | **18143.5** |
+| Modelo 2: nueve variables + `binnedinc` | 19 | **0.5141** | **18071.8** | 18186.2 |
+
+- El ingreso por sí solo (modelo 1) explica mucho menos que los modelos múltiples: la mortalidad depende de varios factores a la vez.
+- Agregar el ingreso a las nueve variables mejora el ajuste en las dos versiones, continua y categórica.
+- La versión categórica tiene el mayor $R^2$ ajustado y el menor AIC, pero la mejora frente a la versión continua es pequeña (0.002 en $R^2$ ajustado) y cuesta 8 parámetros más. El BIC, que penaliza más la complejidad, prefiere la versión continua.
+
+### Conclusión del objetivo 7
+
+- `binnedinc`, la única variable categórica, se incorporó a la regresión con 9 variables dummy, tomando como referencia el decil de ingreso más bajo.
+- Sola, explica el 20.4 % de la variabilidad de la mortalidad: los condados del decil más alto tienen en promedio 43.6 muertes menos por cada 100 000 habitantes que los del decil más bajo, y todas las diferencias frente al decil 1 son significativas.
+- Al controlar por las demás variables, el efecto del ingreso se reduce a unas 5 a 13 muertes menos, pero sigue siendo significativo en conjunto (F parcial = 5.46, p < 0.05; también con errores robustos).
+- El efecto del ingreso no es lineal: crece hasta el decil 7 y luego se estabiliza. Esto sugiere que la reducción de mortalidad asociada al ingreso se concentra en pasar de ingresos bajos a ingresos medios.
+- Para describir el efecto del ingreso conviene el modelo categórico, porque muestra la diferencia de cada nivel. Para un modelo más sencillo, el BIC favorece el modelo de 10 variables con el ingreso continuo, que sigue siendo el modelo principal del estudio.

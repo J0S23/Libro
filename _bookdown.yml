@@ -2,5 +2,15 @@ book_filename: "bookdown-demo"
 delete_merged_file: true
 language:
   ui:
-    chapter_name: "Chapter "
+    chapter_name: "Capítulo "
 output_dir: "docs"
+rmd_files:
+  - "Abstract.Rmd"
+  - "01-Introducción.Rmd"
+  - "02-Metodología.Rmd"
+  - "03-EDA.Rmd"
+  - "04-Analisis_estadistico.Rmd"
+  - "05-RLM.Rmd"
+  - "06-Discusión.Rmd"
+  - "07-Conclusiones.Rmd"
+  - "08-Referencias.Rmd"

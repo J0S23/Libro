@@ -1,4 +1,4 @@
-# EDA {#EDA}
+# Análisis exploratorio de datos (EDA) {#EDA}
 
 Mejorando la vista de las salidas (eliminando el prefijo `##`)
 ```{r eliminar_comentarios}
@@ -40,7 +40,15 @@ head(data_cancer, n= 5)
 La estructura de los datos
 
 ```{r estructura}
-str(data_cancer)
+tibble(
+  Variable  = names(data_cancer),
+  Tipo      = sapply(data_cancer, function(x) class(x)[1]),
+  Faltantes = sapply(data_cancer, function(x) sum(is.na(x))),
+  Ejemplo   = sapply(data_cancer, function(x) paste(head(x, 3), collapse = "; "))
+) %>%
+  knitr::kable(caption = paste("Estructura del conjunto de datos:",
+                               nrow(data_cancer), "observaciones y",
+                               ncol(data_cancer), "variables"))
 ```
 
 
@@ -268,28 +276,42 @@ insuficiente o desbalanceada, lo cual es favorable de cara a la prueba de
 independencia Chi-cuadrado que se realizará más adelante entre esta 
 variable y la categorización de `target_deathrate`.
 
-```{r gráfico de barras}
+Como `binnedinc` agrupa el ingreso medio (`medincome`) en intervalos 
+consecutivos, se representa con un histograma: las barras quedan unidas y 
+cada una ocupa exactamente el ancho de su intervalo de ingreso. Como los 
+intervalos tienen anchos distintos, el eje vertical muestra la densidad 
+(proporción de condados por cada dólar de ingreso), de modo que el área de 
+cada barra es la proporción de condados de ese intervalo.
+
+```{r histograma-binnedinc}
+cortes_binnedinc <- c(22640, 34218.1, 37413.8, 40362.7, 42724.4, 45201,
+                      48021.6, 51046.4, 54545.6, 61494.5, 125635)
+
 df %>% 
-  ggplot(aes(x = binnedinc)) +
-  geom_bar(fill = "#8ecae6", color = "#023047") +
-  geom_text(stat = "count", aes(label = after_stat(count)), vjust = -0.5) +
-  labs(title = "Distribución de binnedinc",
-       x = "Rango de ingreso medio (binnedinc)", y = "Frecuencia") +
-  scale_y_continuous(limits = c(0, 330)) +
+  ggplot(aes(x = medincome)) +
+  geom_histogram(aes(y = after_stat(density)), breaks = cortes_binnedinc,
+                 closed = "right", fill = "#8ecae6", color = "#023047") +
+  scale_x_continuous(breaks = cortes_binnedinc,
+                     labels = scales::label_number(scale = 1e-3, accuracy = 0.1, suffix = "k")) +
+  labs(title = "Histograma del ingreso medio según los intervalos de binnedinc",
+       x = "Ingreso medio (miles de USD, cortes de binnedinc)", y = "Densidad") +
   theme_bw() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
     plot.title = element_text(margin = margin(b = 15))
   )
 ```
-El gráfico de barras confirma visualmente lo observado en la tabla de 
-frecuencias: las diez categorías de `binnedinc` presentan alturas 
-prácticamente idénticas entre sí, reflejando una distribución uniforme de 
-las regiones a lo largo de los distintos rangos de ingreso medio. Esta 
-homogeneidad en el tamaño de los grupos es una característica deseable 
-para la prueba de independencia Chi-cuadrado que se aplicará más adelante, 
-ya que evita que alguna categoría tenga una representación insuficiente 
-que pudiera comprometer la validez de dicha prueba.
+Aunque cada intervalo contiene casi el mismo número de condados (alrededor 
+del 10 %), el histograma muestra que el ingreso no se distribuye de manera 
+uniforme: los intervalos centrales, entre unos 37 000 y 51 000 dólares, son 
+los más estrechos y por eso tienen las barras más altas (sobre todo entre 
+40 000 y 45 000 dólares), lo que indica que ahí se concentra la mayor parte 
+de los condados. El primer intervalo (22 640 a 34 218 dólares) es más ancho 
+y tiene menor densidad, y el último intervalo (de 61 494.5 a 125 635 dólares) es muy ancho y tiene la densidad 
+más baja, lo que refleja la cola larga a la derecha del ingreso medio, 
+consistente con el sesgo positivo observado para `medincome`. El tamaño 
+equilibrado de los grupos sigue siendo favorable para la prueba 
+Chi-cuadrado que se aplicará más adelante.
 
 ## Análisis exploratorio bivariado entre la variable dependiente y las variables independientes
 
@@ -548,7 +570,7 @@ La relación es positiva y de fuerza moderada.
 
 **Porcentaje con Cobertura Pública vs Porcentaje de Desempleo**
 
-##Ingeniería de Características
+## Ingeniería de Características
 
 Aplicando ingeniería de características entre `pctprivatecoverage` y `pctpubliccoverage`
 para crear así una nueva variable (`coverage_balance`) que describe el balance entre las coberturas pública y privada.
