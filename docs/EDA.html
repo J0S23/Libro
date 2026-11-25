@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Capítulo 3 Análisis exploratorio de datos (EDA) | Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer</title>
   <meta name="description" content="Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos" />
-  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Capítulo 3 Análisis exploratorio de datos (EDA) | Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Sebastian Ariza y Joseph Arias" />
 
 
-<meta name="date" content="2026-11-24" />
+<meta name="date" content="2026-11-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -250,48 +250,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="EDA.html#cb3-1" tabindex="-1"></a>data_cancer <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/cancer_reg.csv&quot;</span>)</span></code></pre></div>
 <p>Muestrame las 5 primeras filas</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="EDA.html#cb4-1" tabindex="-1"></a><span class="fu">head</span>(data_cancer, <span class="at">n=</span> <span class="dv">5</span>)</span></code></pre></div>
-<pre><code>  avganncount avgdeathsperyear target_deathrate incidencerate medincome popest2015
-1        1397              469            164.9         489.8     61898     260131
-2         173               70            161.3         411.6     48127      43269
-3         102               50            174.7         349.7     49348      21026
-4         427              202            194.8         430.4     44243      75882
-5          57               26            144.4         350.1     49955      10321
-  povertypercent studypercap          binnedinc medianage medianagemale medianagefemale
-1           11.2   499.74820  (61494.5, 125635]      39.3          36.9            41.7
-2           18.6    23.11123 (48021.6, 51046.4]      33.0          32.2            33.7
-3           14.6    47.56016 (48021.6, 51046.4]      45.0          44.0            45.8
-4           17.1   342.63725   (42724.4, 45201]      42.8          42.2            43.4
-5           12.5     0.00000 (48021.6, 51046.4]      48.3          47.8            48.9
-                     geography percentmarried pctnohs18_24 pcths18_24 pctsomecol18_24
-1    Kitsap County, Washington           52.5         11.5       39.5            42.1
-2  Kittitas County, Washington           44.5          6.1       22.4            64.0
-3 Klickitat County, Washington           54.2         24.0       36.6              NA
-4     Lewis County, Washington           52.7         20.2       41.2            36.1
-5   Lincoln County, Washington           57.8         14.9       43.0            40.0
-  pctbachdeg18_24 pcths25_over pctbachdeg25_over pctemployed16_over pctunemployed16_over
-1             6.9         23.2              19.6               51.9                  8.0
-2             7.5         26.0              22.7               55.9                  7.8
-3             9.5         29.0              16.0               45.9                  7.0
-4             2.5         31.6               9.3               48.3                 12.1
-5             2.0         33.4              15.0               48.2                  4.8
-  pctprivatecoverage pctprivatecoveragealone pctempprivcoverage pctpubliccoverage
-1               75.1                      NA               41.6              32.9
-2               70.2                    53.8               43.6              31.1
-3               63.7                    43.5               34.9              42.1
-4               58.4                    40.3               35.0              45.3
-5               61.6                    43.9               35.1              44.0
-  pctpubliccoveragealone pctwhite  pctblack  pctasian pctotherrace pctmarriedhouseholds
-1                   14.0 81.78053 2.5947283 4.8218571    1.8434785             52.85608
-2                   15.3 89.22851 0.9691025 2.2462326    3.7413515             45.37250
-3                   21.1 90.92219 0.7396734 0.4658982    2.7473583             54.44487
-4                   25.0 91.74469 0.7826260 1.1613587    1.3626432             51.02151
-5                   22.7 94.10402 0.2701920 0.6658304    0.4921355             54.02746
-  birthrate
-1  6.118831
-2  4.333096
-3  3.729488
-4  4.603841
-5  6.796657</code></pre>
+<pre><code>  avganncount avgdeathsperyear target_deathrate incidencerate medincome popest2015 povertypercent studypercap          binnedinc
+1        1397              469            164.9         489.8     61898     260131           11.2   499.74820  (61494.5, 125635]
+2         173               70            161.3         411.6     48127      43269           18.6    23.11123 (48021.6, 51046.4]
+3         102               50            174.7         349.7     49348      21026           14.6    47.56016 (48021.6, 51046.4]
+4         427              202            194.8         430.4     44243      75882           17.1   342.63725   (42724.4, 45201]
+5          57               26            144.4         350.1     49955      10321           12.5     0.00000 (48021.6, 51046.4]
+  medianage medianagemale medianagefemale                    geography percentmarried pctnohs18_24 pcths18_24 pctsomecol18_24
+1      39.3          36.9            41.7    Kitsap County, Washington           52.5         11.5       39.5            42.1
+2      33.0          32.2            33.7  Kittitas County, Washington           44.5          6.1       22.4            64.0
+3      45.0          44.0            45.8 Klickitat County, Washington           54.2         24.0       36.6              NA
+4      42.8          42.2            43.4     Lewis County, Washington           52.7         20.2       41.2            36.1
+5      48.3          47.8            48.9   Lincoln County, Washington           57.8         14.9       43.0            40.0
+  pctbachdeg18_24 pcths25_over pctbachdeg25_over pctemployed16_over pctunemployed16_over pctprivatecoverage
+1             6.9         23.2              19.6               51.9                  8.0               75.1
+2             7.5         26.0              22.7               55.9                  7.8               70.2
+3             9.5         29.0              16.0               45.9                  7.0               63.7
+4             2.5         31.6               9.3               48.3                 12.1               58.4
+5             2.0         33.4              15.0               48.2                  4.8               61.6
+  pctprivatecoveragealone pctempprivcoverage pctpubliccoverage pctpubliccoveragealone pctwhite  pctblack  pctasian pctotherrace
+1                      NA               41.6              32.9                   14.0 81.78053 2.5947283 4.8218571    1.8434785
+2                    53.8               43.6              31.1                   15.3 89.22851 0.9691025 2.2462326    3.7413515
+3                    43.5               34.9              42.1                   21.1 90.92219 0.7396734 0.4658982    2.7473583
+4                    40.3               35.0              45.3                   25.0 91.74469 0.7826260 1.1613587    1.3626432
+5                    43.9               35.1              44.0                   22.7 94.10402 0.2701920 0.6658304    0.4921355
+  pctmarriedhouseholds birthrate
+1             52.85608  6.118831
+2             45.37250  4.333096
+3             54.44487  3.729488
+4             51.02151  4.603841
+5             54.02746  6.796657</code></pre>
 <p>La estructura de los datos</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="EDA.html#cb6-1" tabindex="-1"></a><span class="fu">tibble</span>(</span>
 <span id="cb6-2"><a href="EDA.html#cb6-2" tabindex="-1"></a>  <span class="at">Variable  =</span> <span class="fu">names</span>(data_cancer),</span>
@@ -522,25 +510,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Veamos si hay datos faltantes</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="EDA.html#cb7-1" tabindex="-1"></a>data_cancer <span class="sc">%&gt;%</span> </span>
 <span id="cb7-2"><a href="EDA.html#cb7-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
-<pre><code>  NA_avganncount NA_avgdeathsperyear NA_target_deathrate NA_incidencerate NA_medincome
-1              0                   0                   0                0            0
-  NA_popest2015 NA_povertypercent NA_studypercap NA_binnedinc NA_medianage
-1             0                 0              0            0            0
-  NA_medianagemale NA_medianagefemale NA_geography NA_percentmarried NA_pctnohs18_24
-1                0                  0            0                 0               0
-  NA_pcths18_24 NA_pctsomecol18_24 NA_pctbachdeg18_24 NA_pcths25_over
-1             0               2285                  0               0
-  NA_pctbachdeg25_over NA_pctemployed16_over NA_pctunemployed16_over
-1                    0                   152                       0
-  NA_pctprivatecoverage NA_pctprivatecoveragealone NA_pctempprivcoverage
-1                     0                        609                     0
-  NA_pctpubliccoverage NA_pctpubliccoveragealone NA_pctwhite NA_pctblack NA_pctasian
-1                    0                         0           0           0           0
-  NA_pctotherrace NA_pctmarriedhouseholds NA_birthrate
-1               0                       0            0</code></pre>
+<pre><code>  NA_avganncount NA_avgdeathsperyear NA_target_deathrate NA_incidencerate NA_medincome NA_popest2015 NA_povertypercent
+1              0                   0                   0                0            0             0                 0
+  NA_studypercap NA_binnedinc NA_medianage NA_medianagemale NA_medianagefemale NA_geography NA_percentmarried NA_pctnohs18_24
+1              0            0            0                0                  0            0                 0               0
+  NA_pcths18_24 NA_pctsomecol18_24 NA_pctbachdeg18_24 NA_pcths25_over NA_pctbachdeg25_over NA_pctemployed16_over
+1             0               2285                  0               0                    0                   152
+  NA_pctunemployed16_over NA_pctprivatecoverage NA_pctprivatecoveragealone NA_pctempprivcoverage NA_pctpubliccoverage
+1                       0                     0                        609                     0                    0
+  NA_pctpubliccoveragealone NA_pctwhite NA_pctblack NA_pctasian NA_pctotherrace NA_pctmarriedhouseholds NA_birthrate
+1                         0           0           0           0               0                       0            0</code></pre>
 <p>Otra forma de detectar valores faltantes</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="EDA.html#cb9-1" tabindex="-1"></a><span class="fu">missmap</span>(data_cancer)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/otraforma-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/otraforma-1.png" width="672" /></p>
 <p>Ahora hagamos la imputacion de datos faltantes</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="EDA.html#cb10-1" tabindex="-1"></a>data_cancer <span class="sc">%&gt;%</span> </span>
 <span id="cb10-2"><a href="EDA.html#cb10-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(</span>
@@ -550,22 +532,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Verificar si tiene datos faltantes nuevamente</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="EDA.html#cb11-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb11-2"><a href="EDA.html#cb11-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
-<pre><code>  NA_avganncount NA_avgdeathsperyear NA_target_deathrate NA_incidencerate NA_medincome
-1              0                   0                   0                0            0
-  NA_popest2015 NA_povertypercent NA_studypercap NA_binnedinc NA_medianage
-1             0                 0              0            0            0
-  NA_medianagemale NA_medianagefemale NA_geography NA_percentmarried NA_pctnohs18_24
-1                0                  0            0                 0               0
-  NA_pcths18_24 NA_pctsomecol18_24 NA_pctbachdeg18_24 NA_pcths25_over
-1             0                  0                  0               0
-  NA_pctbachdeg25_over NA_pctemployed16_over NA_pctunemployed16_over
-1                    0                     0                       0
-  NA_pctprivatecoverage NA_pctprivatecoveragealone NA_pctempprivcoverage
-1                     0                          0                     0
-  NA_pctpubliccoverage NA_pctpubliccoveragealone NA_pctwhite NA_pctblack NA_pctasian
-1                    0                         0           0           0           0
-  NA_pctotherrace NA_pctmarriedhouseholds NA_birthrate
-1               0                       0            0</code></pre>
+<pre><code>  NA_avganncount NA_avgdeathsperyear NA_target_deathrate NA_incidencerate NA_medincome NA_popest2015 NA_povertypercent
+1              0                   0                   0                0            0             0                 0
+  NA_studypercap NA_binnedinc NA_medianage NA_medianagemale NA_medianagefemale NA_geography NA_percentmarried NA_pctnohs18_24
+1              0            0            0                0                  0            0                 0               0
+  NA_pcths18_24 NA_pctsomecol18_24 NA_pctbachdeg18_24 NA_pcths25_over NA_pctbachdeg25_over NA_pctemployed16_over
+1             0                  0                  0               0                    0                     0
+  NA_pctunemployed16_over NA_pctprivatecoverage NA_pctprivatecoveragealone NA_pctempprivcoverage NA_pctpubliccoverage
+1                       0                     0                          0                     0                    0
+  NA_pctpubliccoveragealone NA_pctwhite NA_pctblack NA_pctasian NA_pctotherrace NA_pctmarriedhouseholds NA_birthrate
+1                         0           0           0           0               0                       0            0</code></pre>
 <p>Convritiendo la variable <code>binnedinc</code> a categórica</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="EDA.html#cb13-1" tabindex="-1"></a>orden_binnedinc <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
 <span id="cb13-2"><a href="EDA.html#cb13-2" tabindex="-1"></a>  <span class="st">&quot;[22640, 34218.1]&quot;</span>,</span>
@@ -584,9 +560,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb13-15"><a href="EDA.html#cb13-15" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">binnedinc =</span> <span class="fu">factor</span>(binnedinc, <span class="at">levels =</span> orden_binnedinc))</span>
 <span id="cb13-16"><a href="EDA.html#cb13-16" tabindex="-1"></a></span>
 <span id="cb13-17"><a href="EDA.html#cb13-17" tabindex="-1"></a><span class="fu">levels</span>(df<span class="sc">$</span>binnedinc)</span></code></pre></div>
-<pre><code> [1] &quot;[22640, 34218.1]&quot;   &quot;(34218.1, 37413.8]&quot; &quot;(37413.8, 40362.7]&quot; &quot;(40362.7, 42724.4]&quot;
- [5] &quot;(42724.4, 45201]&quot;   &quot;(45201, 48021.6]&quot;   &quot;(48021.6, 51046.4]&quot; &quot;(51046.4, 54545.6]&quot;
- [9] &quot;(54545.6, 61494.5]&quot; &quot;(61494.5, 125635]&quot; </code></pre>
+<pre><code> [1] &quot;[22640, 34218.1]&quot;   &quot;(34218.1, 37413.8]&quot; &quot;(37413.8, 40362.7]&quot; &quot;(40362.7, 42724.4]&quot; &quot;(42724.4, 45201]&quot;   &quot;(45201, 48021.6]&quot;  
+ [7] &quot;(48021.6, 51046.4]&quot; &quot;(51046.4, 54545.6]&quot; &quot;(54545.6, 61494.5]&quot; &quot;(61494.5, 125635]&quot; </code></pre>
 <div id="análisis-exploratorio-de-target_deathrate-variable-respuesta" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Análisis exploratorio de ‘target_deathrate’ (Variable respuesta)<a href="EDA.html#an%C3%A1lisis-exploratorio-de-target_deathrate-variable-respuesta" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A continuación, se presentan una función para generar la tabla exploratoria univariada de una variable numérica</p>
@@ -634,7 +609,7 @@ centrada. Por otro lado, el 25% son a lo sumo 161.2, y el 75% no supera 195.2. A
 <span id="cb18-19"><a href="EDA.html#cb18-19" tabindex="-1"></a>}</span></code></pre></div>
 <p>Observemos la distribución de la variable objetivo <code>target_deathrate</code> a través de un diagrama de cajas y bigotes y un histograma de polígonos</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="EDA.html#cb19-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, target_deathrate)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/univTarget-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/univTarget-1.png" width="672" /></p>
 <p>La distribución de <code>target_deathrate</code> presenta una ligera asimetría a la derecha, confirmando lo expuesto por el coeficiente de asimetría positivo. Además, la variable cuenta con un número considerable de valores atípicos tanto en la cola inferior como en la superior, es decir, existen regiones con tasas de muerte muy alejadas de la mayoría, particularmente por encima de 250 y por debajo de 110 aproximadamente.</p>
 <p>Por otro lado, la media (178.66) es prácticamente igual a la mediana (178.1), lo cual es consistente con una distribución casi simétrica en su núcleo central, a pesar de la ligera asimetría generada por los valores extremos en la cola derecha. La forma del histograma exhibe un pico marcado alrededor del valor central, lo que respalda la forma leptocúrtica previamente hallada (curtosis = 4.35), indicando una mayor concentración de datos cerca de la media y colas más pesadas que las de una distribución normal.</p>
 <p>La presencia simultánea de valores atípicos en ambos extremos sugiere una heterogeneidad importante entre regiones: mientras algunas zonas presentan tasas de mortalidad excepcionalmente bajas (posiblemente asociadas a mejor acceso a salud o detección temprana), otras muestran tasas alarmantemente altas, lo que podría estar vinculado a factores socioeconómicos adversos como pobreza elevada o baja cobertura médica, variables que se explorarán
@@ -649,7 +624,7 @@ más adelante en el análisis.</p>
 1 3047 16.87818 6.409087    15.9 8.25 12.15 20.4 3.2 47.4 4.272006 0.9302543</code></pre>
 <p>Se registraron un total de 3047 registros del porcentaje de pobreza por región (<code>povertypercent</code>), con una tasa media de 16.88% (DE = 6.41). Además, el 50% de los porcentajes de pobreza son menores o iguales a 15.9% (RIC = 8.25), es decir, son muy cercanos a la media, lo que sugiere una distribución relativamente centrada. Por otro lado, el 25% son a lo sumo 12.15%, y el 75% no supera 20.4%. Además, el rango de los datos es de 44.2, siendo el porcentaje mínimo 3.2% y el máximo 47.4%. Por otro lado, se evidencia que los porcentajes de pobreza poseen una forma leptocúrtica (curtosis = 4.27 &gt; 3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, los datos presentan una asimetría positiva o sesgo hacia la derecha (Coef_asim = 0.93), con lo cual se observa que existen algunas regiones con niveles de pobreza excesivamente más altos que la mayoría.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="EDA.html#cb22-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, povertypercent)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/povertypercentUniv-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/povertypercentUniv-1.png" width="672" /></p>
 <p>La distribución de <code>povertypercent</code> presenta una asimetría marcada hacia la derecha, confirmando lo expuesto por el coeficiente de asimetría positivo (Coef_asim = 0.93), el cual, al ser considerablemente mayor que 0, indica un sesgo importante en la cola derecha de la distribución. Además, la variable cuenta con un número considerable de valores atípicos, aunque estos se concentran exclusivamente en la cola superior, es decir, existen regiones con porcentajes de pobreza muy alejados de la mayoría, particularmente por encima del 33%, sin presencia de outliers en el extremo inferior.</p>
 <p>Por otro lado, la media (16.88%) es cercana a la mediana (15.9%), aunque con una diferencia algo más notoria que en distribuciones simétricas, lo cual es consistente con el sesgo hacia la derecha generado por los valores extremos en la cola superior. La forma del histograma exhibe un pico marcado en valores bajos-moderados de pobreza, lo que respalda la forma leptocúrtica previamente hallada (curtosis = 4.27 &gt; 3), indicando una mayor concentración de datos en niveles moderados de pobreza y una cola derecha más pesada que la de una distribución normal.</p>
 <p>La presencia de valores atípicos exclusivamente en la cola superior sugiere que, si bien la mayoría de las regiones presenta niveles de pobreza moderados, existe un subconjunto de regiones con condiciones de pobreza considerablemente más severas que el resto, lo cual podría estar asociado a menor acceso a educación, empleo o cobertura médica, variables que se explorarán más adelante en el análisis.</p>
@@ -659,7 +634,7 @@ más adelante en el análisis.</p>
 1 3047 47063.28 12040.09   45207 13609.5 38882.5 52492 22640 125635 6.705259  1.407377</code></pre>
 <p>Se registraron un total de 3047 registros del ingreso medio por región (<code>medincome</code>), con una tasa media de 46.67 mil (asumiendo unidad en miles; ajustar si es en dólares) (DE = 12040.09). Además, el 50% de los ingresos son menores o iguales a 45207 (RIC = 13609.5), es decir, relativamente cercanos a la media, lo que sugiere una distribución moderadamente centrada. Por otro lado, el 25% son a lo sumo 38882.5, y el 75% no supera 52492. Además, el rango de los datos es de 102995, siendo el ingreso mínimo 22640 y el máximo 125635. Por otro lado, se evidencia que los ingresos poseen una forma marcadamente leptocúrtica (curtosis = 6.71 &gt; 3), es decir, con un pico bastante más marcado y colas mucho más pesadas que la normal. Además, los datos presentan una asimetría positiva pronunciada o sesgo hacia la derecha (Coef_asim = 1.41), con lo cual se observa que existen algunas regiones con ingresos excesivamente más altos que la mayoría.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="EDA.html#cb25-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, medincome)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/medincomeUniv-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/medincomeUniv-1.png" width="672" /></p>
 <p>El histograma de <code>medincome</code> muestra una distribución claramente unimodal con un sesgo pronunciado hacia la derecha, concentrando la mayoría de las observaciones entre 35000 y 55000 aproximadamente. El diagrama de cajas y bigotes confirma esta asimetría, evidenciando un número considerable de valores atípicos por encima del bigote superior (regiones con ingresos superiores a 75000, llegando hasta cerca de 125000), sin presencia de outliers en la cola inferior. Esta concentración de valores extremos únicamente en la parte superior es consistente con el elevado coeficiente de asimetría (1.41) y la fuerte curtosis (6.71), sugiriendo que, si bien la mayoría de las regiones presenta ingresos moderados, existe un subconjunto reducido de regiones con niveles de ingreso considerablemente más altos que el resto.</p>
 <p><strong>3. pctbachdeg25_over:</strong></p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="EDA.html#cb26-1" tabindex="-1"></a><span class="fu">summarise_numeric</span>(df, pctbachdeg25_over)</span></code></pre></div>
@@ -667,7 +642,7 @@ más adelante en el análisis.</p>
 1 3047 13.28202 5.394756    12.3 6.7 9.4 16.1 2.5 42.2  4.73255  1.094298</code></pre>
 <p>Se registraron un total de 3047 registros del porcentaje de personas con título universitario entre 25 y más años (<code>pctbachdeg25_over</code>), con una tasa media de 13.28% (DE = 5.39). Además, el 50% de los porcentajes son menores o iguales a 12.3% (RIC = 6.7), es decir, son cercanos a la media, lo que sugiere una distribución relativamente centrada. Por otro lado, el 25% son a lo sumo 9.4%, y el 75% no supera 16.1%. Además, el rango de los datos es de 39.7, siendo el porcentaje mínimo 2.5% y el máximo 42.2%. Por otro lado, se evidencia que los porcentajes de personas con título universitario poseen una forma leptocúrtica (curtosis = 4.73 &gt; 3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, los datos presentan una asimetría positiva o sesgo hacia la derecha bastante marcado (Coef_asim = 1.09), con lo cual se observa que existen algunas regiones con porcentajes de personas con título universitario excesivamente más altos que la mayoría.</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="EDA.html#cb28-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, pctbachdeg25_over)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/pctbachdeg25_overUniv-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/pctbachdeg25_overUniv-1.png" width="672" /></p>
 <p>El histograma de <code>pctbachdeg25_over</code> muestra una distribución unimodal con un sesgo pronunciado hacia la derecha, concentrando la mayoría de las observaciones entre 8% y 18% aproximadamente. El diagrama de cajas y bigotes confirma esta asimetría, evidenciando un número considerable de valores atípicos por encima del bigote superior (regiones con porcentajes de título universitario superiores a 26%, llegando hasta cerca de 42%), sin presencia de outliers en la cola inferior. Esta concentración de valores extremos únicamente en la parte superior es consistente con el elevado coeficiente de asimetría (1.09) y la marcada curtosis (4.73), sugiriendo que, si bien la mayoría de las regiones presenta niveles moderados de formación universitaria, existe un subconjunto de regiones con porcentajes considerablemente más altos que el resto.</p>
 <p><strong>4. pctprivatecoverage:</strong></p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="EDA.html#cb29-1" tabindex="-1"></a><span class="fu">summarise_numeric</span>(df, pctprivatecoverage)</span></code></pre></div>
@@ -675,7 +650,7 @@ más adelante en el análisis.</p>
 1 3047 64.35494 10.64706    65.1 14.9 57.2 72.1 22.3 92.3 2.994335 -0.3933435</code></pre>
 <p>Se registraron un total de 3047 registros del porcentaje de cobertura de seguro privado (<code>pctprivatecoverage</code>), con una tasa media de 64.35% (DE = 10.65). Además, el 50% de los porcentajes son menores o iguales a 65.1% (RIC = 14.9), es decir, muy cercanos a la media, lo que sugiere una distribución relativamente centrada. Por otro lado, el 25% son a lo sumo 57.2%, y el 75% no supera 72.1%. Además, el rango de los datos es de 70, siendo el porcentaje mínimo 22.3% y el máximo 92.3%. Por otro lado, se evidencia que los porcentajes de cobertura privada poseen una forma prácticamente mesocúrtica (curtosis = 2.99 ≈ 3), es decir, con un pico y colas similares a los de una distribución normal. Además, los datos presentan una ligera asimetría negativa o sesgo hacia la izquierda (Coef_asim = -0.39), con lo cual se observa que existen algunas regiones con porcentajes de cobertura privada notablemente más bajos que la mayoría.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="EDA.html#cb31-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, pctprivatecoverage)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/pctprivatecoverageUniv-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/pctprivatecoverageUniv-1.png" width="672" /></p>
 <p>El histograma de <code>pctprivatecoverage</code> muestra una distribución razonablemente simétrica, con un ligero sesgo hacia la izquierda, concentrando la mayoría de las observaciones entre 55% y 75%. El diagrama de cajas y bigotes confirma este comportamiento, evidenciando la presencia de valores atípicos únicamente en la cola inferior (regiones con coberturas privadas por debajo de 35%, llegando hasta cerca de 22%), sin outliers en el extremo superior. Esta asimetría leve hacia la izquierda, junto con una curtosis cercana a 3, es consistente con una distribución cercana a la normalidad, salvo por la presencia de algunas regiones con niveles de cobertura privada considerablemente más bajos que el resto.</p>
 <p><strong>5. pctpubliccoverage:</strong></p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="EDA.html#cb32-1" tabindex="-1"></a><span class="fu">summarise_numeric</span>(df, pctpubliccoverage)</span></code></pre></div>
@@ -683,7 +658,7 @@ más adelante en el análisis.</p>
 1 3047 36.25264 7.841741    36.3 10.65 30.9 41.55 11.2 65.1 2.908984 -0.005432924</code></pre>
 <p>Se registraron un total de 3047 registros del porcentaje de cobertura de seguro público (<code>pctpubliccoverage</code>), con una tasa media de 36.25% (DE = 7.84). Además, el 50% de los porcentajes son menores o iguales a 36.3% (RIC = 10.65), lo cual es prácticamente idéntico a la media, sugiriendo una distribución muy simétrica y centrada. Por otro lado, el 25% son a lo sumo 30.9%, y el 75% no supera 41.55%. Además, el rango de los datos es de 53.9, siendo el porcentaje mínimo 11.2% y el máximo 65.1%. Por otro lado, se evidencia que los porcentajes de cobertura pública poseen una forma prácticamente mesocúrtica (curtosis = 2.91 ≈ 3), es decir, con un pico y colas muy similares a los de una distribución normal. Además, los datos presentan una asimetría prácticamente nula (Coef_asim = -0.005), con lo cual se observa que la distribución es esencialmente simétrica.</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="EDA.html#cb34-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, pctpubliccoverage)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/pctpubliccoverageUniv-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/pctpubliccoverageUniv-1.png" width="672" /></p>
 <p>El histograma de <code>pctpubliccoverage</code> muestra una distribución bastante simétrica y cercana a la forma normal, concentrando la mayoría de las observaciones entre 30% y 42%. El diagrama de cajas y bigotes confirma esta simetría, evidenciando valores atípicos tanto en la cola inferior como en la superior, aunque en cantidad reducida (regiones con coberturas públicas por debajo de 15% o por encima de 57%). La coincidencia entre media y mediana, junto con un coeficiente de asimetría prácticamente nulo y una curtosis cercana a 3, respalda que esta variable se ajusta razonablemente bien a una distribución normal, con solo algunas regiones que se alejan del comportamiento típico en ambos extremos.</p>
 <p><strong>6. pctunemployed16_over:</strong></p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="EDA.html#cb35-1" tabindex="-1"></a><span class="fu">summarise_numeric</span>(df, pctunemployed16_over)</span></code></pre></div>
@@ -691,7 +666,7 @@ más adelante en el análisis.</p>
 1 3047 7.852412 3.452371     7.6 4.2 5.5 9.7 0.4 29.4 5.291033 0.8906224</code></pre>
 <p>Se registraron un total de 3047 registros del porcentaje de desempleo en personas mayores de 16 años (<code>pctunemployed16_over</code>), con una tasa media de 7.85% (DE = 3.45). Además, el 50% de los porcentajes son menores o iguales a 7.6% (RIC = 4.2), es decir, cercanos a la media, lo que sugiere una distribución relativamente centrada. Por otro lado, el 25% son a lo sumo 5.5%, y el 75% no supera 9.7%. Además, el rango de los datos es de 29, siendo el porcentaje mínimo 0.4% y el máximo 29.4%. Por otro lado, se evidencia que los porcentajes de desempleo poseen una forma leptocúrtica (curtosis = 5.29 &gt; 3), es decir, con un pico algo más marcado y colas más pesadas que la normal. Además, los datos presentan una asimetría positiva o sesgo hacia la derecha (Coef_asim = 0.89), con lo cual se observa que existen algunas regiones con tasas de desempleo excesivamente más altas que la mayoría.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="EDA.html#cb37-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, pctunemployed16_over)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/pctunemployed16_overUniv-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/pctunemployed16_overUniv-1.png" width="672" /></p>
 <p>El histograma de <code>pctunemployed16_over</code> muestra una distribución unimodal con un sesgo notorio hacia la derecha, concentrando la mayoría de las observaciones entre 4% y 12%. El diagrama de cajas y bigotes confirma esta asimetría, evidenciando un número considerable de valores atípicos por encima del bigote superior (regiones con tasas de desempleo superiores a 16%, llegando hasta cerca de 29%), sin presencia de outliers en la cola inferior. Esta concentración de valores extremos únicamente en la parte superior es consistente con el coeficiente de asimetría positivo (0.89) y la marcada curtosis (5.29), sugiriendo que, si bien la mayoría de las regiones presenta tasas de desempleo moderadas, existe un subconjunto de regiones con niveles de desempleo considerablemente más altos que el resto.</p>
 </div>
 <div id="análisis-exploratorio-univariado-de-la-variable-categórica-binnedinc" class="section level2 hasAnchor" number="3.3">
@@ -742,7 +717,7 @@ cada barra es la proporción de condados de ese intervalo.</p>
 <span id="cb40-14"><a href="EDA.html#cb40-14" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
 <span id="cb40-15"><a href="EDA.html#cb40-15" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">15</span>))</span>
 <span id="cb40-16"><a href="EDA.html#cb40-16" tabindex="-1"></a>  )</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/histograma-binnedinc-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/histograma-binnedinc-1.png" width="672" />
 Aunque cada intervalo contiene casi el mismo número de condados (alrededor
 del 10 %), el histograma muestra que el ingreso no se distribuye de manera
 uniforme: los intervalos centrales, entre unos 37 000 y 51 000 dólares, son
@@ -772,27 +747,27 @@ Chi-cuadrado que se aplicará más adelante.</p>
 <p>Seguidamente, se observará cada uno de los gráficos de dispersión entre la variable dependiente <code>target_deathrate</code> y cada una de las variables numéricas independientes</p>
 <p><strong>povertypercent vs target_deathrate:</strong></p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="EDA.html#cb42-1" tabindex="-1"></a><span class="fu">plot_dispersion_respuesta</span>(df, povertypercent, <span class="st">&quot;povertypercent&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/deathrateVspovertypercent-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/deathrateVspovertypercent-1.png" width="672" />
 El diagrama de dispersión entre <code>povertypercent</code> y <code>target_deathrate</code> muestra una relación positiva pero moderada: a mayor porcentaje de pobreza, se observa una ligera tendencia al aumento en la tasa de mortalidad por cáncer. La mayoría de las observaciones se concentra entre 10% y 20% de pobreza, con tasas de mortalidad principalmente entre 150 y 220 muertes por cada 100,000 habitantes. Además, la dispersión vertical aumenta notablemente en niveles altos de pobreza (superiores a 30%), donde las tasas de mortalidad llegan a superar las 250 muertes por cada 100,000 habitantes en varios casos, sugiriendo que otros factores como el acceso a cobertura médica podrían estar influyendo con mayor peso en esas regiones. También se identifica un valor atípico notable alrededor del 25% de pobreza con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, la relación positiva entre ambas variables no parece lo suficientemente fuerte como para explicar por sí sola la variabilidad de <code>target_deathrate</code>, lo que anticipa la necesidad de un modelo de regresión múltiple que incorpore variables adicionales para capturar de forma más completa los determinantes de la mortalidad por cáncer.</p>
 <p><strong>medincome vs target_deathrate:</strong></p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="EDA.html#cb43-1" tabindex="-1"></a><span class="fu">plot_dispersion_respuesta</span>(df, medincome, <span class="st">&quot;medincome&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/deathrateVsmedincome-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/deathrateVsmedincome-1.png" width="672" /></p>
 <p>El diagrama de dispersión entre <code>medincome</code> y <code>target_deathrate</code> muestra una relación negativa moderada: a mayor ingreso medio, se observa una tendencia a la disminución en la tasa de mortalidad por cáncer, siendo esta la relación más clara identificada hasta el momento. La mayoría de las observaciones se concentra entre 25000 y 75000 de ingreso, con tasas de mortalidad principalmente entre 150 y 220 muertes por cada 100,000 habitantes. Además, la dispersión vertical es notablemente mayor en niveles bajos de ingreso (por debajo de 40000), donde las tasas llegan a superar las 280 muertes por cada 100,000 habitantes en varios casos, mientras que en niveles altos de ingreso (superiores a 75000) la nube se estrecha considerablemente y las tasas rara vez superan las 180 muertes, sugiriendo un efecto protector más consistente del ingreso a medida que este aumenta. También se identifica el mismo valor atípico notable alrededor de los 35000 de ingreso con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, esta relación negativa parece ser una de las más fuertes entre las variables exploradas hasta ahora, aunque persiste una dispersión considerable que anticipa la necesidad de un modelo de regresión múltiple para capturar de forma más completa los determinantes de la mortalidad por cáncer.</p>
 <p><strong>pctbachdeg25_over vs target_deathrate:</strong></p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="EDA.html#cb44-1" tabindex="-1"></a><span class="fu">plot_dispersion_respuesta</span>(df, pctbachdeg25_over, <span class="st">&quot;pctbachdeg25_over&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/deathrateVspctbachdeg25_over-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/deathrateVspctbachdeg25_over-1.png" width="672" /></p>
 <p>El diagrama de dispersión entre <code>pctbachdeg25_over</code> y <code>target_deathrate</code> muestra una relación negativa moderada: a mayor porcentaje de personas con título universitario, se observa una tendencia a la disminución en la tasa de mortalidad por cáncer. La mayoría de las observaciones se concentra entre 8% y 20% de formación universitaria, con tasas de mortalidad principalmente entre 150 y 220 muertes por cada 100,000 habitantes. Además, la dispersión vertical es mayor en niveles bajos de formación universitaria (por debajo de 10%), donde las tasas llegan a superar las 270 muertes por cada 100,000 habitantes en varios casos, mientras que en niveles altos (superiores a 30%) la nube se estrecha y las tasas tienden a ubicarse por debajo de 150, sugiriendo que un mayor nivel educativo podría asociarse con mejores desenlaces frente al cáncer. También se identifica el mismo valor atípico notable alrededor del 6% con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, la relación negativa entre ambas variables refuerza la idea de que los factores socioeconómicos, en este caso la educación, están relacionados con la mortalidad por cáncer, aunque nuevamente la dispersión presente anticipa la necesidad de un modelo de regresión múltiple que incorpore variables adicionales.</p>
 <p><strong>pctprivatecoverage vs target_deathrate:</strong></p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="EDA.html#cb45-1" tabindex="-1"></a><span class="fu">plot_dispersion_respuesta</span>(df, pctprivatecoverage, <span class="st">&quot;pctprivatecoverage&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/deathrateVsprivatecoverage-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/deathrateVsprivatecoverage-1.png" width="672" /></p>
 <p>El diagrama de dispersión entre <code>pctprivatecoverage</code> y <code>target_deathrate</code> muestra una relación negativa moderada: a mayor porcentaje de cobertura de seguro privado, se observa una tendencia clara a la disminución en la tasa de mortalidad por cáncer. La mayoría de las observaciones se concentra entre 50% y 80% de cobertura privada, con tasas de mortalidad principalmente entre 150 y 210 muertes por cada 100,000 habitantes, formando una nube densa y relativamente estrecha en ese rango. Además, la dispersión vertical es notablemente mayor en niveles bajos de cobertura privada (por debajo de 45%), donde las tasas alcanzan valores entre 200 y 280 muertes por cada 100,000 habitantes con mayor frecuencia, mientras que en niveles altos (superiores a 75%) la nube se desplaza y se comprime hacia tasas más bajas, rara vez superando las 200 muertes, lo que sugiere que una mayor cobertura privada está asociada de forma consistente con menores tasas de mortalidad. También se identifica el mismo valor atípico notable alrededor del 60% de cobertura con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, esta relación negativa moderada es coherente con el patrón inverso observado en pctpubliccoverage, reforzando la hipótesis de que el tipo de cobertura médica está vinculado al nivel socioeconómico y, por extensión, a la mortalidad por cáncer, aunque la dispersión remanente anticipa la necesidad de un modelo de regresión múltiple para capturar el efecto conjunto de todas las variables.</p>
 <p><strong>pctpubliccoverage vs target_deathrate:</strong></p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="EDA.html#cb46-1" tabindex="-1"></a><span class="fu">plot_dispersion_respuesta</span>(df, pctpubliccoverage, <span class="st">&quot;pctpubliccoverage&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/deathrateVspctpubliccoverage-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/deathrateVspctpubliccoverage-1.png" width="672" /></p>
 <p>El diagrama de dispersión entre <code>pctpubliccoverage</code> y <code>target_deathrate</code> muestra una relación positiva moderada: a mayor porcentaje de cobertura de seguro público, se observa una tendencia al aumento en la tasa de mortalidad por cáncer, comportamiento opuesto al identificado con la cobertura privada. La mayoría de las observaciones se concentra entre 25% y 50% de cobertura pública, con tasas de mortalidad principalmente entre 150 y 220 muertes por cada 100,000 habitantes. Además, la dispersión vertical aumenta en niveles altos de cobertura pública (superiores a 45%), donde varias regiones alcanzan tasas por encima de 250 muertes por cada 100,000 habitantes, lo que podría estar asociado a que una mayor dependencia de la cobertura pública refleja, de forma indirecta, condiciones socioeconómicas más desfavorables. También se identifica el mismo valor atípico notable alrededor del 30% de cobertura con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, esta relación positiva es consistente con lo hallado en povertypercent y pctunemployed16_over, reforzando la hipótesis de que la desventaja socioeconómica está asociada a una mayor mortalidad por cáncer, aunque la relación no es lo suficientemente fuerte como para prescindir de un modelo de regresión múltiple.</p>
 <p><strong>pctunemployed16_over vs target_deathrate:</strong></p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="EDA.html#cb47-1" tabindex="-1"></a><span class="fu">plot_dispersion_respuesta</span>(df, pctunemployed16_over, <span class="st">&quot;pctunemployed16_over&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/deathrateVspctunemployed16_over-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/deathrateVspctunemployed16_over-1.png" width="672" /></p>
 <p>El diagrama de dispersión entre <code>pctunemployed16_over</code> y <code>target_deathrate</code> muestra una relación positiva moderada: a mayor tasa de desempleo, se observa una tendencia al aumento en la tasa de mortalidad por cáncer. La mayoría de las observaciones se concentra entre 4% y 12% de desempleo, con tasas de mortalidad principalmente entre 150 y 220 muertes por cada 100,000 habitantes. Además, la dispersión vertical aumenta en niveles altos de desempleo (superiores a 15%), donde varias regiones presentan tasas cercanas o superiores a 250 muertes por cada 100,000 habitantes, aunque también se observan algunos casos con tasas bajas en niveles altos de desempleo (como el valor cercano a 110 muertes con desempleo superior a 25%), lo que introduce cierta inconsistencia en la tendencia general. También se identifica el mismo valor atípico notable alrededor del 12% de desempleo con una tasa cercana a 360, muy por encima del comportamiento general. En conjunto, la relación positiva entre ambas variables es consistente con el patrón observado en povertypercent y pctpubliccoverage, sugiriendo que las condiciones adversas del mercado laboral podrían estar vinculadas a una mayor mortalidad por cáncer, aunque, al igual que en los casos anteriores, esta relación por sí sola no es suficiente para explicar la variabilidad completa de target_deathrate, lo que anticipa la necesidad de un modelo de regresión múltiple.</p>
 <p>Ahora veamos la relación entre la variable objetivo <code>target_deathrate</code> y la variable categórica <code>binnedinc</code>.</p>
 <p>Función para observar el gráfico de cajas y bigotes correspondiente a una variable numérica por cada uno de los grupos de la variable categórica <code>binnedinc</code></p>
@@ -809,7 +784,7 @@ El diagrama de dispersión entre <code>povertypercent</code> y <code>target_deat
 <span id="cb48-11"><a href="EDA.html#cb48-11" tabindex="-1"></a>}</span></code></pre></div>
 <p>Ahora llamando dicha función con la variable dependiente <code>target_deathrate</code></p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="EDA.html#cb49-1" tabindex="-1"></a><span class="fu">plot_binnedinc_vs</span>(df,target_deathrate,<span class="st">&quot;target_deathrate&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/deathrateVSbinnedinc-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/deathrateVSbinnedinc-1.png" width="672" />
 El diagrama de cajas y bigotes muestra un patrón descendente claro y
 consistente: a medida que aumenta el rango de ingreso medio (<code>binnedinc</code>),
 la tasa de mortalidad por cáncer disminuye de forma progresiva. El primer
@@ -853,89 +828,89 @@ con su tasa de mortalidad por cáncer.</p>
 <span id="cb51-11"><a href="EDA.html#cb51-11" tabindex="-1"></a>}</span></code></pre></div>
 <p><strong>Porcentaje de Pobreza vs Ingreso Medio</strong></p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="EDA.html#cb52-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;povertypercent&quot;</span>, <span class="st">&quot;medincome&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/povertypercent-medincome-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/povertypercent-medincome-1.png" width="672" />
 Los puntos muestran una tendencia descendente clara, mientras aumenta el <code>Porcentaje de Pobreza</code> disminuye el <code>Ingreso Medio</code>. Podemos notar que la mayoría de condados se concentran entre los porcentajes de probreza de 8% y 22%, con gran parte de los valores de estas zonas por debajo de los 60000 USD de ingreso medio.
 Asimismo, podemos notar como la dispersión se mantiene bastante concentrada, la variabilidad de los ingresos aumenta considerablemente cuando el porcentaje de pobreza alcanza porcentajes por debajo de 8% o cuando el ingreso medio llega a valores por debajo de los 27000 USD aumenta la variabilidad del porcentaje de pobreza.
 En general, la relación es negativa, siendo curva, y notablemente fuerte dentro de este dataset, permitiendo ver como el porcentaje de pobreza está directamente relacionado con los ingresos.</p>
 <p><strong>Porcentaje de Pobreza vs Porcentaje de Personas mayores a 25 años con Título Universitario</strong></p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="EDA.html#cb53-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;povertypercent&quot;</span>, <span class="st">&quot;pctbachdeg25_over&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/povertypercent-pctbachdeg25-over-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/povertypercent-pctbachdeg25-over-1.png" width="672" />
 Los puntos muestran una tendencia descendente moderada, mientras aumenta el <code>Porcentaje de Pobreza</code> disminuye el <code>Porcentaje de Personas mayores a 25 años con Título Universitario</code>. Se evidencia como los datos de los condados están concentrados entre los porcentajes de probreza de 10% y 20%, con dicha concentración de zonas por debajo del 16% de personas con título y mayores a 25 años.
 Este gráfico contiene un gran nivel de dispersión el cual se hace notar con la gran cantidad de outliers que está gráfica maneja, llegando hasta porcentajes de 42.2% de personas mayores a 25 años con título, lo cual nos muestra que en ningún condado de Estados Unidos el porcentaje de personas “educadas”, a través de la Universidad, es la mayoría de personas del condado. De igual manera, en el porcentaje de pobreza hay valores que llegan hasta el 47.4%.
 En general, la relación es negativa, siendo ligeramente curva, y fuerte, clarificando la ligera relación entre el porcentaje de pobreza y el porcentaje de personas mayores a 25 con título universitario. Evidenciando como el ser personas “educadas” si se relaciona moderadamente con el porcentaje de pobreza.</p>
 <p><strong>Porcentaje de Pobreza vs Porcentaje con Cobertura Privada</strong></p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="EDA.html#cb54-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;povertypercent&quot;</span>, <span class="st">&quot;pctprivatecoverage&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/povertypercent-pctprivatecoverage-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/povertypercent-pctprivatecoverage-1.png" width="672" />
 Los puntos muestran una tendencia descendente clara, mientras aumenta el <code>Porcentaje de Pobreza</code> disminuye el <code>Porcentaje con Cobertura Privada</code>. La mayoría de condados están concentrados entre 12% y 20% de pobreza, con valores de cobertura privada que rondan entre el 57% y el 72%.
 El nivel de dispersión es moderado, puesto que a partir de aproximadamente el 8% de porcentaje de pobreza, comienzan a haber outliers mayores, aunque manteniendo una concentración clara, la cual se sitúa entre el 7% y 20% de pobreza, y el 55% y 80% de condados con seguro médico privado.
 En general, la relación es negativa, lineal y muy fuerte, lo que evidencia que el acceso a seguro médico privado está estrechamente ligado al nivel de pobreza de un condado.</p>
 <p><strong>Porcentaje de Pobreza vs Porcentaje con Cobertura Pública</strong></p>
 <div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="EDA.html#cb55-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;povertypercent&quot;</span>, <span class="st">&quot;pctpubliccoverage&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/povertypercent-pctpubliccoverage-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/povertypercent-pctpubliccoverage-1.png" width="672" />
 A diferencia del gráfico anterior, aquí la tendencia es ascendente, a mayor <code>Porcentaje de Pobreza</code>, mayor tiende a ser el <code>Porcentaje con Cobertura Pública</code>. Con base en el contexto del problema, a mayor pobreza, más dependencia de programas de salud pública en vez de seguros privados es lógico y razonable.
 La mayoría de condados se concentran entre 12% y 20% de pobreza, con cobertura pública entre 31% y 42%.
 La relación es positiva, con curvatura moderada, y ligeramente fuerte.</p>
 <p><strong>Porcentaje de Pobreza vs Porcentaje de Desempleo</strong></p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="EDA.html#cb56-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;povertypercent&quot;</span>, <span class="st">&quot;pctunemployed16_over&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/povertypercent-pctunemployed16-over-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/povertypercent-pctunemployed16-over-1.png" width="672" />
 Se observa una tendencia ascendente moderada, a mayor pobreza, mayor desempleo en el condado, siendo esto esperable, ya que ambas variables reflejan dificultades económicas similares. La mayoría de los condados se concentran entre 12% y 20% de pobreza, con tasas de desempleo que se ubican en un rango de entre 5.5% y 9.7%.
 Existen algunos condados con desempleo notablemente alto, llegando hasta 29.4%, que se alejan del resto de datoa y podrían considerarse datos atípicos. La relación es positiva, de fuerza moderada y lineal con una leve curvatura.</p>
 <p><strong>Ingreso Medio vs Porcentaje con Título Universitario</strong></p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="EDA.html#cb57-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;medincome&quot;</span>, <span class="st">&quot;pctbachdeg25_over&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/medincome-pctbachdeg25-over-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/medincome-pctbachdeg25-over-1.png" width="672" />
 Los puntos muestran una tendencia ascendente evidente, que a mayor <code>Ingreso Medio</code>, mayor <code>Porcentaje con Título Universitario</code>. Resultado predecible bajo el contextado dado que más educación suele traducirse en mejores oportunidades laborales e ingresos más altos.
 La mayoría de los condados se concentran entre 38,900 y 52,500 USD de ingreso, con porcentajes de título universitario entre 9.4% y 16.1% en esa zona.
 La relación es positiva, moderadamente curva, y fuerte.</p>
 <p><strong>Ingreso Medio vs Porcentaje con Cobertura Privada</strong></p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="EDA.html#cb58-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;medincome&quot;</span>, <span class="st">&quot;pctprivatecoverage&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/medincome-pctprivatecoverage-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/medincome-pctprivatecoverage-1.png" width="672" />
 Se observa una tendencia ascendente, a mayor <code>Ingreso Medio</code>, mayor <code>Porcentaje con Cobertura Privada</code>. Esto es coherente con la lógica de los seguros privados puesto que suelen depender de la capacidad de pago o de acceder a un empleo formal con beneficios.
 La mayoría de condados se concentran entre 38,900 y 52,500 USD de ingreso, con cobertura privada entre 57% y 72%.
 La relación es positiva y fuerte, siendo una de las más claras al hablar del ingreso medio.</p>
 <p><strong>Ingreso Medio vs Porcentaje con Cobertura Pública</strong></p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="EDA.html#cb59-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;medincome&quot;</span>, <span class="st">&quot;pctpubliccoverage&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/medincome-pctpubliccoverage-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/medincome-pctpubliccoverage-1.png" width="672" />
 Aquí la tendencia es descendente, conforme aumenta el <code>Ingreso Medio</code>, disminuye el <code>Porcentaje con Cobertura Pública</code>, siendo consistente con el hecho de que a mayor capacidad económica, menor dependencia de programas de salud pública.
 La concentración de los datos se encuentra 28000 USD y los 55000 USD de ingreso medio, junto a un rango de entre 27% y 48% de cobertura pública.
 La relación es negativa y fuerte, la más fuerte entre todas las comparaciones de <code>medincome</code> con las variables de cobertura de salud.</p>
 <p><strong>Ingreso Medio vs Porcentaje de Desempleo</strong></p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="EDA.html#cb60-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;medincome&quot;</span>, <span class="st">&quot;pctunemployed16_over&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/medincome-pctunemployed16-over-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/medincome-pctunemployed16-over-1.png" width="672" />
 Se observa una tendencia descendente, no obstante con una dispersión mayor a lo usual dentro de este dataset, a mayor <code>Ingreso Medio</code>, tiende a disminuir el <code>Porcentaje de Desempleo</code>.
 En este sentido, la distribución de los datos está mucho más esparcida, sin embargo, podemos notar cierto nivel de concentración dentro de la zona de ingresos bajos-medios.
 La relación es negativa y con un nivel de fuerza moderada, debido a que más allá de la concentración de datos, el resto de la distribución pese a seguir esta relación, es con datos más atípicos que normales.</p>
 <p><strong>Porcentaje con Título Universitario vs Porcentaje con Cobertura Privada</strong></p>
 <div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="EDA.html#cb61-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;pctbachdeg25_over&quot;</span>, <span class="st">&quot;pctprivatecoverage&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/pctbachdeg25-over-pctprivatecoverage-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/pctbachdeg25-over-pctprivatecoverage-1.png" width="672" />
 Los puntos muestran una tendencia ascendente moderada, a mayor <code>Porcentaje con Título Universitario</code>, mayor <code>Porcentaje con Cobertura Privada</code>. La mayoría de los condados se concentran entre 9.4% y 16.1% de título universitario, con cobertura privada entre 57% y 72%.
 Podemos observar como tiene una distribución la cual está un poco esparcida pero se desarrolla principalmente por arriba del 50% de cobertura privada.
 La relación es positiva, con una curvatura medianamente notable y con una fuerza moderada.</p>
 <p><strong>Porcentaje con Título Universitario vs Porcentaje con Cobertura Pública</strong></p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="EDA.html#cb62-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;pctbachdeg25_over&quot;</span>, <span class="st">&quot;pctpubliccoverage&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/pctbachdeg25-over-pctpubliccoverage-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/pctbachdeg25-over-pctpubliccoverage-1.png" width="672" />
 Se observa una tendencia descendente moderada, a mayor <code>Porcentaje con Título Universitario</code>, menor <code>Porcentaje con Cobertura Pública</code>, como en casos anteriores, siendo consistente dado que con mayor educación se asocia con mejores condiciones económicas y menor dependencia de programas públicos de salud.
 Seguidamente, podemos notar que la concentración de los datos se da dentro de niveles medio-bajo del porcentaje con título universitario, lo cual implica y confirma lo antes mencionado.
 La relación es negativa y de fuerza moderada.</p>
 <p><strong>Porcentaje con Título Universitario vs Porcentaje de Desempleo</strong></p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="EDA.html#cb63-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;pctbachdeg25_over&quot;</span>, <span class="st">&quot;pctunemployed16_over&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/pctbachdeg25-over-pctunemployed16-over-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/pctbachdeg25-over-pctunemployed16-over-1.png" width="672" />
 Este es uno de los gráficos con menor fuerza de relación entre todos los analizados, aunque se aprecia una leve tendencia descendente. a mayor título universitario, menor desempleo. La concentración de los datos está considerablemente dispersa, sin un patrón tan marcado como en los pares anteriores.
 La relación es negativa, pero débil-moderada, sugiriendo que el nivel educativo por sí solo no explica gran parte de la variabilidad del desempleo en los condados.</p>
 <p><strong>Porcentaje con Cobertura Privada vs Porcentaje con Cobertura Pública</strong></p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="EDA.html#cb64-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;pctprivatecoverage&quot;</span>, <span class="st">&quot;pctpubliccoverage&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/pctprivatecoverage-pctpubliccoverage-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/pctprivatecoverage-pctpubliccoverage-1.png" width="672" />
 Se observa una tendencia descendente clara, a mayor <code>Porcentaje con Cobertura Privada</code>, menor <code>Porcentaje con Cobertura Pública</code>, lo cual es esperable considerando que ambas variables representan, formas alternativas o competitivas de acceso a seguro médico dentro de un mismo condado.
 La distribución de los datos se concentra entre 55% y 76% de cobertura privada, y entre 25% y 42% de cobertura pública.
 La relación es negativa y fuerte, una de las más marcadas entre todos los pares que no involucran <code>povertypercent</code> o <code>medincome</code>.</p>
 <p><strong>Porcentaje con Cobertura Privada vs Porcentaje de Desempleo</strong></p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="EDA.html#cb65-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;pctprivatecoverage&quot;</span>, <span class="st">&quot;pctunemployed16_over&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/pctprivatecoverage-pctunemployed16-over-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/pctprivatecoverage-pctunemployed16-over-1.png" width="672" />
 Los puntos muestran una tendencia descendente moderada, a mayor <code>Porcentaje con Cobertura Privada</code>, menor <code>Porcentaje de Desempleo</code>. Esto es coherente con que la cobertura privada suele depender de tener empleo formal.
 La distribución de datos se encuentra notablemente concentrada dentro de niveles medio-altos de covertura privada y medio-bajos de desemplo. La cantidad de datos dispersos es bastante moderada a diferencia de muchos otros gráficos.
 La relación es negativa y de fuerza moderada-fuerte.</p>
 <p><strong>Porcentaje con Cobertura Pública vs Porcentaje de Desempleo</strong></p>
 <div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="EDA.html#cb66-1" tabindex="-1"></a><span class="fu">grafico_dispersion</span>(df_bivariado, <span class="st">&quot;pctpubliccoverage&quot;</span>, <span class="st">&quot;pctunemployed16_over&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/pctpubliccoverage-pctunemployed16-over-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/pctpubliccoverage-pctunemployed16-over-1.png" width="672" />
 Se observa una tendencia ascendente moderada, a mayor <code>Porcentaje con Cobertura Pública</code>, mayor <code>Porcentaje de Desempleo</code>. Siguiendo la misma línea, la idea de que la dependencia de programas públicos de salud tiende a acompañar contextos de mayor desempleo.
 La distribución de los datos es bastante centrada dentro de la cobertura pública y medio-baja dentro de el nivel de desempleo.
 La relación es positiva y de fuerza moderada.</p>
@@ -963,14 +938,14 @@ para crear así una nueva variable (<code>coverage_balance</code>) que describe 
 6             16.8</code></pre>
 <p><strong>Histograma y diagrama de cajas: coverage_balance</strong></p>
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="EDA.html#cb69-1" tabindex="-1"></a><span class="fu">plot_univariado</span>(df, coverage_balance)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/coverage_balance-1.png" alt="" width="672" />
+<p><img src="bookdown-demo_files/figure-html/coverage_balance-1.png" width="672" />
 El histograma de <code>coverage_balance</code> muestra una distribución unimodal y aproximadamente simétrica, con una leve inclinación hacia la izquierda, concentrando la mayoría de las observaciones entre 15 y 50 aproximadamente. El diagrama de cajas y bigotes confirma esta simetría relativa, evidenciando muy pocos valores atípicos en ambos extremos (solo 6 condados por debajo, con valores negativos que indican una leve inclinación hacia la cobertura pública, y 1 condado por encima, cercano a 78.8). Esta escasa presencia de outliers y su distribución equilibrada en ambas colas es consistente con el coeficiente de asimetría cercano a cero (-0.17) y la curtosis moderada (2.75), sugiriendo que, la mayoría de los condados presentan un balance de cobertura relativamente predecible y sin concentraciones extremas, con una inclinación general hacia la cobertura privada por sobre la pública (mediana de 28.6).</p>
 </div>
 <div id="análisis-exploratorio-bivariado-entre-las-variables-independientes-y-la-variable-categórica" class="section level2 hasAnchor" number="3.7">
 <h2><span class="header-section-number">3.7</span> Análisis exploratorio bivariado entre las variables independientes y la variable categórica<a href="EDA.html#an%C3%A1lisis-exploratorio-bivariado-entre-las-variables-independientes-y-la-variable-categ%C3%B3rica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><strong>Porcentaje de pobreza VS Rangos de ingreso medio</strong></p>
 <div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="EDA.html#cb70-1" tabindex="-1"></a><span class="fu">plot_binnedinc_vs</span>(df,povertypercent,<span class="st">&quot;Porcentaje de pobreza&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/povertypercentVSbinnedinc-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/povertypercentVSbinnedinc-1.png" width="672" /></p>
 <p>El porcentaje de pobreza presenta una relación descendente marcada y
 consistente a lo largo de los diez rangos de ingreso medio: el grupo con
 menor ingreso ([22640, 34218.1]) exhibe la mediana más alta de pobreza,
@@ -987,7 +962,7 @@ sugiriendo que la pobreza es un fenómeno más variable y heterogéneo en las
 regiones económicamente más desfavorecidas.</p>
 <p><strong>ingreso medio VS Rangos de ingresos medios</strong></p>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="EDA.html#cb71-1" tabindex="-1"></a><span class="fu">plot_binnedinc_vs</span>(df,medincome,<span class="st">&quot;ingreso medio&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/medincomeVSbinnedinc-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/medincomeVSbinnedinc-1.png" width="672" /></p>
 <p>Como es de esperarse dado que <code>binnedinc</code> se construye directamente a
 partir de esta variable, la relación entre <code>medincome</code> y el rango de
 ingreso medio es marcadamente ascendente a lo largo de todos los grupos:
@@ -1005,7 +980,7 @@ consecuencia natural de cómo fue construido este último rango, y no un
 hallazgo sustantivo sobre la variable en sí.</p>
 <p><strong>Porcentaje con Título Universitario VS Rangos de ingresos medios</strong></p>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="EDA.html#cb72-1" tabindex="-1"></a><span class="fu">plot_binnedinc_vs</span>(df,pctbachdeg25_over,<span class="st">&quot;Porcentaje con Título Universitario&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/pctbachdeg25_overVSbinnedinc-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/pctbachdeg25_overVSbinnedinc-1.png" width="672" /></p>
 <p>El porcentaje de personas con título universitario muestra una relación
 ascendente clara y prácticamente monótona a lo largo de los rangos de
 ingreso: el grupo de menor ingreso presenta una mediana de apenas 8%,
@@ -1022,7 +997,7 @@ considerable dentro de las regiones más ricas en cuanto al nivel educativo
 de su población.</p>
 <p><strong>Porcentaje del balance entre las coberturas de salud VS Rangos de ingresos medios</strong></p>
 <div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="EDA.html#cb73-1" tabindex="-1"></a><span class="fu">plot_binnedinc_vs</span>(df,coverage_balance,<span class="st">&quot;Porcentaje del balance entre coberturas&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/coverage_balanceVSbinnedinc-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/coverage_balanceVSbinnedinc-1.png" width="672" /></p>
 <p>El balance de cobertura médica muestra una tendencia ascendente clara a lo
 largo de los rangos de ingreso: en el grupo de menor ingreso, la mediana
 se ubica cerca de 0, indicando un equilibrio casi total entre cobertura
@@ -1038,7 +1013,7 @@ pública), mientras que en los grupos de mayor ingreso la variabilidad se
 reduce y se concentra casi exclusivamente en valores positivos.</p>
 <p><strong>Porcentaje de Desempleo VS Rangos de ingresos medios</strong></p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="EDA.html#cb74-1" tabindex="-1"></a><span class="fu">plot_binnedinc_vs</span>(df,pctunemployed16_over,<span class="st">&quot;Porcentaje de Desempleo&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/pctunemployed16_overVSbinnedinc-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/pctunemployed16_overVSbinnedinc-1.png" width="672" /></p>
 <p>El porcentaje de desempleo presenta una relación descendente, aunque menos
 pronunciada que las variables anteriores: el grupo de menor ingreso
 muestra una mediana de desempleo de 12%, mientras que el grupo de mayor

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Capítulo 4 Análisis paramétrico y no paramétrico | Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer</title>
   <meta name="description" content="Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos" />
-  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Capítulo 4 Análisis paramétrico y no paramétrico | Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Sebastian Ariza y Joseph Arias" />
 
 
-<meta name="date" content="2026-11-24" />
+<meta name="date" content="2026-11-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -615,22 +615,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb80-6"><a href="Análisis_estadístico.html#cb80-6" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span></span>
 <span id="cb80-7"><a href="Análisis_estadístico.html#cb80-7" tabindex="-1"></a>    )</span>
 <span id="cb80-8"><a href="Análisis_estadístico.html#cb80-8" tabindex="-1"></a>  )</span></code></pre></div>
-<pre><code>  NA_avganncount NA_avgdeathsperyear NA_target_deathrate NA_incidencerate NA_medincome
-1              0                   0                   0                0            0
-  NA_popest2015 NA_povertypercent NA_studypercap NA_binnedinc NA_medianage
-1             0                 0              0            0            0
-  NA_medianagemale NA_medianagefemale NA_geography NA_percentmarried NA_pctnohs18_24
-1                0                  0            0                 0               0
-  NA_pcths18_24 NA_pctsomecol18_24 NA_pctbachdeg18_24 NA_pcths25_over
-1             0                  0                  0               0
-  NA_pctbachdeg25_over NA_pctemployed16_over NA_pctunemployed16_over
-1                    0                     0                       0
-  NA_pctprivatecoverage NA_pctprivatecoveragealone NA_pctempprivcoverage
-1                     0                          0                     0
-  NA_pctpubliccoverage NA_pctpubliccoveragealone NA_pctwhite NA_pctblack NA_pctasian
-1                    0                         0           0           0           0
-  NA_pctotherrace NA_pctmarriedhouseholds NA_birthrate
-1               0                       0            0</code></pre>
+<pre><code>  NA_avganncount NA_avgdeathsperyear NA_target_deathrate NA_incidencerate NA_medincome NA_popest2015 NA_povertypercent
+1              0                   0                   0                0            0             0                 0
+  NA_studypercap NA_binnedinc NA_medianage NA_medianagemale NA_medianagefemale NA_geography NA_percentmarried NA_pctnohs18_24
+1              0            0            0                0                  0            0                 0               0
+  NA_pcths18_24 NA_pctsomecol18_24 NA_pctbachdeg18_24 NA_pcths25_over NA_pctbachdeg25_over NA_pctemployed16_over
+1             0                  0                  0               0                    0                     0
+  NA_pctunemployed16_over NA_pctprivatecoverage NA_pctprivatecoveragealone NA_pctempprivcoverage NA_pctpubliccoverage
+1                       0                     0                          0                     0                    0
+  NA_pctpubliccoveragealone NA_pctwhite NA_pctblack NA_pctasian NA_pctotherrace NA_pctmarriedhouseholds NA_birthrate
+1                         0           0           0           0               0                       0            0</code></pre>
 <p>Aplicando nuevamente ingeniería de características entre <code>pctprivatecoverage</code> y <code>pctpubliccoverage</code>.</p>
 <div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="Análisis_estadístico.html#cb82-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
 <span id="cb82-2"><a href="Análisis_estadístico.html#cb82-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -853,14 +847,10 @@ coeficientes de correlación no paramétricos.</p>
 <span id="cb119-6"><a href="Análisis_estadístico.html#cb119-6" tabindex="-1"></a>    <span class="at">p_value =</span> <span class="fu">round</span>(test<span class="sc">$</span>p.value, <span class="dv">4</span>)</span>
 <span id="cb119-7"><a href="Análisis_estadístico.html#cb119-7" tabindex="-1"></a>  )</span>
 <span id="cb119-8"><a href="Análisis_estadístico.html#cb119-8" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span></code></pre></div>
-<pre><code>Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot
-compute exact p-value with ties
-Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot
-compute exact p-value with ties
-Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot
-compute exact p-value with ties
-Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot
-compute exact p-value with ties</code></pre>
+<pre><code>Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot compute exact p-value with ties
+Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot compute exact p-value with ties
+Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot compute exact p-value with ties
+Warning in cor.test.default(df[[v]], df$target_deathrate, method = &quot;spearman&quot;): Cannot compute exact p-value with ties</code></pre>
 <div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="Análisis_estadístico.html#cb121-1" tabindex="-1"></a>resultados_spearman</span></code></pre></div>
 <pre><code>                    variable correlacion p_value
 rho...1            medincome      -0.463       0
@@ -956,12 +946,11 @@ Predominio público Balance intermedio Predominio privado
 <span id="cb127-14"><a href="Análisis_estadístico.html#cb127-14" tabindex="-1"></a>    <span class="at">Coef_asim =</span> <span class="fu">skewness</span>(target_deathrate)</span>
 <span id="cb127-15"><a href="Análisis_estadístico.html#cb127-15" tabindex="-1"></a>  )</span></code></pre></div>
 <pre><code># A tibble: 3 × 12
-  categoria_cobertura     n media d_est mediana   RIC    Q1    Q3   min   max curtosis
-  &lt;fct&gt;               &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
-1 Predominio público   1016  191.  29.9    193.  39.5  172.  211   66.3  292.     3.45
-2 Balance intermedio   1020  180.  23.6    180.  27.1  166.  193. 102.   363.     7.11
-3 Predominio privado   1011  165.  22.7    165.  26.8  152.  179.  59.7  292.     4.82
-# ℹ 1 more variable: Coef_asim &lt;dbl&gt;</code></pre>
+  categoria_cobertura     n media d_est mediana   RIC    Q1    Q3   min   max curtosis Coef_asim
+  &lt;fct&gt;               &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1 Predominio público   1016  191.  29.9    193.  39.5  172.  211   66.3  292.     3.45   -0.0332
+2 Balance intermedio   1020  180.  23.6    180.  27.1  166.  193. 102.   363.     7.11    0.395 
+3 Predominio privado   1011  165.  22.7    165.  26.8  152.  179.  59.7  292.     4.82   -0.0589</code></pre>
 <p>El resumen descriptivo de <code>target_deathrate</code> por categoría de balance de
 cobertura muestra que la media de mortalidad disminuye a medida que
 aumenta el predominio de la cobertura privada, pasando de 191.26 en
@@ -995,7 +984,7 @@ intermedio” presentando el sesgo positivo más notorio.</p>
 <span id="cb129-7"><a href="Análisis_estadístico.html#cb129-7" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Categoría de cobertura&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Tasa de mortalidad (por 100,000 hab.)&quot;</span>) <span class="sc">+</span></span>
 <span id="cb129-8"><a href="Análisis_estadístico.html#cb129-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb129-9"><a href="Análisis_estadístico.html#cb129-9" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/boxplot-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/boxplot-1.png" width="672" /></p>
 <p>El diagrama de cajas y bigotes muestra un patrón claro entre las tres
 categorías: a medida que aumenta el predominio de la cobertura privada
 sobre la pública, la tasa de mortalidad por cáncer tiende a disminuir. El
@@ -1064,11 +1053,11 @@ post-hoc mediante la prueba de Dunn.</p>
 <div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="Análisis_estadístico.html#cb134-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb134-2"><a href="Análisis_estadístico.html#cb134-2" tabindex="-1"></a>  <span class="fu">dunn_test</span>(target_deathrate <span class="sc">~</span> categoria_cobertura, <span class="at">p.adjust.method =</span> <span class="st">&quot;bonferroni&quot;</span>)</span></code></pre></div>
 <pre><code># A tibble: 3 × 9
-  .y.              group1    group2    n1    n2 statistic         p     p.adj p.adj.signif
-* &lt;chr&gt;            &lt;chr&gt;     &lt;chr&gt;  &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;       
-1 target_deathrate Predomin… Balan…  1016  1020     -8.90 5.64e- 19 1.69e- 18 ****        
-2 target_deathrate Predomin… Predo…  1016  1011    -22.0  1.63e-107 4.89e-107 ****        
-3 target_deathrate Balance … Predo…  1020  1011    -13.2  1.50e- 39 4.51e- 39 ****        </code></pre>
+  .y.              group1             group2                n1    n2 statistic         p     p.adj p.adj.signif
+* &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;              &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;       
+1 target_deathrate Predominio público Balance intermedio  1016  1020     -8.90 5.64e- 19 1.69e- 18 ****        
+2 target_deathrate Predominio público Predominio privado  1016  1011    -22.0  1.63e-107 4.89e-107 ****        
+3 target_deathrate Balance intermedio Predominio privado  1020  1011    -13.2  1.50e- 39 4.51e- 39 ****        </code></pre>
 <p>El análisis post-hoc mediante la prueba de Dunn confirma que las
 diferencias son estadísticamente significativas entre <strong>todos</strong> los pares
 de grupos comparados (p.adj &lt; 0.001 en los tres casos, con el máximo nivel
@@ -1122,18 +1111,18 @@ Kruskal-Wallis chi-squared = 651.49, df = 9, p-value &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="Análisis_estadístico.html#cb140-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
 <span id="cb140-2"><a href="Análisis_estadístico.html#cb140-2" tabindex="-1"></a>  <span class="fu">dunn_test</span>(target_deathrate <span class="sc">~</span> binnedinc, <span class="at">p.adjust.method =</span> <span class="st">&quot;bonferroni&quot;</span>)</span></code></pre></div>
 <pre><code># A tibble: 45 × 9
-   .y.              group1     group2    n1    n2 statistic        p    p.adj p.adj.signif
- * &lt;chr&gt;            &lt;chr&gt;      &lt;chr&gt;  &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;       
- 1 target_deathrate (34218.1,… (3741…   304   304     -2.39 1.69e- 2 7.61e- 1 ns          
- 2 target_deathrate (34218.1,… (4036…   304   304     -3.91 9.39e- 5 4.23e- 3 **          
- 3 target_deathrate (34218.1,… (4272…   304   305     -6.12 9.22e-10 4.15e- 8 ****        
- 4 target_deathrate (34218.1,… (4520…   304   306     -7.70 1.37e-14 6.16e-13 ****        
- 5 target_deathrate (34218.1,… (4802…   304   305    -10.6  3.83e-26 1.72e-24 ****        
- 6 target_deathrate (34218.1,… (5104…   304   305    -11.3  1.10e-29 4.96e-28 ****        
- 7 target_deathrate (34218.1,… (5454…   304   306    -13.0  9.62e-39 4.33e-37 ****        
- 8 target_deathrate (34218.1,… (6149…   304   302    -16.3  1.87e-59 8.39e-58 ****        
- 9 target_deathrate (34218.1,… [2264…   304   306      2.54 1.10e- 2 4.97e- 1 ns          
-10 target_deathrate (37413.8,… (4036…   304   304     -1.52 1.29e- 1 1   e+ 0 ns          
+   .y.              group1             group2                n1    n2 statistic        p    p.adj p.adj.signif
+ * &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;              &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;       
+ 1 target_deathrate (34218.1, 37413.8] (37413.8, 40362.7]   304   304     -2.39 1.69e- 2 7.61e- 1 ns          
+ 2 target_deathrate (34218.1, 37413.8] (40362.7, 42724.4]   304   304     -3.91 9.39e- 5 4.23e- 3 **          
+ 3 target_deathrate (34218.1, 37413.8] (42724.4, 45201]     304   305     -6.12 9.22e-10 4.15e- 8 ****        
+ 4 target_deathrate (34218.1, 37413.8] (45201, 48021.6]     304   306     -7.70 1.37e-14 6.16e-13 ****        
+ 5 target_deathrate (34218.1, 37413.8] (48021.6, 51046.4]   304   305    -10.6  3.83e-26 1.72e-24 ****        
+ 6 target_deathrate (34218.1, 37413.8] (51046.4, 54545.6]   304   305    -11.3  1.10e-29 4.96e-28 ****        
+ 7 target_deathrate (34218.1, 37413.8] (54545.6, 61494.5]   304   306    -13.0  9.62e-39 4.33e-37 ****        
+ 8 target_deathrate (34218.1, 37413.8] (61494.5, 125635]    304   302    -16.3  1.87e-59 8.39e-58 ****        
+ 9 target_deathrate (34218.1, 37413.8] [22640, 34218.1]     304   306      2.54 1.10e- 2 4.97e- 1 ns          
+10 target_deathrate (37413.8, 40362.7] (40362.7, 42724.4]   304   304     -1.52 1.29e- 1 1   e+ 0 ns          
 # ℹ 35 more rows</code></pre>
 <p>El análisis post-hoc mediante la prueba de Dunn (con ajuste de Bonferroni) muestra que, de los 45 pares de grupos comparados, 36 presentan diferencias estadísticamente significativas (p.adj &lt; 0.05) y 9 no (p.adj ≥ 0.05). Los 9 pares no significativos corresponden, sin excepción, a grupos de ingreso consecutivos, mientras que las comparaciones entre grupos más distantes entre sí resultan significativas.</p>
 <p>Este patrón es coherente con la tendencia descendente y gradual observada en el resumen descriptivo y el boxplot del EDA: como la mortalidad decrece de forma progresiva a medida que aumenta el ingreso, dos grupos consecutivos no logran mostrar una diferencia lo suficientemente grande como para ser estadísticamente detectable, mientras que grupos más alejados en la escala sí la muestran.</p>
@@ -1286,7 +1275,7 @@ X-squared = 504.54, df = 9, p-value &lt; 2.2e-16</code></pre>
 <span id="cb154-5"><a href="Análisis_estadístico.html#cb154-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución de target_deathrate por nivel de ingreso&quot;</span>,</span>
 <span id="cb154-6"><a href="Análisis_estadístico.html#cb154-6" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Muertes por cáncer por cada 100 000 habitantes&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">+</span></span>
 <span id="cb154-7"><a href="Análisis_estadístico.html#cb154-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/cat-histogramas-1.png" alt="" width="960" /></p>
+<p><img src="bookdown-demo_files/figure-html/cat-histogramas-1.png" width="960" /></p>
 <div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="Análisis_estadístico.html#cb155-1" tabindex="-1"></a>medias_ingreso <span class="ot">&lt;-</span> datos_cat <span class="sc">%&gt;%</span></span>
 <span id="cb155-2"><a href="Análisis_estadístico.html#cb155-2" tabindex="-1"></a>  <span class="fu">group_by</span>(ingreso) <span class="sc">%&gt;%</span></span>
 <span id="cb155-3"><a href="Análisis_estadístico.html#cb155-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
@@ -1817,7 +1806,7 @@ ingreso               4.180330  9        1.082709</code></pre>
 <div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="Análisis_estadístico.html#cb173-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb173-2"><a href="Análisis_estadístico.html#cb173-2" tabindex="-1"></a><span class="fu">plot</span>(mod_cat2, <span class="at">which =</span> <span class="dv">1</span>)</span>
 <span id="cb173-3"><a href="Análisis_estadístico.html#cb173-3" tabindex="-1"></a><span class="fu">plot</span>(mod_cat2, <span class="at">which =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/cat-residuos-1.png" alt="" width="864" /></p>
+<p><img src="bookdown-demo_files/figure-html/cat-residuos-1.png" width="864" /></p>
 <div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="Análisis_estadístico.html#cb174-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
 <span id="cb174-2"><a href="Análisis_estadístico.html#cb174-2" tabindex="-1"></a></span>
 <span id="cb174-3"><a href="Análisis_estadístico.html#cb174-3" tabindex="-1"></a>res_cat2 <span class="ot">&lt;-</span> <span class="fu">residuals</span>(mod_cat2)</span>

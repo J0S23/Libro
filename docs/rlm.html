@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Capítulo 5 Regresión lineal múltiple | Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer</title>
   <meta name="description" content="Aquí voy a realizar el trabajo aplicado de la asignatura de métodos estadísticos" />
-  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Capítulo 5 Regresión lineal múltiple | Análisis Estadístico de los Factores que Influyen en la Tasa de Muertes causadas por Cáncer" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Sebastian Ariza y Joseph Arias" />
 
 
-<meta name="date" content="2026-11-24" />
+<meta name="date" content="2026-11-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -331,12 +331,10 @@ F-statistic: 320.6 on 10 and 3036 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div id="multicolinealidad-1" class="section level2 hasAnchor" number="5.3">
 <h2><span class="header-section-number">5.3</span> Multicolinealidad<a href="rlm.html#multicolinealidad-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="rlm.html#cb195-1" tabindex="-1"></a><span class="fu">vif</span>(mod10)</span></code></pre></div>
-<pre><code>   sqrt_incidencerate p25_pctbachdeg25_over sq_pctprivatecoverage      log_pctotherrace 
-             1.126620              4.199392              3.898936              1.571708 
-      sqrt_pcths18_24          p25_pctblack         p25_birthrate      log_pcths25_over 
-             1.402075              1.260288              1.052150              3.121808 
-   sq_medianagefemale         inv_medincome 
-             1.361300              3.867743 </code></pre>
+<pre><code>   sqrt_incidencerate p25_pctbachdeg25_over sq_pctprivatecoverage      log_pctotherrace       sqrt_pcths18_24 
+             1.126620              4.199392              3.898936              1.571708              1.402075 
+         p25_pctblack         p25_birthrate      log_pcths25_over    sq_medianagefemale         inv_medincome 
+             1.260288              1.052150              3.121808              1.361300              3.867743 </code></pre>
 <div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="rlm.html#cb197-1" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">vif</span>(mod10))</span></code></pre></div>
 <pre><code>[1] 4.199392</code></pre>
 <p>Los VIF van de 1.05 a 4.20; el máximo corresponde a <code>p25_pctbachdeg25_over</code> (4.20), seguido de <code>sq_pctprivatecoverage</code> (3.90) y <code>inv_medincome</code> (3.87). Todos son inferiores a 5, por lo que no hay multicolinealidad problemática, aunque la educación universitaria, la cobertura privada y el ingreso comparten información.</p>
@@ -347,7 +345,7 @@ F-statistic: 320.6 on 10 and 3036 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="rlm.html#cb199-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb199-2"><a href="rlm.html#cb199-2" tabindex="-1"></a><span class="fu">plot</span>(mod10, <span class="at">which =</span> <span class="dv">1</span>)   <span class="co"># residuos vs ajustados</span></span>
 <span id="cb199-3"><a href="rlm.html#cb199-3" tabindex="-1"></a><span class="fu">plot</span>(mod10, <span class="at">which =</span> <span class="dv">2</span>)   <span class="co"># Q-Q normal</span></span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/graficos-residuos-10-1.png" alt="" width="864" /></p>
+<p><img src="bookdown-demo_files/figure-html/graficos-residuos-10-1.png" width="864" /></p>
 <div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="rlm.html#cb200-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
 <p><strong>Media cero.</strong> Ho: E(error) = 0.</p>
 <div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="rlm.html#cb201-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">residuals</span>(mod10)</span>
@@ -394,7 +392,7 @@ alternative hypothesis: true autocorrelation is greater than 0</code></pre>
 <p>El estadístico de Durbin-Watson es 1.766 (&lt; 2) y se rechaza Ho: hay una autocorrelación positiva leve entre residuos consecutivos. Hay que interpretarlo con cuidado, porque el orden de las filas del conjunto de datos no es temporal.</p>
 <p><strong>Observaciones atípicas e influyentes.</strong></p>
 <div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="rlm.html#cb211-1" tabindex="-1"></a><span class="fu">plot</span>(mod10, <span class="at">which =</span> <span class="dv">4</span>)   <span class="co"># distancia de Cook</span></span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/cook-10-1.png" alt="" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/cook-10-1.png" width="672" /></p>
 <div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="rlm.html#cb212-1" tabindex="-1"></a>cook <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(mod10)</span>
 <span id="cb212-2"><a href="rlm.html#cb212-2" tabindex="-1"></a><span class="fu">c</span>(<span class="at">max_cook =</span> <span class="fu">max</span>(cook), <span class="at">n_cook_mayor_4n =</span> <span class="fu">sum</span>(cook <span class="sc">&gt;</span> <span class="dv">4</span> <span class="sc">/</span> n), <span class="at">n_cook_mayor_1 =</span> <span class="fu">sum</span>(cook <span class="sc">&gt;</span> <span class="dv">1</span>))</span></code></pre></div>
 <pre><code>       max_cook n_cook_mayor_4n  n_cook_mayor_1 
