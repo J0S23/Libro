@@ -52,6 +52,10 @@ Los resultados buscan aportar evidencia estadísticamente significativa sobre lo
 correlación de Spearman, Chi-cuadrado, regresión lineal múltiple, variables 
 dummy, factores socioeconómicos.
 
+**Video de presentación:** [https://youtu.be/COsBEINWf7Y](https://youtu.be/COsBEINWf7Y)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/COsBEINWf7Y" title="Video de presentación del trabajo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ```{r include=FALSE}
 # automatically create a bib database for R packages
 knitr::write_bib(c(
